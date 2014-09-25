@@ -32,6 +32,13 @@ angular.module('engine.base-components', ['ces-sugar'])
                 'mesh': {
                     geometryType: 'box'
                 },
+                'texture': {
+                    file: '',
+                    offset: [0, 0],
+                    repeat: [1, 1],
+                    minFilter: 1006, // three constants usually...
+                    magFilter: 1008
+                },
                 'camera': {
                     projection: 'perspective',
                     fov: 70,
