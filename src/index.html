@@ -1,30 +1,24 @@
 <!DOCTYPE html>
-<html ng-app="hello-world">
+<html ng-app="Ironbane.CharPreviewApp">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Hello World</title>
+    <title>Ironbane Character Preview</title>
 
     <!-- autoInclude: css !-->
 
 </head>
 <body ng-controller="MainController">
 
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6">
-                <h1>{{ welcome }}</h1>
-                <p>Hey there, thanks for checking out <a href="https://github.com/nickjanssen/angus">Angus</a>!</p>
-                <p>You've succesfully managed to run the AngularJS example!</p>
-            </div>
-            <div class="col-md-6">
-                <img class="container__logo" src="assets/images/angus-logo.jpg">
-            </div>
-        </div>
-    </div>
+    <h1>{{ title }}</h1>
+    <div id="main"></div>
 
     <!-- autoInclude: jsLib !-->
+
+    <script src="assets/lib/game-shim.js"></script>
+    <script src="assets/lib/three.min.js"></script>
+    <script src="assets/lib/ces-browser.min.js"></script>
 
     <!-- autoInclude: jsApp !-->
 
