@@ -6,6 +6,8 @@ angular.module('engine.texture-loader', ['three', 'engine.texture-cache'])
         function (THREE, $textureCache, $q) {
             'use strict';
 
+            var _loader = new THREE.TextureLoader();
+
             this.getTexture = function (src) {
                 var cached = $textureCache.get(src),
                     deferred = $q.defer();
@@ -13,7 +15,7 @@ angular.module('engine.texture-loader', ['three', 'engine.texture-cache'])
                 if (cached) {
                     deferred.resolve(cached);
                 } else {
-                    THREE.TextureLoader.load(src, function (texture) {
+                    _loader.load(src, function (texture) {
                         $textureCache.put(src, texture);
 
                         deferred.resolve(texture);
