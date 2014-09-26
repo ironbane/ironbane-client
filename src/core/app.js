@@ -3,7 +3,9 @@ angular.module('Ironbane.CharPreviewApp', [
     'game.world-root',
     'ces-sugar',
     'engine.three-adapter',
-    'engine.base-components'
+    'engine.base-components',
+    'engine.material-loader',
+    'engine.texture-loader'
 ])
     .run([
         'ThreeAdapter',
@@ -43,17 +45,28 @@ angular.module('Ironbane.CharPreviewApp', [
             $rootWorld.addSystem(new RotateSystem());
         }
     ])
+    .run(function(TextureLoader, MaterialLoader) {
+        // init the engine, load all assets available
+        // TODO: load from JSON asset manifest?
+        TextureLoader.load('assets/images/stone.png');
+        MaterialLoader.load('StoneMaterial', {
+            type: 'BasicMeshMaterial',
+            texture: 'assets/images/stone.png'
+        });
+    })
     .run([
         'Entity',
         '$components',
         '$rootWorld',
-        function (Entity, $components, $rootWorld) {
+        function loadWorld(Entity, $components, $rootWorld) {
             'use strict';
+
+            // load a "scene"
 
             // super simple test
             var foo = new Entity();
             var xform = $components.getComponent('transform');
-            var box = $components.getComponent('mesh');
+            var box = $components.getComponent('mesh', {material: 'StoneMaterial'});
             foo.addComponent(xform);
             foo.addComponent(box);
             xform.position.x = 2.5;

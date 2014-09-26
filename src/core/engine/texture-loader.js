@@ -8,7 +8,7 @@ angular.module('engine.texture-loader', ['three', 'engine.texture-cache'])
 
             var _loader = new THREE.TextureLoader();
 
-            this.getTexture = function (src) {
+            this.load = function (src) {
                 var cached = $textureCache.get(src),
                     deferred = $q.defer();
 
