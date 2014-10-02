@@ -2,6 +2,7 @@ angular.module('ces.system', [
     'ces.class'
 ])
     .factory('System', function (Class) {
+        'use strict';
         /**
          * The system is responsible for updating the entities.
          * @class

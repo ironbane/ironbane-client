@@ -1,4 +1,4 @@
-angular.module('ces-sugar.systems', ['ces'])
+angular.module('ces.systems-registry', ['ces.system'])
     .provider('$systems', function () {
         'use strict';
 

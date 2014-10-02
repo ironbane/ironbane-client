@@ -1,5 +1,6 @@
 angular.module('ces.component', ['ces.class'])
     .factory('Component', function (Class) {
+        'use strict';
 
         /**
          * The components is the container of some properties that

@@ -6,5 +6,7 @@ angular.module('ces', [
     'ces.family',
     'ces.signal',
     'ces.system',
-    'ces.world'
+    'ces.world',
+    'ces.components-registry',
+    'ces.systems-registry'
 ]);

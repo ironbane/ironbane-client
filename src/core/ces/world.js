@@ -4,6 +4,7 @@ angular.module('ces.world', [
     'ces.entitylist'
 ])
     .factory('World', function (Class, Family, EntityList) {
+        'use strict';
 
         /**
          * The world is the container of all the entities and systems.

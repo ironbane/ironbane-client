@@ -4,6 +4,7 @@ angular.module('ces.family', [
     'ces.signal'
 ])
     .factory('Family', function (Class, EntityList, Signal) {
+        'use strict';
         /**
          * The family is a collection of entities having all the specified components.
          * @class

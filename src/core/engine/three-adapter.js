@@ -1,6 +1,5 @@
 angular.module('engine.three-adapter', [
     'ces',
-    'ces-sugar',
     'three',
     'engine.material-loader'
 ])

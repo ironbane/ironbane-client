@@ -1,3 +1,4 @@
+/* jshint ignore:start */
 angular.module('ces.class', [])
     .factory('Class', function () {
         /* Simple JavaScript Inheritance
@@ -68,3 +69,4 @@ angular.module('ces.class', [])
 
         return Class;
     });
+/* jshint ignore:end */

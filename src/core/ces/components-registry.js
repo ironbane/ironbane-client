@@ -1,4 +1,4 @@
-angular.module('ces-sugar.components', ['ces'])
+angular.module('ces.components-registry', ['ces.component'])
     .provider('$components', function () {
         'use strict';
 
@@ -36,7 +36,7 @@ angular.module('ces-sugar.components', ['ces'])
                     _components[name] = component;
                 };
 
-                svc.getComponent = function (name, data) {
+                svc.get = function (name, data) {
                     var c = Object.create(_components[name]);
 
                     angular.extend(c, data);

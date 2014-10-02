@@ -3,6 +3,7 @@ angular.module('ces.entity', [
     'ces.signal'
 ])
     .factory('Entity', function (THREE, Signal) {
+        'use strict';
 
         var Entity = function () {
             THREE.Object3D.call(this);

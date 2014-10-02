@@ -2,6 +2,7 @@ angular.module('ces.signal', [
     'ces.class'
 ])
     .factory('Signal', function (Class) {
+        'use strict';
         /**
          * The signal can register listeners and invoke the listeners with messages.
          * @class
