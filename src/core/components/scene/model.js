@@ -4,7 +4,7 @@ angular.module('components.scene.model', ['ces', 'three'])
 
         $componentsProvider.addComponentData({
             'model': {
-                'type': 'box',
+                'type': 'Box',
                 'material': null,
                 'mesh': null,
                 'receiveShadows': true,
@@ -18,20 +18,32 @@ angular.module('components.scene.model', ['ces', 'three'])
         function getGeometry(type) {
             var geometry;
 
-            if (type === 'box') {
+            if (type === 'Box') {
                 geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
             }
 
-            if (type === 'sphere') {
+            if (type === 'Sphere') {
                 geometry = new THREE.SphereGeometry(1);
             }
 
-            if (type === 'circle') {
+            if (type === 'Circle') {
                 geometry = new THREE.CircleGeometry(1);
             }
 
-            if (type === 'cylinder') {
+            if (type === 'Cylinder') {
                 geometry = new THREE.CylinderGeometry();
+            }
+
+            if (type === 'Icosahedron') {
+
+            }
+
+            if (type === 'Torus') {
+
+            }
+
+            if (type === 'TorusKnot') {
+
             }
 
             if (type === 'mesh') {
@@ -42,24 +54,24 @@ angular.module('components.scene.model', ['ces', 'three'])
         }
 
         var ModelSystem = System.extend({
-            addedToWorld: function(world) {
+            addedToWorld: function (world) {
                 var sys = this;
 
                 sys._super(world);
 
-                world.entityAdded('model').add(function(entity) {
+                world.entityAdded('model').add(function (entity) {
                     sys.onEntityAdded(entity);
                 });
             },
-            update: function() {},
-            onEntityAdded: function(entity) {
+            update: function () {},
+            onEntityAdded: function (entity) {
                 var component = entity.getComponent('model'),
                     geometry = getGeometry(component.type);
 
                 component.model = new THREE.Mesh(geometry);
                 entity.add(component.model);
             },
-            onEntityRemoved: function(entity) {
+            onEntityRemoved: function (entity) {
                 // TODO
             }
         });

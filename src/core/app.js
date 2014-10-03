@@ -5,9 +5,10 @@ angular.module('Ironbane.CharPreviewApp', [
     'three',
     'components.scene.camera',
     'components.scene.model',
-    'components.scene.light'
+    'components.scene.light',
+    'components.scene.sprite'
 ])
-    .run(function (CameraSystem, ModelSystem, $rootWorld, THREE, LightSystem) {
+    .run(function (CameraSystem, ModelSystem, $rootWorld, THREE, LightSystem, SpriteSystem) {
         'use strict';
 
         // TODO: move to directive
@@ -19,7 +20,7 @@ angular.module('Ironbane.CharPreviewApp', [
         var grid = new THREE.GridHelper(100, 1);
         $rootWorld.scene.add(grid);
 
-
+        $rootWorld.addSystem(new SpriteSystem());
         $rootWorld.addSystem(new ModelSystem());
         $rootWorld.addSystem(new LightSystem());
         // NOTE: this should be the LAST system as it does rendering!!
@@ -43,6 +44,12 @@ angular.module('Ironbane.CharPreviewApp', [
         light.addComponent($components.get('light'));
         light.position.set(20, 20, 20);
         $rootWorld.addEntity(light);
+
+        var sprite = new Entity();
+        sprite.name = "Player";
+        sprite.addComponent($components.get('sprite', {texture: 'assets/images/characters/skin/2.png'}));
+        sprite.position.y = 5;
+        $rootWorld.addEntity(sprite);
     })
     .controller('MainController', function ($scope, $rootWorld) {
         'use strict';
