@@ -4,7 +4,7 @@ angular.module('ces.components-registry', ['ces.component'])
 
         var _preload = {};
 
-        this.addPreloadData = function (data) {
+        this.addComponentData = function (data) {
             angular.extend(_preload, data);
         };
 

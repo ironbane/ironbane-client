@@ -2,7 +2,7 @@ angular.module('components.scene.model', ['ces', 'three'])
     .config(function ($componentsProvider) {
         'use strict';
 
-        $componentsProvider.addPreloadData({
+        $componentsProvider.addComponentData({
             'model': {
                 'type': 'box',
                 'material': null,
@@ -15,7 +15,7 @@ angular.module('components.scene.model', ['ces', 'three'])
     .factory('ModelSystem', function (System, THREE) {
         'use strict';
 
-        function getPrimitive(type) {
+        function getGeometry(type) {
             var geometry;
 
             if (type === 'box') {
@@ -53,7 +53,14 @@ angular.module('components.scene.model', ['ces', 'three'])
             },
             update: function() {},
             onEntityAdded: function(entity) {
+                var component = entity.getComponent('model'),
+                    geometry = getGeometry(component.type);
 
+                component.model = new THREE.Mesh(geometry);
+                entity.add(component.model);
+            },
+            onEntityRemoved: function(entity) {
+                // TODO
             }
         });
 

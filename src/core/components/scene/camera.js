@@ -2,7 +2,7 @@ angular.module('components.scene.camera', ['ces', 'three'])
     .config(function ($componentsProvider) {
         'use strict';
 
-        $componentsProvider.addPreloadData({
+        $componentsProvider.addComponentData({
             'camera': {
                 aspectRatio: 16 / 9,
                 nearClip: 0.1,
