@@ -6,9 +6,10 @@ angular.module('Ironbane.CharPreviewApp', [
     'components.scene.camera',
     'components.scene.model',
     'components.scene.light',
-    'components.scene.sprite'
+    'components.scene.sprite',
+    'components.scene.scene'
 ])
-    .run(function (CameraSystem, ModelSystem, $rootWorld, THREE, LightSystem, SpriteSystem) {
+    .run(function (CameraSystem, ModelSystem, $rootWorld, THREE, LightSystem, SpriteSystem, SceneSystem) {
         'use strict';
 
         // TODO: move to directive
@@ -20,6 +21,7 @@ angular.module('Ironbane.CharPreviewApp', [
         var grid = new THREE.GridHelper(100, 1);
         $rootWorld.scene.add(grid);
 
+        $rootWorld.addSystem(new SceneSystem());
         $rootWorld.addSystem(new SpriteSystem());
         $rootWorld.addSystem(new ModelSystem());
         $rootWorld.addSystem(new LightSystem());
@@ -50,6 +52,10 @@ angular.module('Ironbane.CharPreviewApp', [
         sprite.addComponent($components.get('sprite', {texture: 'assets/images/characters/skin/2.png'}));
         sprite.position.y = 5;
         $rootWorld.addEntity(sprite);
+
+        var level = new Entity();
+        level.addComponent($components.get('scene', {path: 'assets/scene/storage_room/storage-room.json'}));
+        $rootWorld.addEntity(level);
     })
     .controller('MainController', function ($scope, $rootWorld) {
         'use strict';
