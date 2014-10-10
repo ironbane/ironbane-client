@@ -35,7 +35,7 @@ angular.module('Ironbane.CharPreviewApp', [
         cameraEntity.addComponent($components.get('camera'));
         $rootWorld.addEntity(cameraEntity);
         var cam = cameraEntity.getComponent('camera').camera;
-        cam.position.set(7, 12, 15);
+        cam.position.set(7, 17, 15);
         cam.lookAt(new THREE.Vector3(0, 0, 0));
 
         var cube = new Entity();
@@ -50,7 +50,8 @@ angular.module('Ironbane.CharPreviewApp', [
         var sprite = new Entity();
         sprite.name = "Player";
         sprite.addComponent($components.get('sprite', {texture: 'assets/images/characters/skin/2.png'}));
-        sprite.position.y = 5;
+        sprite.position.y = 0.5;
+        sprite.position.z = -2;
         $rootWorld.addEntity(sprite);
 
         var level = new Entity();
