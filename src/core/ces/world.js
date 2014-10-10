@@ -125,12 +125,12 @@ angular.module('ces.world', [
              * @public
              * @param {Number} dt time interval between updates.
              */
-            update: function (dt) {
+            update: function (dt, elapsed, timestamp) {
                 var systems, i, len;
 
                 systems = this._systems;
                 for (i = 0, len = systems.length; i < len; ++i) {
-                    systems[i].update(dt);
+                    systems[i].update(dt, elapsed, timestamp);
                 }
             },
 

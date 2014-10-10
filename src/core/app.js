@@ -9,12 +9,24 @@ angular.module('Ironbane.CharPreviewApp', [
     'components.scene.sprite',
     'components.scene.scene'
 ])
-    .run(function (CameraSystem, ModelSystem, $rootWorld, THREE, LightSystem, SpriteSystem, SceneSystem) {
+    .run(function (System, CameraSystem, ModelSystem, $rootWorld, THREE, LightSystem, SpriteSystem, SceneSystem) {
         'use strict';
 
         // TODO: move to directive
         $rootWorld.renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild($rootWorld.renderer.domElement);
+
+        var AutoPanSystem = System.extend({
+            update: function(dt, elapsed, timestamp) {
+                var cams = this.world.getEntities('camera');
+
+                var mainCamera = cams[0].getComponent('camera').camera;
+
+                mainCamera.position.set(Math.cos(timestamp/1000)*7, 17, Math.sin(timestamp/1000)*15);
+                mainCamera.lookAt(new THREE.Vector3(0, 0, 0));
+            }
+        });
+        $rootWorld.addSystem(new AutoPanSystem());
 
 
         // DEBUG editor mode?
@@ -34,9 +46,6 @@ angular.module('Ironbane.CharPreviewApp', [
         var cameraEntity = new Entity();
         cameraEntity.addComponent($components.get('camera'));
         $rootWorld.addEntity(cameraEntity);
-        var cam = cameraEntity.getComponent('camera').camera;
-        cam.position.set(7, 17, 15);
-        cam.lookAt(new THREE.Vector3(0, 0, 0));
 
         var cube = new Entity();
         cube.addComponent($components.get('model'));
