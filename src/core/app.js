@@ -7,9 +7,11 @@ angular.module('Ironbane.CharPreviewApp', [
     'components.scene.model',
     'components.scene.light',
     'components.scene.sprite',
-    'components.scene.scene'
+    'components.scene.scene',
+    'components.script',
+    'game.scripts'
 ])
-    .run(function (System, CameraSystem, ModelSystem, $rootWorld, THREE, LightSystem, SpriteSystem, SceneSystem) {
+    .run(function (System, CameraSystem, ModelSystem, $rootWorld, THREE, LightSystem, SpriteSystem, SceneSystem, ScriptSystem) {
         'use strict';
 
         // TODO: move to directive
@@ -26,12 +28,14 @@ angular.module('Ironbane.CharPreviewApp', [
                 mainCamera.lookAt(new THREE.Vector3(0, 0, 0));
             }
         });
-        $rootWorld.addSystem(new AutoPanSystem());
+        //$rootWorld.addSystem(new AutoPanSystem());
 
 
         // DEBUG editor mode?
         var grid = new THREE.GridHelper(100, 1);
         $rootWorld.scene.add(grid);
+
+        $rootWorld.addSystem(new ScriptSystem());
 
         $rootWorld.addSystem(new SceneSystem());
         $rootWorld.addSystem(new SpriteSystem());
@@ -45,10 +49,21 @@ angular.module('Ironbane.CharPreviewApp', [
 
         var cameraEntity = new Entity();
         cameraEntity.addComponent($components.get('camera'));
+        cameraEntity.addComponent($components.get('script', {
+            scripts: [
+                '/scripts/built-in/camera-pan.js'
+            ]
+        }));
         $rootWorld.addEntity(cameraEntity);
 
         var cube = new Entity();
+        cube.name = 'Cubey-Doobey-Doo';
         cube.addComponent($components.get('model'));
+        cube.addComponent($components.get('script', {
+            scripts: [
+                'assets/scripts/test.js'
+            ]
+        }));
         $rootWorld.addEntity(cube);
 
         var light = new Entity();
@@ -57,7 +72,7 @@ angular.module('Ironbane.CharPreviewApp', [
         $rootWorld.addEntity(light);
 
         var sprite = new Entity();
-        sprite.name = "Player";
+        sprite.name = 'Player';
         sprite.addComponent($components.get('sprite', {texture: 'assets/images/characters/skin/2.png'}));
         sprite.position.y = 0.5;
         sprite.position.z = -2;
