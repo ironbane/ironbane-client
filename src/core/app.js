@@ -3,13 +3,9 @@ angular.module('Ironbane.CharPreviewApp', [
     'game.world-root',
     'ces',
     'three',
-    'components.scene.camera',
-    'components.scene.model',
-    'components.scene.light',
-    'components.scene.sprite',
-    'components.scene.scene',
-    'components.script',
-    'game.scripts'
+    'components',
+    'game.scripts',
+    'engine.entity-builder'
 ])
     .run(function (System, CameraSystem, ModelSystem, $rootWorld, THREE, LightSystem, SpriteSystem, SceneSystem, ScriptSystem) {
         'use strict';
@@ -18,25 +14,11 @@ angular.module('Ironbane.CharPreviewApp', [
         $rootWorld.renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild($rootWorld.renderer.domElement);
 
-        var AutoPanSystem = System.extend({
-            update: function(dt, elapsed, timestamp) {
-                var cams = this.world.getEntities('camera');
-
-                var mainCamera = cams[0].getComponent('camera').camera;
-
-                mainCamera.position.set(Math.cos(timestamp/1000)*7, 17, Math.sin(timestamp/1000)*15);
-                mainCamera.lookAt(new THREE.Vector3(0, 0, 0));
-            }
-        });
-        //$rootWorld.addSystem(new AutoPanSystem());
-
-
         // DEBUG editor mode?
         var grid = new THREE.GridHelper(100, 1);
         $rootWorld.scene.add(grid);
 
         $rootWorld.addSystem(new ScriptSystem());
-
         $rootWorld.addSystem(new SceneSystem());
         $rootWorld.addSystem(new SpriteSystem());
         $rootWorld.addSystem(new ModelSystem());
@@ -44,7 +26,7 @@ angular.module('Ironbane.CharPreviewApp', [
         // NOTE: this should be the LAST system as it does rendering!!
         $rootWorld.addSystem(new CameraSystem());
     })
-    .run(function loadWorld(Entity, $components, $rootWorld, THREE) {
+    .run(function loadWorld(Entity, $components, $rootWorld, THREE, EntityBuilder) {
         'use strict';
 
         var cameraEntity = new Entity();
@@ -64,19 +46,27 @@ angular.module('Ironbane.CharPreviewApp', [
                 'assets/scripts/test.js'
             ]
         }));
+        cube.position.y = 3;
         $rootWorld.addEntity(cube);
 
-        var light = new Entity();
-        light.addComponent($components.get('light'));
-        light.position.set(20, 20, 20);
-        $rootWorld.addEntity(light);
-
-        var sprite = new Entity();
-        sprite.name = 'Player';
-        sprite.addComponent($components.get('sprite', {texture: 'assets/images/characters/skin/2.png'}));
-        sprite.position.y = 0.5;
-        sprite.position.z = -2;
-        $rootWorld.addEntity(sprite);
+        var player = EntityBuilder.build('Player', {
+            position: [0, 0.5, -2],
+            components: {
+                sprite: {
+                    texture: 'assets/images/characters/skin/2.png'
+                },
+                health: {
+                    max: 5,
+                    value: 5
+                },
+                // add a little personal torchlight
+                light: {
+                    type: 'PointLight',
+                    distance: 1
+                }
+            }
+        });
+        $rootWorld.addEntity(player);
 
         var level = new Entity();
         level.addComponent($components.get('scene', {path: 'assets/scene/storage_room/storage-room.json'}));

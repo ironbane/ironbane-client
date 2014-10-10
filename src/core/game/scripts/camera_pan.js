@@ -15,7 +15,7 @@ angular.module('game.scripts.camera-pan', ['components.script', 'three'])
                 return;
             }
 
-            cameraComponent.camera.position.set(Math.cos(timestamp / 1000) * 7, 17, Math.sin(timestamp / 1000) * 15);
+            cameraComponent.camera.position.set(Math.cos(timestamp / 1000) * 10, 20, Math.sin(timestamp / 1000) * 15);
             cameraComponent.camera.lookAt(new THREE.Vector3(0, 0, 0));
         };
 
