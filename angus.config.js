@@ -2,13 +2,33 @@
 
 module.exports = {
 
+    npm: {
+        packages: [
+            'three@^0.66.4',
+            'shelljs@^0.3.0',
+            'curlrequest@^0.5.1',
+            'adm-zip@^0.4.4',
+            'walkdir@0.0.7',
+            'mkdirp@^0.5.0',
+            'q',
+            'underscore'
+        ]
+    },
+
     bower: {
         packages: [
             'angular'
         ],
+        localFolders: [
+            'src/lib'
+        ],
         filesNeeded: {
             js: [
-                'angular/angular.js'
+                'angular/angular.js',
+
+                'lib/game-shim.js',
+                'lib/three.js',
+                'lib/three-angular.js'
             ],
 
             less: [],

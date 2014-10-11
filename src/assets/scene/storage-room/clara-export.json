@@ -5344,78 +5344,78 @@
 	],
 	"materials": [
 		{
-			"uuid": "394E5657-A510-4022-9661-85C69FD671BF",
+			"uuid": "E25A5896-7F2F-4422-9A37-67C04660401E",
 			"type": "MeshBasicMaterial",
-			"color": 8570859,
+			"color": 5651900,
 			"opacity": 1,
 			"transparent": false,
 			"wireframe": false
 		},
 		{
-			"uuid": "B6EA155E-B0B2-46B0-8AD7-835AADF6F1C4",
+			"uuid": "D22BFCE2-5B9D-43F3-AFC9-881C3796C9A8",
 			"type": "MeshBasicMaterial",
-			"color": 13515282,
+			"color": 131297,
 			"opacity": 1,
 			"transparent": false,
 			"wireframe": false
 		},
 		{
-			"uuid": "dd4a18c2-7af3-442a-b211-cd26ec337893",
-			"name": "crate",
+			"uuid": "7ab7bb3b-8912-4d0e-af17-3b69831fc955",
+			"name": "crate.png_material",
 			"type": "MeshPhongMaterial",
 			"color": 11579568,
 			"ambient": 0,
 			"emissive": 0,
-			"specular": 0,
+			"specular": 16777215,
 			"shininess": 50,
 			"opacity": 1,
 			"transparent": false,
 			"wireframe": false
 		},
 		{
-			"uuid": "f01ee7bc-1a6d-4396-87f3-f730270dad8d",
-			"name": "bricks",
+			"uuid": "f31db7f2-ccf3-4e49-9c07-0f5caa12f167",
+			"name": "ironblock.png_material",
 			"type": "MeshPhongMaterial",
 			"color": 11579568,
 			"ambient": 0,
 			"emissive": 0,
-			"specular": 0,
+			"specular": 16777215,
 			"shininess": 50,
 			"opacity": 1,
 			"transparent": false,
 			"wireframe": false
 		},
 		{
-			"uuid": "90adc226-8f00-490b-a418-583e6d2662a1",
-			"name": "stone_bricks",
+			"uuid": "e3020da6-3c92-40ae-bf9c-d8e7d5efba50",
+			"name": "castlewall.png_material",
 			"type": "MeshPhongMaterial",
 			"color": 11579568,
 			"ambient": 0,
 			"emissive": 0,
-			"specular": 0,
-			"shininess": 0,
+			"specular": 16777215,
+			"shininess": 50,
 			"opacity": 1,
 			"transparent": false,
 			"wireframe": false
 		},
 		{
-			"uuid": "C97E132D-4A8C-49A9-901B-E38F5FF6378C",
+			"uuid": "2FE822E5-F8BD-4E7E-BF4F-2E9114716B34",
 			"type": "MeshBasicMaterial",
-			"color": 8611373,
+			"color": 16502243,
 			"opacity": 1,
 			"transparent": false,
 			"wireframe": false
 		},
 		{
-			"uuid": "2B77357B-0CAF-4F28-89D6-B759225CD311",
+			"uuid": "E84BAFCF-1E47-4631-BBB5-8362360E5303",
 			"type": "MeshBasicMaterial",
-			"color": 10896584,
+			"color": 3080072,
 			"opacity": 1,
 			"transparent": false,
 			"wireframe": false
 		},
 		{
-			"uuid": "26D8CC1A-1F99-469A-8B5D-EB188E40AF18",
+			"uuid": "8360B267-C9F4-4374-83A3-713F2E041028",
 			"type": "MeshPhongMaterial",
 			"color": 13721375,
 			"ambient": 13721375,
@@ -5427,15 +5427,15 @@
 			"wireframe": false
 		},
 		{
-			"uuid": "1BCB55DF-B148-4C3A-88E6-A2D801FF3DC4",
+			"uuid": "F882D769-DB8F-4B9E-82C3-87961539E436",
 			"type": "MeshBasicMaterial",
-			"color": 8783852,
+			"color": 8410946,
 			"opacity": 1,
 			"transparent": false,
 			"wireframe": false
 		},
 		{
-			"uuid": "F784F73F-EF20-4591-B982-C031359168A8",
+			"uuid": "3353081E-0338-4C86-BB28-E64C0AB36FB5",
 			"type": "MeshPhongMaterial",
 			"color": 13721375,
 			"ambient": 13721375,
@@ -5447,15 +5447,15 @@
 			"wireframe": false
 		},
 		{
-			"uuid": "88C9CC11-3DE0-422B-B280-1111AD761E42",
+			"uuid": "220A100E-3643-42FF-A1EE-B8F71DCD6FE4",
 			"type": "MeshBasicMaterial",
-			"color": 9299813,
+			"color": 7110524,
 			"opacity": 1,
 			"transparent": false,
 			"wireframe": false
 		},
 		{
-			"uuid": "B17076FD-69DA-4711-99B0-2883CA0961C4",
+			"uuid": "3AA077D0-5C65-405B-B279-E7B52538DCD8",
 			"type": "MeshPhongMaterial",
 			"color": 13721375,
 			"ambient": 13721375,
@@ -5467,15 +5467,15 @@
 			"wireframe": false
 		},
 		{
-			"uuid": "C801AE93-13DF-4941-B155-5FBC8A328F5B",
+			"uuid": "830C5B17-AFDC-4E21-AAE2-C89818962ACD",
 			"type": "MeshBasicMaterial",
-			"color": 16406329,
+			"color": 5329932,
 			"opacity": 1,
 			"transparent": false,
 			"wireframe": false
 		},
 		{
-			"uuid": "C1C7E4AA-97E6-4601-93C5-9D446941F040",
+			"uuid": "095E6448-0883-420B-B73D-3DC777F6751F",
 			"type": "MeshPhongMaterial",
 			"color": 13721375,
 			"ambient": 13721375,
@@ -5487,16 +5487,16 @@
 			"wireframe": false
 		},
 		{
-			"uuid": "9036A649-D2BD-4F12-9E7D-7AB524F9ECC5",
+			"uuid": "9BD0A0B6-00EC-4F90-A74E-3ED84973DD40",
 			"type": "MeshBasicMaterial",
-			"color": 11313152,
+			"color": 15056496,
 			"opacity": 1,
 			"transparent": false,
 			"wireframe": false
 		}
 	],
 	"object": {
-		"uuid": "0D15D176-FA20-4723-8DA3-E76CA61F2B3A",
+		"uuid": "C2A951E6-FD74-4E0D-B37C-4355E153A235",
 		"type": "Scene",
 		"matrix": [
 			1,
@@ -5526,7 +5526,7 @@
 				},
 				"type": "Mesh",
 				"geometry": "0f4573fa-77fa-4e7f-ae99-15b3cf36646c",
-				"material": "394E5657-A510-4022-9661-85C69FD671BF",
+				"material": "E25A5896-7F2F-4422-9A37-67C04660401E",
 				"castShadow": false,
 				"receiveShadow": false,
 				"matrix": [
@@ -5553,7 +5553,7 @@
 						"name": "Room",
 						"type": "Mesh",
 						"geometry": "a5e1c25f-90aa-403f-8cea-9983a5fadfb8",
-						"material": "B6EA155E-B0B2-46B0-8AD7-835AADF6F1C4",
+						"material": "D22BFCE2-5B9D-43F3-AFC9-881C3796C9A8",
 						"castShadow": false,
 						"receiveShadow": false,
 						"matrix": [
@@ -5580,7 +5580,7 @@
 								"name": "crate14",
 								"type": "Mesh",
 								"geometry": "7e622957-d42f-4a1a-8cd1-038a963daa76",
-								"material": "dd4a18c2-7af3-442a-b211-cd26ec337893",
+								"material": "7ab7bb3b-8912-4d0e-af17-3b69831fc955",
 								"castShadow": true,
 								"receiveShadow": true,
 								"matrix": [
@@ -5607,7 +5607,7 @@
 								"name": "crate15",
 								"type": "Mesh",
 								"geometry": "a3f05d08-2adf-4eb9-8fb2-b17db2c4745a",
-								"material": "dd4a18c2-7af3-442a-b211-cd26ec337893",
+								"material": "7ab7bb3b-8912-4d0e-af17-3b69831fc955",
 								"castShadow": true,
 								"receiveShadow": true,
 								"matrix": [
@@ -5634,7 +5634,7 @@
 								"name": "Floor1",
 								"type": "Mesh",
 								"geometry": "a1d82220-daad-476c-b491-9d5cf0addd9f",
-								"material": "f01ee7bc-1a6d-4396-87f3-f730270dad8d",
+								"material": "f31db7f2-ccf3-4e49-9c07-0f5caa12f167",
 								"castShadow": true,
 								"receiveShadow": true,
 								"matrix": [
@@ -5661,7 +5661,7 @@
 								"name": "crate16",
 								"type": "Mesh",
 								"geometry": "f8bd8cba-f617-4772-a026-27b000cb031f",
-								"material": "dd4a18c2-7af3-442a-b211-cd26ec337893",
+								"material": "7ab7bb3b-8912-4d0e-af17-3b69831fc955",
 								"castShadow": true,
 								"receiveShadow": true,
 								"matrix": [
@@ -5688,7 +5688,7 @@
 								"name": "crate17",
 								"type": "Mesh",
 								"geometry": "eac4d85e-94f1-48c8-bc02-e88a0827e8df",
-								"material": "dd4a18c2-7af3-442a-b211-cd26ec337893",
+								"material": "7ab7bb3b-8912-4d0e-af17-3b69831fc955",
 								"castShadow": true,
 								"receiveShadow": true,
 								"matrix": [
@@ -5715,7 +5715,7 @@
 								"name": "crate18",
 								"type": "Mesh",
 								"geometry": "e7e4ab7d-0fd9-40a1-9e28-28bc174322be",
-								"material": "dd4a18c2-7af3-442a-b211-cd26ec337893",
+								"material": "7ab7bb3b-8912-4d0e-af17-3b69831fc955",
 								"castShadow": true,
 								"receiveShadow": true,
 								"matrix": [
@@ -5742,7 +5742,7 @@
 								"name": "crate19",
 								"type": "Mesh",
 								"geometry": "76530cff-521a-4ee1-b101-d760671842ec",
-								"material": "dd4a18c2-7af3-442a-b211-cd26ec337893",
+								"material": "7ab7bb3b-8912-4d0e-af17-3b69831fc955",
 								"castShadow": true,
 								"receiveShadow": true,
 								"matrix": [
@@ -5769,7 +5769,7 @@
 								"name": "crate20",
 								"type": "Mesh",
 								"geometry": "3ae5e7c7-f5ba-4047-b8d6-1502a004aa2a",
-								"material": "dd4a18c2-7af3-442a-b211-cd26ec337893",
+								"material": "7ab7bb3b-8912-4d0e-af17-3b69831fc955",
 								"castShadow": true,
 								"receiveShadow": true,
 								"matrix": [
@@ -5796,7 +5796,7 @@
 								"name": "crate21",
 								"type": "Mesh",
 								"geometry": "9990c88c-1e4c-4080-81d3-ae14b9893909",
-								"material": "dd4a18c2-7af3-442a-b211-cd26ec337893",
+								"material": "7ab7bb3b-8912-4d0e-af17-3b69831fc955",
 								"castShadow": true,
 								"receiveShadow": true,
 								"matrix": [
@@ -5823,7 +5823,7 @@
 								"name": "crate22",
 								"type": "Mesh",
 								"geometry": "67a9d41a-cbb9-4491-8dc6-391fe2c1a713",
-								"material": "dd4a18c2-7af3-442a-b211-cd26ec337893",
+								"material": "7ab7bb3b-8912-4d0e-af17-3b69831fc955",
 								"castShadow": true,
 								"receiveShadow": true,
 								"matrix": [
@@ -5850,7 +5850,7 @@
 								"name": "crate23",
 								"type": "Mesh",
 								"geometry": "9c01b126-53a2-4424-b56f-ad209abfedc9",
-								"material": "dd4a18c2-7af3-442a-b211-cd26ec337893",
+								"material": "7ab7bb3b-8912-4d0e-af17-3b69831fc955",
 								"castShadow": true,
 								"receiveShadow": true,
 								"matrix": [
@@ -5877,7 +5877,7 @@
 								"name": "crate24",
 								"type": "Mesh",
 								"geometry": "318c7f1e-1125-4aad-a863-bbf1a632cb2b",
-								"material": "dd4a18c2-7af3-442a-b211-cd26ec337893",
+								"material": "7ab7bb3b-8912-4d0e-af17-3b69831fc955",
 								"castShadow": true,
 								"receiveShadow": true,
 								"matrix": [
@@ -5904,7 +5904,7 @@
 								"name": "wall4",
 								"type": "Mesh",
 								"geometry": "d4a4520b-d77c-43a2-90ac-f13714441ac1",
-								"material": "90adc226-8f00-490b-a418-583e6d2662a1",
+								"material": "e3020da6-3c92-40ae-bf9c-d8e7d5efba50",
 								"castShadow": true,
 								"receiveShadow": true,
 								"matrix": [
@@ -5931,7 +5931,7 @@
 								"name": "crate25",
 								"type": "Mesh",
 								"geometry": "5d904ada-5a27-494f-9522-f0e50221435a",
-								"material": "dd4a18c2-7af3-442a-b211-cd26ec337893",
+								"material": "7ab7bb3b-8912-4d0e-af17-3b69831fc955",
 								"castShadow": true,
 								"receiveShadow": true,
 								"matrix": [
@@ -5958,7 +5958,7 @@
 								"name": "wall6",
 								"type": "Mesh",
 								"geometry": "c9a41709-a752-4712-9f3d-f0aff3fcbf7b",
-								"material": "90adc226-8f00-490b-a418-583e6d2662a1",
+								"material": "e3020da6-3c92-40ae-bf9c-d8e7d5efba50",
 								"castShadow": true,
 								"receiveShadow": true,
 								"matrix": [
@@ -5985,7 +5985,7 @@
 								"name": "wall5",
 								"type": "Mesh",
 								"geometry": "796f8f08-ff0d-447f-b445-013a0b834675",
-								"material": "90adc226-8f00-490b-a418-583e6d2662a1",
+								"material": "e3020da6-3c92-40ae-bf9c-d8e7d5efba50",
 								"castShadow": true,
 								"receiveShadow": true,
 								"matrix": [
@@ -6012,7 +6012,7 @@
 								"name": "wall7",
 								"type": "Mesh",
 								"geometry": "9e348615-0847-4a31-8d0d-1763ab6cc6c2",
-								"material": "90adc226-8f00-490b-a418-583e6d2662a1",
+								"material": "e3020da6-3c92-40ae-bf9c-d8e7d5efba50",
 								"castShadow": true,
 								"receiveShadow": true,
 								"matrix": [
@@ -6043,7 +6043,7 @@
 								},
 								"type": "Mesh",
 								"geometry": "4126a93c-7cd5-4b13-a32f-e1193a9cf69b",
-								"material": "C97E132D-4A8C-49A9-901B-E38F5FF6378C",
+								"material": "2FE822E5-F8BD-4E7E-BF4F-2E9114716B34",
 								"castShadow": false,
 								"receiveShadow": false,
 								"matrix": [
@@ -6077,7 +6077,7 @@
 								},
 								"type": "Mesh",
 								"geometry": "6d169b81-abc7-4dd3-8f48-331595824bcc",
-								"material": "2B77357B-0CAF-4F28-89D6-B759225CD311",
+								"material": "E84BAFCF-1E47-4631-BBB5-8362360E5303",
 								"castShadow": false,
 								"receiveShadow": false,
 								"matrix": [
@@ -6107,7 +6107,7 @@
 								},
 								"type": "Mesh",
 								"geometry": "c70ce6db-45e5-4c0a-a839-0d173646f271",
-								"material": "dd4a18c2-7af3-442a-b211-cd26ec337893",
+								"material": "7ab7bb3b-8912-4d0e-af17-3b69831fc955",
 								"castShadow": true,
 								"receiveShadow": true,
 								"matrix": [
@@ -6134,7 +6134,7 @@
 								"name": "Torch1",
 								"type": "Mesh",
 								"geometry": "920f8806-d378-4424-ba02-5ebebe86f5df",
-								"material": "26D8CC1A-1F99-469A-8B5D-EB188E40AF18",
+								"material": "8360B267-C9F4-4374-83A3-713F2E041028",
 								"castShadow": true,
 								"receiveShadow": true,
 								"matrix": [
@@ -6165,7 +6165,7 @@
 										},
 										"type": "Mesh",
 										"geometry": "cfb3a7e9-ba06-4ce9-a298-64aab0e18973",
-										"material": "1BCB55DF-B148-4C3A-88E6-A2D801FF3DC4",
+										"material": "F882D769-DB8F-4B9E-82C3-87961539E436",
 										"castShadow": false,
 										"receiveShadow": false,
 										"matrix": [
@@ -6223,7 +6223,7 @@
 								"name": "Torch2",
 								"type": "Mesh",
 								"geometry": "70fa6827-29ba-43b0-a278-36e172a3a16a",
-								"material": "F784F73F-EF20-4591-B982-C031359168A8",
+								"material": "3353081E-0338-4C86-BB28-E64C0AB36FB5",
 								"castShadow": true,
 								"receiveShadow": true,
 								"matrix": [
@@ -6254,7 +6254,7 @@
 										},
 										"type": "Mesh",
 										"geometry": "86f7ab87-ec58-439b-9327-b320379c6152",
-										"material": "88C9CC11-3DE0-422B-B280-1111AD761E42",
+										"material": "220A100E-3643-42FF-A1EE-B8F71DCD6FE4",
 										"castShadow": false,
 										"receiveShadow": false,
 										"matrix": [
@@ -6283,7 +6283,7 @@
 								"name": "Torch3",
 								"type": "Mesh",
 								"geometry": "01afd0ab-d3de-4a77-96dd-769c0929f300",
-								"material": "B17076FD-69DA-4711-99B0-2883CA0961C4",
+								"material": "3AA077D0-5C65-405B-B279-E7B52538DCD8",
 								"castShadow": true,
 								"receiveShadow": true,
 								"matrix": [
@@ -6314,7 +6314,7 @@
 										},
 										"type": "Mesh",
 										"geometry": "a39909b7-c889-40f4-9a1f-53a3a93cf2f0",
-										"material": "C801AE93-13DF-4941-B155-5FBC8A328F5B",
+										"material": "830C5B17-AFDC-4E21-AAE2-C89818962ACD",
 										"castShadow": false,
 										"receiveShadow": false,
 										"matrix": [
@@ -6372,7 +6372,7 @@
 								"name": "Torch",
 								"type": "Mesh",
 								"geometry": "5cb7b2d7-7878-4a2b-bdd7-05328c8d8bb0",
-								"material": "C1C7E4AA-97E6-4601-93C5-9D446941F040",
+								"material": "095E6448-0883-420B-B73D-3DC777F6751F",
 								"castShadow": true,
 								"receiveShadow": true,
 								"matrix": [
@@ -6403,7 +6403,7 @@
 										},
 										"type": "Mesh",
 										"geometry": "285398ad-679c-4797-878d-75a3bbd03903",
-										"material": "9036A649-D2BD-4F12-9E7D-7AB524F9ECC5",
+										"material": "9BD0A0B6-00EC-4F90-A74E-3ED84973DD40",
 										"castShadow": false,
 										"receiveShadow": false,
 										"matrix": [
@@ -6432,7 +6432,7 @@
 								"name": "crate26",
 								"type": "Mesh",
 								"geometry": "3885139f-cdfb-42df-a746-07531b4fc006",
-								"material": "dd4a18c2-7af3-442a-b211-cd26ec337893",
+								"material": "7ab7bb3b-8912-4d0e-af17-3b69831fc955",
 								"castShadow": true,
 								"receiveShadow": true,
 								"matrix": [
@@ -6462,7 +6462,7 @@
 								},
 								"type": "Mesh",
 								"geometry": "77864278-da29-488d-8662-a35e34ef1ee6",
-								"material": "dd4a18c2-7af3-442a-b211-cd26ec337893",
+								"material": "7ab7bb3b-8912-4d0e-af17-3b69831fc955",
 								"castShadow": true,
 								"receiveShadow": true,
 								"matrix": [

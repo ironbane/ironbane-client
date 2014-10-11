@@ -69,7 +69,11 @@ angular.module('Ironbane.CharPreviewApp', [
         $rootWorld.addEntity(player);
 
         var level = new Entity();
-        level.addComponent($components.get('scene', {path: 'assets/scene/storage_room/storage-room.json'}));
+        level.addComponent($components.get('scene', {id: 'storage-room'}));
+        level.addComponent($components.get('light', {
+            type: 'AmbientLight',
+            color: new THREE.Color( 0xffffff )
+        }));
         $rootWorld.addEntity(level);
     })
     .controller('MainController', function ($scope, $rootWorld) {
