@@ -84,7 +84,7 @@ angular.module('Ironbane.CharPreviewApp', [
                 },
                 light: {
                     type: 'AmbientLight',
-                    color: 0xffffff
+                    color: 0x333333
                 }
             }
         });
