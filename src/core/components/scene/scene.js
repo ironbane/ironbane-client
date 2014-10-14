@@ -74,8 +74,6 @@ angular.module('components.scene.scene', ['ces', 'three'])
 
                                 newMats[i].map = texture;
                                 newMats[i].needsUpdate = true;
-                                newMats[i].color.setHex(0xffffff);
-                                newMats[i].ambient.setHex(0xffffff);
                             }
                         }
 

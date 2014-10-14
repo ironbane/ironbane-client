@@ -31,7 +31,7 @@ module.exports = function (angus, gulp) {
     return function (done) {
 
         var exportClaraScenes = function () {
-            curl.request(claraOptions('http://clara.io/api/users/nikke/scenes'), function (err, file) {
+            curl.request(claraOptions('http://clara.io/api/users/' + claraUser.name + '/scenes'), function (err, file) {
                 var promises = [];
 
                 var json = JSON.parse(file);
@@ -99,20 +99,25 @@ module.exports = function (angus, gulp) {
             var obj = loader.parse(json);
 
             var newWorld = new THREE.Object3D();
+            newWorld.name = 'Processed_Scene';
 
             var mergedMeshesGeometry = new THREE.Geometry();
             var mergedMaterialsCollection = [];
 
-            var entitiesCollection = new THREE.Object3D();
+            var entitiesCollection = new THREE.Object3D(),
+                ents = [];
 
-            loopChildren(obj, function (child) {
+            entitiesCollection.name = 'Entities';
+
+            obj.traverse(function (child) {
                 if (child.userData.entity) {
                     if (obj.userData.entity) {
                         // Only if the parent is an entity, we save the uuid
                         // Otherwise it would be no use since the parent will be merged into one world mesh
                         child.parentUuid = obj.uuid;
                     }
-                    entitiesCollection.add(child);
+                    // store to array for later (don't mess with the tree during traversal)
+                    ents.push(child);
                 } else {
                     if (child.geometry) {
 
@@ -127,6 +132,10 @@ module.exports = function (angus, gulp) {
                         mergeMaterials(mergedMeshesGeometry, mergedMaterialsCollection, clonedGeometry, [child.material]);
                     }
                 }
+            });
+
+            ents.forEach(function(entity) {
+                entitiesCollection.add(entity);
             });
 
             function mergeMaterials(geometry1, materials1, geometry2, materials2) {
@@ -254,6 +263,7 @@ module.exports = function (angus, gulp) {
             }
 
             var mergedMeshes = new THREE.Mesh(mergedMeshesGeometry, new THREE.MeshFaceMaterial(mergedMaterialsCollection));
+            mergedMeshes.name = 'WorldMesh';
 
             newWorld.add(mergedMeshes);
             newWorld.add(entitiesCollection);
@@ -277,13 +287,6 @@ module.exports = function (angus, gulp) {
                         cb();
                     }
                 }
-            });
-        };
-
-        var loopChildren = function (obj, fn) {
-            fn(obj);
-            obj.children.forEach(function (child) {
-                loopChildren(child, fn);
             });
         };
 

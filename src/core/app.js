@@ -29,24 +29,33 @@ angular.module('Ironbane.CharPreviewApp', [
     .run(function loadWorld(Entity, $components, $rootWorld, THREE, EntityBuilder) {
         'use strict';
 
-        var cameraEntity = new Entity();
-        cameraEntity.addComponent($components.get('camera'));
-        cameraEntity.addComponent($components.get('script', {
-            scripts: [
-                '/scripts/built-in/camera-pan.js'
-            ]
-        }));
+        var cameraEntity = EntityBuilder.build('MainCamera', {
+            components: {
+                camera: {
+                    // defaults
+                },
+                script: {
+                    scripts: [
+                        '/scripts/built-in/camera-pan.js'
+                    ]
+                }
+            }
+        });
         $rootWorld.addEntity(cameraEntity);
 
-        var cube = new Entity();
-        cube.name = 'Cubey-Doobey-Doo';
-        cube.addComponent($components.get('model'));
-        cube.addComponent($components.get('script', {
-            scripts: [
-                'assets/scripts/test.js'
-            ]
-        }));
-        cube.position.y = 3;
+        var cube = EntityBuilder.build('Cubey-Doobey-Doo', {
+            position: [0, 3, 0],
+            components: {
+                model: {
+                    //default
+                },
+                script: {
+                    scripts: [
+                        'assets/scripts/test.js'
+                    ]
+                }
+            }
+        });
         $rootWorld.addEntity(cube);
 
         var player = EntityBuilder.build('Player', {
@@ -68,12 +77,17 @@ angular.module('Ironbane.CharPreviewApp', [
         });
         $rootWorld.addEntity(player);
 
-        var level = new Entity();
-        level.addComponent($components.get('scene', {id: 'storage-room'}));
-        level.addComponent($components.get('light', {
-            type: 'AmbientLight',
-            color: new THREE.Color( 0xffffff )
-        }));
+        var level = EntityBuilder.build('TestLevel', {
+            components: {
+                scene: {
+                    id: 'storage-room'
+                },
+                light: {
+                    type: 'AmbientLight',
+                    color: 0xffffff
+                }
+            }
+        });
         $rootWorld.addEntity(level);
     })
     .controller('MainController', function ($scope, $rootWorld) {
