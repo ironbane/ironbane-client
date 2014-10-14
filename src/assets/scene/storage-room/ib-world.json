@@ -6,7 +6,7 @@
     },
     "geometries": [
         {
-            "uuid": "C43FBDB1-836D-4A43-87E5-1A1DF01B3DCA",
+            "uuid": "41B0D685-6643-4B6C-9F17-F1A26139857E",
             "type": "Geometry",
             "data": {
                 "vertices": [
@@ -4554,60 +4554,6 @@
                     5
                 ]
             }
-        },
-        {
-            "uuid": "4126a93c-7cd5-4b13-a32f-e1193a9cf69b",
-            "type": "Geometry",
-            "data": {
-                "vertices": [],
-                "normals": [],
-                "faces": []
-            }
-        },
-        {
-            "uuid": "6d169b81-abc7-4dd3-8f48-331595824bcc",
-            "type": "Geometry",
-            "data": {
-                "vertices": [],
-                "normals": [],
-                "faces": []
-            }
-        },
-        {
-            "uuid": "cfb3a7e9-ba06-4ce9-a298-64aab0e18973",
-            "type": "Geometry",
-            "data": {
-                "vertices": [],
-                "normals": [],
-                "faces": []
-            }
-        },
-        {
-            "uuid": "86f7ab87-ec58-439b-9327-b320379c6152",
-            "type": "Geometry",
-            "data": {
-                "vertices": [],
-                "normals": [],
-                "faces": []
-            }
-        },
-        {
-            "uuid": "a39909b7-c889-40f4-9a1f-53a3a93cf2f0",
-            "type": "Geometry",
-            "data": {
-                "vertices": [],
-                "normals": [],
-                "faces": []
-            }
-        },
-        {
-            "uuid": "285398ad-679c-4797-878d-75a3bbd03903",
-            "type": "Geometry",
-            "data": {
-                "vertices": [],
-                "normals": [],
-                "faces": []
-            }
         }
     ],
     "materials": [
@@ -4674,7 +4620,7 @@
                         "type": "material",
                         "generator": "MaterialExporter"
                     },
-                    "uuid": "5791FF26-DC33-41A6-A3ED-0A21A2F5014C",
+                    "uuid": "7CAE5BB9-3541-40C9-B229-2CBCC8FE2184",
                     "type": "MeshPhongMaterial",
                     "color": 13721375,
                     "ambient": 13721375,
@@ -4691,7 +4637,7 @@
                         "type": "material",
                         "generator": "MaterialExporter"
                     },
-                    "uuid": "21EC62C2-D4B9-45BF-B490-400B4FC0649C",
+                    "uuid": "549E0E32-5D66-49C9-8348-0292B4367BA9",
                     "type": "MeshPhongMaterial",
                     "color": 13721375,
                     "ambient": 13721375,
@@ -4708,7 +4654,7 @@
                         "type": "material",
                         "generator": "MaterialExporter"
                     },
-                    "uuid": "1A907860-522E-44FC-A3A3-6FFEC10D0D08",
+                    "uuid": "C2511CDA-DC98-4D7A-92D5-0206DAD08A90",
                     "type": "MeshPhongMaterial",
                     "color": 13721375,
                     "ambient": 13721375,
@@ -4725,7 +4671,7 @@
                         "type": "material",
                         "generator": "MaterialExporter"
                     },
-                    "uuid": "6E06835A-C1A0-4942-9911-43213FD46A55",
+                    "uuid": "83D9DFC6-CF7A-42F0-9B7D-FFA6A4E45F84",
                     "type": "MeshPhongMaterial",
                     "color": 13721375,
                     "ambient": 13721375,
@@ -4737,60 +4683,13 @@
                     "wireframe": false
                 }
             ]
-        },
-        {
-            "uuid": "18209064-66BC-4C09-94AE-439628CE8503",
-            "type": "MeshBasicMaterial",
-            "color": 826875,
-            "opacity": 1,
-            "transparent": false,
-            "wireframe": false
-        },
-        {
-            "uuid": "30BC66B7-1B09-4B42-989C-2CF1C5AEA186",
-            "type": "MeshBasicMaterial",
-            "color": 3448285,
-            "opacity": 1,
-            "transparent": false,
-            "wireframe": false
-        },
-        {
-            "uuid": "12DA5C54-6FDC-49AE-9780-A17797E6E2AA",
-            "type": "MeshBasicMaterial",
-            "color": 15125528,
-            "opacity": 1,
-            "transparent": false,
-            "wireframe": false
-        },
-        {
-            "uuid": "BBD06395-7753-4708-A3C2-A55829087E8E",
-            "type": "MeshBasicMaterial",
-            "color": 16743427,
-            "opacity": 1,
-            "transparent": false,
-            "wireframe": false
-        },
-        {
-            "uuid": "3800B4D1-C8AD-4DB8-B318-D7AED7C3DD58",
-            "type": "MeshBasicMaterial",
-            "color": 15662844,
-            "opacity": 1,
-            "transparent": false,
-            "wireframe": false
-        },
-        {
-            "uuid": "38752CFD-F0CB-4855-934E-C570BC39BEAF",
-            "type": "MeshBasicMaterial",
-            "color": 5816334,
-            "opacity": 1,
-            "transparent": false,
-            "wireframe": false
         }
     ],
     "object": {
-        "uuid": "D902720B-001E-4C58-B9D1-41CA75EB31DB",
-        "name": "Processed_Scene",
-        "type": "Object3D",
+        "uuid": "EB566D02-4F8B-4D4C-9FD3-474D266C90B0",
+        "name": "WorldMesh",
+        "type": "Mesh",
+        "geometry": "41B0D685-6643-4B6C-9F17-F1A26139857E",
         "matrix": [
             1,
             0,
@@ -4808,292 +4707,6 @@
             0,
             0,
             1
-        ],
-        "children": [
-            {
-                "uuid": "C04472AA-277E-44E1-87C2-263EC6848A47",
-                "name": "WorldMesh",
-                "type": "Mesh",
-                "geometry": "C43FBDB1-836D-4A43-87E5-1A1DF01B3DCA",
-                "matrix": [
-                    1,
-                    0,
-                    0,
-                    0,
-                    0,
-                    1,
-                    0,
-                    0,
-                    0,
-                    0,
-                    1,
-                    0,
-                    0,
-                    0,
-                    0,
-                    1
-                ]
-            },
-            {
-                "uuid": "161FECE8-E7CB-4B0E-AEFD-852179FD975B",
-                "name": "Entities",
-                "type": "Object3D",
-                "matrix": [
-                    1,
-                    0,
-                    0,
-                    0,
-                    0,
-                    1,
-                    0,
-                    0,
-                    0,
-                    0,
-                    1,
-                    0,
-                    0,
-                    0,
-                    0,
-                    1
-                ],
-                "children": [
-                    {
-                        "uuid": "47639c4b-4eec-4a75-bc43-b43d88f50097",
-                        "name": "SpawnPoint",
-                        "userData": {
-                            "spawnType": "player",
-                            "entity": "SpawnPoint"
-                        },
-                        "type": "Mesh",
-                        "geometry": "4126a93c-7cd5-4b13-a32f-e1193a9cf69b",
-                        "material": "18209064-66BC-4C09-94AE-439628CE8503",
-                        "matrix": [
-                            1,
-                            0,
-                            0,
-                            0,
-                            0,
-                            1,
-                            0,
-                            0,
-                            0,
-                            0,
-                            1,
-                            0,
-                            0.6573476791381836,
-                            0.24074280261993408,
-                            3.3555190563201904,
-                            1
-                        ]
-                    },
-                    {
-                        "uuid": "5e69e051-6f36-4c33-9674-4ed5b0b27760",
-                        "name": "SpawnPoint1",
-                        "userData": {
-                            "spawnType": "mob",
-                            "mobType": "rat",
-                            "spawnCount": "3",
-                            "spawnRate": "500",
-                            "entity": "SpawnPoint"
-                        },
-                        "type": "Mesh",
-                        "geometry": "6d169b81-abc7-4dd3-8f48-331595824bcc",
-                        "material": "30BC66B7-1B09-4B42-989C-2CF1C5AEA186",
-                        "matrix": [
-                            1,
-                            0,
-                            0,
-                            0,
-                            0,
-                            1,
-                            0,
-                            0,
-                            0,
-                            0,
-                            1,
-                            0,
-                            4.083547592163086,
-                            0.24074280261993408,
-                            -3.5949809551239014,
-                            1
-                        ]
-                    },
-                    {
-                        "uuid": "37b31504-2c47-41c3-b396-b2c7b2b0f1e8",
-                        "name": "Torchlight1",
-                        "userData": {
-                            "lit": "true",
-                            "entity": "Torch"
-                        },
-                        "type": "Mesh",
-                        "geometry": "cfb3a7e9-ba06-4ce9-a298-64aab0e18973",
-                        "material": "12DA5C54-6FDC-49AE-9780-A17797E6E2AA",
-                        "matrix": [
-                            6.57462215423584,
-                            0,
-                            0,
-                            0,
-                            0,
-                            3.594912528991699,
-                            -2.7670693397521973,
-                            0,
-                            0,
-                            3.733332872390747,
-                            4.850260257720947,
-                            0,
-                            -0.05460000038146973,
-                            0.6913999915122986,
-                            0.3937999904155731,
-                            1
-                        ]
-                    },
-                    {
-                        "uuid": "1bfb8659-b95d-47fa-93f0-43024a22c4b2",
-                        "name": "PointLight",
-                        "userData": {
-                            "entity": "light"
-                        },
-                        "type": "PointLight",
-                        "color": 10513674,
-                        "intensity": 1,
-                        "distance": 10,
-                        "matrix": [
-                            1,
-                            0,
-                            0,
-                            0,
-                            0,
-                            1,
-                            0,
-                            0,
-                            0,
-                            0,
-                            1,
-                            0,
-                            0.2937000095844269,
-                            1.9682999849319458,
-                            -3.6456000804901123,
-                            1
-                        ]
-                    },
-                    {
-                        "uuid": "d4a1b2dc-fcb6-4953-b772-5fe460ea78b2",
-                        "name": "Torchlight2",
-                        "userData": {
-                            "lit": "true",
-                            "entity": "Torch"
-                        },
-                        "type": "Mesh",
-                        "geometry": "86f7ab87-ec58-439b-9327-b320379c6152",
-                        "material": "BBD06395-7753-4708-A3C2-A55829087E8E",
-                        "matrix": [
-                            6.57462215423584,
-                            0,
-                            0,
-                            0,
-                            0,
-                            3.594912528991699,
-                            -2.7670693397521973,
-                            0,
-                            0,
-                            3.733332872390747,
-                            4.850260257720947,
-                            0,
-                            -0.05460000038146973,
-                            0.6913999915122986,
-                            0.3937999904155731,
-                            1
-                        ]
-                    },
-                    {
-                        "uuid": "59988a4a-b15b-450e-9fc0-c573e2875216",
-                        "name": "Torchlight3",
-                        "userData": {
-                            "lit": "true",
-                            "entity": "Torch"
-                        },
-                        "type": "Mesh",
-                        "geometry": "a39909b7-c889-40f4-9a1f-53a3a93cf2f0",
-                        "material": "3800B4D1-C8AD-4DB8-B318-D7AED7C3DD58",
-                        "matrix": [
-                            6.57462215423584,
-                            0,
-                            0,
-                            0,
-                            0,
-                            3.594912528991699,
-                            -2.7670693397521973,
-                            0,
-                            0,
-                            3.733332872390747,
-                            4.850260257720947,
-                            0,
-                            -0.05460000038146973,
-                            0.6913999915122986,
-                            0.3937999904155731,
-                            1
-                        ]
-                    },
-                    {
-                        "uuid": "a914767a-9e83-4524-9c21-63ab35ce286b",
-                        "name": "PointLight1",
-                        "userData": {
-                            "entity": "light"
-                        },
-                        "type": "PointLight",
-                        "color": 9199887,
-                        "intensity": 1,
-                        "distance": 10,
-                        "matrix": [
-                            -0.9999915957450867,
-                            1.2245960306083326e-16,
-                            -0.004094530828297138,
-                            0,
-                            1.2195921834724278e-16,
-                            1,
-                            1.2245960306083326e-16,
-                            0,
-                            0.004094530828297138,
-                            1.2195921834724278e-16,
-                            -0.9999915957450867,
-                            0,
-                            0.44830000400543213,
-                            1.931399941444397,
-                            3.00600004196167,
-                            1
-                        ]
-                    },
-                    {
-                        "uuid": "686f04fd-766f-41aa-aadd-0d45041fc1e9",
-                        "name": "Torchlight",
-                        "userData": {
-                            "lit": "true",
-                            "entity": "Torch"
-                        },
-                        "type": "Mesh",
-                        "geometry": "285398ad-679c-4797-878d-75a3bbd03903",
-                        "material": "38752CFD-F0CB-4855-934E-C570BC39BEAF",
-                        "matrix": [
-                            6.57462215423584,
-                            0,
-                            0,
-                            0,
-                            0,
-                            3.594912528991699,
-                            -2.7670693397521973,
-                            0,
-                            0,
-                            3.733332872390747,
-                            4.850260257720947,
-                            0,
-                            -0.05460000038146973,
-                            0.6913999915122986,
-                            0.3937999904155731,
-                            1
-                        ]
-                    }
-                ]
-            }
         ]
     }
 }

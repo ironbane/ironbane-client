@@ -75,14 +75,17 @@ module.exports = function (angus, gulp) {
 
                                 var claraExportFilepath = path.dirname(filePath) + '/clara-export.json';
                                 var ibWorldFilepath = path.dirname(filePath) + '/ib-world.json';
+                                var ibEntitiesFilepath = path.dirname(filePath) + '/ib-entities.json';
 
                                 fs.renameSync(filePath, claraExportFilepath);
 
                                 var claraExportJson = require(claraExportFilepath);
                                 var ibWorld = postProcessWorld(claraExportJson);
-                                saveProcessedWorld(ibWorld, ibWorldFilepath, function () {
-                                    deferred.resolve();
-                                });
+
+                                Q.all([
+                                    saveProcessedWorld(ibWorld.worldMesh, ibWorldFilepath),
+                                    saveProcessedWorld(ibWorld.entities, ibEntitiesFilepath)
+                                ]).then(deferred.resolve, deferred.reject);
                             }
                         });
                     }
@@ -97,9 +100,6 @@ module.exports = function (angus, gulp) {
             var loader = new THREE.ObjectLoader();
 
             var obj = loader.parse(json);
-
-            var newWorld = new THREE.Object3D();
-            newWorld.name = 'Processed_Scene';
 
             var mergedMeshesGeometry = new THREE.Geometry();
             var mergedMaterialsCollection = [];
@@ -134,7 +134,7 @@ module.exports = function (angus, gulp) {
                 }
             });
 
-            ents.forEach(function(entity) {
+            ents.forEach(function (entity) {
                 entitiesCollection.add(entity);
             });
 
@@ -265,29 +265,29 @@ module.exports = function (angus, gulp) {
             var mergedMeshes = new THREE.Mesh(mergedMeshesGeometry, new THREE.MeshFaceMaterial(mergedMaterialsCollection));
             mergedMeshes.name = 'WorldMesh';
 
-            newWorld.add(mergedMeshes);
-            newWorld.add(entitiesCollection);
-
-            return newWorld;
+            return {
+                worldMesh: mergedMeshes,
+                entities: entitiesCollection
+            };
         };
 
 
-        var saveProcessedWorld = function (world, savePath, cb) {
-
-            var exporter = new THREE.ObjectExporter();
-
-            var parsedWorld = exporter.parse(world);
+        var saveProcessedWorld = function (world, savePath) {
+            var deferred = Q.defer(),
+                exporter = new THREE.ObjectExporter(),
+                parsedWorld = exporter.parse(world);
 
             fs.writeFile(savePath, JSON.stringify(parsedWorld, null, 4), function (err) {
                 if (err) {
                     console.log(err);
+                    return deferred.reject(err);
                 } else {
                     console.log('Saved ' + savePath);
-                    if (cb) {
-                        cb();
-                    }
+                    return deferred.resolve();
                 }
             });
+
+            return deferred.promise;
         };
 
         exportClaraScenes();

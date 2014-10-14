@@ -39,30 +39,10 @@ angular.module('components.scene.scene', ['ces', 'three'])
                         component.scene = loader.parse(data);
 
                         var originalMats = data.materials[0].materials;
-                        var newMats = component.scene.children[0].material.materials;
 
                         for (var i = 0; i < originalMats.length; i++) {
 
                             if (originalMats[i].name) {
-
-                                // (function(originalMat, newMat) {
-                                //     var texName = originalMat.name.split('.')[0];
-
-                                //     TextureLoader.load('assets/scene/' + component.id + '/' + texName + '.png')
-                                //     .then(function (texture) {
-
-                                //         // texture.magFilter = THREE.NearestFilter;
-                                //         // texture.minFilter = THREE.NearestMipMapLinearFilter;
-                                //         // texture.wrapS = THREE.RepeatWrapping;
-                                //         // texture.wrapT = THREE.RepeatWrapping;
-
-                                //         newMat.map = texture;
-                                //         newMat.needsUpdate = true;
-                                //         newMat.color.setHex(0xffffff);
-                                //         newMat.ambient.setHex(0xffffff);
-                                //     });
-
-                                // })(originalMats[i], newMats[i]);
 
                                 var texName = originalMats[i].name.split('.')[0];
 
@@ -72,13 +52,12 @@ angular.module('components.scene.scene', ['ces', 'three'])
                                 texture.wrapS = THREE.RepeatWrapping;
                                 texture.wrapT = THREE.RepeatWrapping;
 
-                                newMats[i].map = texture;
-                                newMats[i].needsUpdate = true;
+                                component.scene.material.materials[i].map = texture;
+                                component.scene.material.materials[i].needsUpdate = true;
                             }
                         }
 
-                        component.scene.children[0].material.materials = newMats;
-                        component.scene.children[0].material.needsUpdate = true;
+                        component.scene.material.needsUpdate = true;
 
                         entity.add(component.scene);
                     });
