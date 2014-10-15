@@ -2,7 +2,7 @@ angular.module('ces.entity', [
     'three',
     'ces.signal'
 ])
-    .factory('Entity', function (THREE, Signal) {
+    .factory('Entity', function (THREE, Signal, $log) {
         'use strict';
 
         var Entity = function () {
@@ -11,10 +11,40 @@ angular.module('ces.entity', [
             this._components = {};
             this.onComponentAdded = new Signal();
             this.onComponentRemoved = new Signal();
+
+            this.onChildAdded = new Signal();
+            this.onChildRemoved = new Signal();
         };
 
         Entity.prototype = Object.create(THREE.Object3D.prototype);
         Entity.prototype.constructor = Entity;
+
+        Entity.prototype.add = function (child) {
+            var self = this;
+
+            // three has some conditions in which this object might not be allowed to be added
+            child.addEventListener('added', function () {
+                $log.debug('child entity added: ', child, child instanceof Entity);
+                if (child instanceof Entity) {
+                    self.onChildAdded.emit(self, child);
+                }
+            });
+
+            // call the parent method, which does allow for multi-add
+            THREE.Object3D.prototype.add.apply(this, arguments);
+        };
+
+        Entity.prototype.remove = function (child) {
+            var self = this;
+
+            child.addEventListener('removed', function () {
+                if (child instanceof Entity) {
+                    self.onChildRemoved.emit(self, child);
+                }
+            });
+
+            THREE.Object3D.prototype.remove.apply(this, arguments);
+        };
 
         /**
          * Check if this entity has a component by name.

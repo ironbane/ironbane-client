@@ -1,9 +1,10 @@
 angular.module('ces.world', [
     'ces.class',
     'ces.family',
+    'ces.entity',
     'ces.entitylist'
 ])
-    .factory('World', function (Class, Family, EntityList) {
+    .factory('World', function (Class, Family, Entity, EntityList, $log) {
         'use strict';
 
         /**
@@ -85,7 +86,12 @@ angular.module('ces.world', [
                     self._onComponentRemoved(entity, component);
                 });
 
+                entity.onChildAdded.add(self._onEntityAddChild);
+                entity.onChildRemoved.add(self._onEntityRemoveChild);
+
                 this._entities.add(entity);
+
+                this._onEntityAddChild(null, entity);
             },
 
             /**
@@ -94,7 +100,8 @@ angular.module('ces.world', [
              * @param {Entity} entity
              */
             removeEntity: function (entity) {
-                var families, familyId;
+                var families, familyId,
+                    self = this;
 
                 // try to remove the entity from each family
                 families = this._families;
@@ -102,7 +109,12 @@ angular.module('ces.world', [
                     families[familyId].removeEntity(entity);
                 }
 
+                entity.onChildAdded.remove(self._onEntityAddChild);
+                entity.onChildRemoved.remove(self._onEntityRemoveChild);
+
                 this._entities.remove(entity);
+
+                this._onEntityRemoveChild(null, entity);
             },
 
             /**
@@ -227,6 +239,37 @@ angular.module('ces.world', [
                 families = this._families;
                 for (familyId in families) {
                     families[familyId].onComponentRemoved(entity, componentName);
+                }
+            },
+
+            _onEntityAddChild: function (entity, child) {
+                var world = this;
+
+                $log.debug('_onEntityAddChild: ', entity, child);
+
+                // check if children are entities and add them
+                if(child.children && child.children.length > 0) {
+                    $log.debug('gots kids');
+                    child.children.forEach(function(c) {
+                        $log.debug('lookin at the kids', c, c instanceof Entity);
+                        if(c instanceof Entity) {
+                            $log.debug('Entity: ', entity, ' add child ', child);
+                            // the add entity workflow will end up handling the recursion here
+                            world.addEntity(c);
+                        }
+                    });
+                }
+            },
+
+            _onEntityRemoveChild: function (entity, child) {
+                var world = this;
+
+                if(child.children && child.children.length > 0) {
+                    angular.forEach(child.children, function(c) {
+                        if(c instanceof Entity) {
+                            world.removeEntity(c);
+                        }
+                    });
                 }
             }
         });
