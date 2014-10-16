@@ -15,13 +15,17 @@ angular.module('game.world-root', ['ces', 'three'])
         _world.addEntity = function (entity) {
             oldAddEntity.call(_world, entity);
 
-            _world.scene.add(entity);
+            // only add top level ents
+            if(!entity.parent) {
+                _world.scene.add(entity);
+            }
         };
 
         var oldRemoveEntity = _world.removeEntity;
         _world.removeEntity = function (entity) {
             oldRemoveEntity.call(_world, entity);
 
+            // do I need to check the same about top level here?...
             _world.scene.remove(entity);
         };
 

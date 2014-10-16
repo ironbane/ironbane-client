@@ -58,14 +58,16 @@ angular.module('Ironbane.CharPreviewApp', [
         });
         // this tests that a child added prior to the parent being added to the world
         // is still registered by the entity list
-        var testChild = EntityBuilder.build('Test Child', {
-            position: [0, 5, 0],
-            components: {
-                light: {
-                    type: 'PointLight'
+        /*for (var x = 0; x < 10; x++) {
+            cube.add(EntityBuilder.build('Test Light ' + x, {
+                position: [x * 2, 5, 0],
+                components: {
+                    light: {
+                        type: 'PointLight'
+                    }
                 }
-            }
-        });
+            }));
+        }*/
         //cube.add(testChild);
         $rootWorld.addEntity(cube);
 

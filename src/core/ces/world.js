@@ -96,6 +96,8 @@ angular.module('ces.world', [
                 this._entities.add(entity);
 
                 this._onEntityAddChild(null, entity);
+
+                $log.debug('add entity', entity.name);
             },
 
             /**
@@ -250,8 +252,10 @@ angular.module('ces.world', [
 
                 // check if children are entities and add them
                 if (child.children && child.children.length > 0) {
-                    child.children.forEach(function (c) {
+                    //$log.debug(child.name, ' has ', child.children.length, ' children.');
+                    angular.forEach(child.children, function (c) {
                         if (c instanceof Entity) {
+                            //$log.debug('add child', c.name);
                             // the add entity workflow will end up handling the recursion here
                             world.addEntity(c);
                         }
