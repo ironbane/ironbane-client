@@ -24,7 +24,7 @@ angular.module('ces.entity', [
 
             // three has some conditions in which this object might not be allowed to be added
             child.addEventListener('added', function () {
-                $log.debug('child entity added: ', child, child instanceof Entity);
+                //$log.debug('child entity added: ', child, child instanceof Entity);
                 if (child instanceof Entity) {
                     self.onChildAdded.emit(self, child);
                 }

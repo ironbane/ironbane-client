@@ -66,7 +66,7 @@ angular.module('Ironbane.CharPreviewApp', [
                 }
             }
         });
-        cube.add(testChild);
+        //cube.add(testChild);
         $rootWorld.addEntity(cube);
 
         var player = EntityBuilder.build('Player', {

@@ -9,6 +9,8 @@ THREE.BufferGeometryExporter = require('./exporters/BufferGeometryExporter');
 THREE.MaterialExporter = require('./exporters/MaterialExporter');
 THREE.ObjectExporter = require('./exporters/ObjectExporter');
 
+var entityExporter = (new (require('./exporters/EntityExporter'))());
+
 var fs = require('fs');
 var path = require('path');
 var AdmZip = require('adm-zip');
@@ -84,7 +86,7 @@ module.exports = function (angus, gulp) {
 
                                 Q.all([
                                     saveProcessedWorld(ibWorld.worldMesh, ibWorldFilepath),
-                                    saveProcessedWorld(ibWorld.entities, ibEntitiesFilepath)
+                                    saveProcessedEntities(ibWorld.entities, ibEntitiesFilepath)
                                 ]).then(deferred.resolve, deferred.reject);
                             }
                         });
@@ -278,6 +280,23 @@ module.exports = function (angus, gulp) {
                 parsedWorld = exporter.parse(world);
 
             fs.writeFile(savePath, JSON.stringify(parsedWorld, null, 4), function (err) {
+                if (err) {
+                    console.log(err);
+                    return deferred.reject(err);
+                } else {
+                    console.log('Saved ' + savePath);
+                    return deferred.resolve();
+                }
+            });
+
+            return deferred.promise;
+        };
+
+        var saveProcessedEntities = function(object, savePath) {
+            var deferred = Q.defer(),
+                parsed = entityExporter.parse(object);
+
+            fs.writeFile(savePath, JSON.stringify(parsed, null, 4), function(err) {
                 if (err) {
                     console.log(err);
                     return deferred.reject(err);

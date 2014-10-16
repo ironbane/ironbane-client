@@ -6,7 +6,7 @@
     },
     "geometries": [
         {
-            "uuid": "41B0D685-6643-4B6C-9F17-F1A26139857E",
+            "uuid": "9BF63555-8DB0-4EAB-A850-920FD77FC5CA",
             "type": "Geometry",
             "data": {
                 "vertices": [
@@ -4620,7 +4620,7 @@
                         "type": "material",
                         "generator": "MaterialExporter"
                     },
-                    "uuid": "7CAE5BB9-3541-40C9-B229-2CBCC8FE2184",
+                    "uuid": "3C6053B1-EB51-4545-BE7D-ED2F89A03A48",
                     "type": "MeshPhongMaterial",
                     "color": 13721375,
                     "ambient": 13721375,
@@ -4637,7 +4637,7 @@
                         "type": "material",
                         "generator": "MaterialExporter"
                     },
-                    "uuid": "549E0E32-5D66-49C9-8348-0292B4367BA9",
+                    "uuid": "AC14576D-EC95-4FC9-9222-E0D7F5FD2241",
                     "type": "MeshPhongMaterial",
                     "color": 13721375,
                     "ambient": 13721375,
@@ -4654,7 +4654,7 @@
                         "type": "material",
                         "generator": "MaterialExporter"
                     },
-                    "uuid": "C2511CDA-DC98-4D7A-92D5-0206DAD08A90",
+                    "uuid": "779F4131-355C-46D1-825F-30DE798CEC2A",
                     "type": "MeshPhongMaterial",
                     "color": 13721375,
                     "ambient": 13721375,
@@ -4671,7 +4671,7 @@
                         "type": "material",
                         "generator": "MaterialExporter"
                     },
-                    "uuid": "83D9DFC6-CF7A-42F0-9B7D-FFA6A4E45F84",
+                    "uuid": "B1B0834E-3B2E-4B91-8829-64834F270E09",
                     "type": "MeshPhongMaterial",
                     "color": 13721375,
                     "ambient": 13721375,
@@ -4686,10 +4686,10 @@
         }
     ],
     "object": {
-        "uuid": "EB566D02-4F8B-4D4C-9FD3-474D266C90B0",
+        "uuid": "3FF8821A-D442-42FE-BBAB-A78454567F94",
         "name": "WorldMesh",
         "type": "Mesh",
-        "geometry": "41B0D685-6643-4B6C-9F17-F1A26139857E",
+        "geometry": "9BF63555-8DB0-4EAB-A850-920FD77FC5CA",
         "matrix": [
             1,
             0,

@@ -1,119 +1,11 @@
 {
     "metadata": {
-        "version": 4.3,
-        "type": "Object",
-        "generator": "ObjectExporter"
+        "version": 0.1,
+        "type": "Entity",
+        "generator": "EntityExporter"
     },
-    "geometries": [
-        {
-            "uuid": "4126a93c-7cd5-4b13-a32f-e1193a9cf69b",
-            "type": "Geometry",
-            "data": {
-                "vertices": [],
-                "normals": [],
-                "faces": []
-            }
-        },
-        {
-            "uuid": "6d169b81-abc7-4dd3-8f48-331595824bcc",
-            "type": "Geometry",
-            "data": {
-                "vertices": [],
-                "normals": [],
-                "faces": []
-            }
-        },
-        {
-            "uuid": "cfb3a7e9-ba06-4ce9-a298-64aab0e18973",
-            "type": "Geometry",
-            "data": {
-                "vertices": [],
-                "normals": [],
-                "faces": []
-            }
-        },
-        {
-            "uuid": "86f7ab87-ec58-439b-9327-b320379c6152",
-            "type": "Geometry",
-            "data": {
-                "vertices": [],
-                "normals": [],
-                "faces": []
-            }
-        },
-        {
-            "uuid": "a39909b7-c889-40f4-9a1f-53a3a93cf2f0",
-            "type": "Geometry",
-            "data": {
-                "vertices": [],
-                "normals": [],
-                "faces": []
-            }
-        },
-        {
-            "uuid": "285398ad-679c-4797-878d-75a3bbd03903",
-            "type": "Geometry",
-            "data": {
-                "vertices": [],
-                "normals": [],
-                "faces": []
-            }
-        }
-    ],
-    "materials": [
-        {
-            "uuid": "77AAF993-0077-4446-A232-477DC3CD4FBA",
-            "type": "MeshBasicMaterial",
-            "color": 6638075,
-            "opacity": 1,
-            "transparent": false,
-            "wireframe": false
-        },
-        {
-            "uuid": "FE16C080-E4A5-4B66-95E2-BB0306CE1CC4",
-            "type": "MeshBasicMaterial",
-            "color": 13669129,
-            "opacity": 1,
-            "transparent": false,
-            "wireframe": false
-        },
-        {
-            "uuid": "B40C9C45-7D1B-4076-A544-855518A2E043",
-            "type": "MeshBasicMaterial",
-            "color": 2167643,
-            "opacity": 1,
-            "transparent": false,
-            "wireframe": false
-        },
-        {
-            "uuid": "58E61CA4-3524-46FB-8AB4-83ABE5ED001A",
-            "type": "MeshBasicMaterial",
-            "color": 11726097,
-            "opacity": 1,
-            "transparent": false,
-            "wireframe": false
-        },
-        {
-            "uuid": "3B6FDC78-5438-4858-918F-1F3F05D48B0E",
-            "type": "MeshBasicMaterial",
-            "color": 14879145,
-            "opacity": 1,
-            "transparent": false,
-            "wireframe": false
-        },
-        {
-            "uuid": "424C957D-FBE8-42C3-B541-B962F57FDD50",
-            "type": "MeshBasicMaterial",
-            "color": 7621721,
-            "opacity": 1,
-            "transparent": false,
-            "wireframe": false
-        }
-    ],
-    "object": {
-        "uuid": "707B7014-10E5-4D3B-9125-D947347E946E",
+    "entities": {
         "name": "Entities",
-        "type": "Object3D",
         "matrix": [
             1,
             0,
@@ -132,17 +24,14 @@
             0,
             1
         ],
+        "components": {},
         "children": [
             {
-                "uuid": "47639c4b-4eec-4a75-bc43-b43d88f50097",
                 "name": "SpawnPoint",
                 "userData": {
                     "spawnType": "player",
                     "entity": "SpawnPoint"
                 },
-                "type": "Mesh",
-                "geometry": "4126a93c-7cd5-4b13-a32f-e1193a9cf69b",
-                "material": "77AAF993-0077-4446-A232-477DC3CD4FBA",
                 "matrix": [
                     1,
                     0,
@@ -160,10 +49,11 @@
                     0.24074280261993408,
                     3.3555190563201904,
                     1
-                ]
+                ],
+                "components": {},
+                "prefab": "SpawnPoint"
             },
             {
-                "uuid": "5e69e051-6f36-4c33-9674-4ed5b0b27760",
                 "name": "SpawnPoint1",
                 "userData": {
                     "spawnType": "mob",
@@ -172,9 +62,6 @@
                     "spawnRate": "500",
                     "entity": "SpawnPoint"
                 },
-                "type": "Mesh",
-                "geometry": "6d169b81-abc7-4dd3-8f48-331595824bcc",
-                "material": "FE16C080-E4A5-4B66-95E2-BB0306CE1CC4",
                 "matrix": [
                     1,
                     0,
@@ -192,18 +79,16 @@
                     0.24074280261993408,
                     -3.5949809551239014,
                     1
-                ]
+                ],
+                "components": {},
+                "prefab": "SpawnPoint"
             },
             {
-                "uuid": "37b31504-2c47-41c3-b396-b2c7b2b0f1e8",
                 "name": "Torchlight1",
                 "userData": {
                     "lit": "true",
                     "entity": "Torch"
                 },
-                "type": "Mesh",
-                "geometry": "cfb3a7e9-ba06-4ce9-a298-64aab0e18973",
-                "material": "B40C9C45-7D1B-4076-A544-855518A2E043",
                 "matrix": [
                     6.57462215423584,
                     0,
@@ -221,18 +106,15 @@
                     0.6913999915122986,
                     0.3937999904155731,
                     1
-                ]
+                ],
+                "components": {},
+                "prefab": "Torch"
             },
             {
-                "uuid": "1bfb8659-b95d-47fa-93f0-43024a22c4b2",
                 "name": "PointLight",
                 "userData": {
                     "entity": "light"
                 },
-                "type": "PointLight",
-                "color": 10513674,
-                "intensity": 1,
-                "distance": 10,
                 "matrix": [
                     1,
                     0,
@@ -250,18 +132,22 @@
                     1.9682999849319458,
                     -3.6456000804901123,
                     1
-                ]
+                ],
+                "components": {
+                    "light": {
+                        "type": "PointLight",
+                        "color": 10513674,
+                        "intensity": 1,
+                        "distance": 10
+                    }
+                }
             },
             {
-                "uuid": "d4a1b2dc-fcb6-4953-b772-5fe460ea78b2",
                 "name": "Torchlight2",
                 "userData": {
                     "lit": "true",
                     "entity": "Torch"
                 },
-                "type": "Mesh",
-                "geometry": "86f7ab87-ec58-439b-9327-b320379c6152",
-                "material": "58E61CA4-3524-46FB-8AB4-83ABE5ED001A",
                 "matrix": [
                     6.57462215423584,
                     0,
@@ -279,18 +165,16 @@
                     0.6913999915122986,
                     0.3937999904155731,
                     1
-                ]
+                ],
+                "components": {},
+                "prefab": "Torch"
             },
             {
-                "uuid": "59988a4a-b15b-450e-9fc0-c573e2875216",
                 "name": "Torchlight3",
                 "userData": {
                     "lit": "true",
                     "entity": "Torch"
                 },
-                "type": "Mesh",
-                "geometry": "a39909b7-c889-40f4-9a1f-53a3a93cf2f0",
-                "material": "3B6FDC78-5438-4858-918F-1F3F05D48B0E",
                 "matrix": [
                     6.57462215423584,
                     0,
@@ -308,18 +192,15 @@
                     0.6913999915122986,
                     0.3937999904155731,
                     1
-                ]
+                ],
+                "components": {},
+                "prefab": "Torch"
             },
             {
-                "uuid": "a914767a-9e83-4524-9c21-63ab35ce286b",
                 "name": "PointLight1",
                 "userData": {
                     "entity": "light"
                 },
-                "type": "PointLight",
-                "color": 9199887,
-                "intensity": 1,
-                "distance": 10,
                 "matrix": [
                     -0.9999915957450867,
                     1.2245960306083326e-16,
@@ -337,18 +218,22 @@
                     1.931399941444397,
                     3.00600004196167,
                     1
-                ]
+                ],
+                "components": {
+                    "light": {
+                        "type": "PointLight",
+                        "color": 9199887,
+                        "intensity": 1,
+                        "distance": 10
+                    }
+                }
             },
             {
-                "uuid": "686f04fd-766f-41aa-aadd-0d45041fc1e9",
                 "name": "Torchlight",
                 "userData": {
                     "lit": "true",
                     "entity": "Torch"
                 },
-                "type": "Mesh",
-                "geometry": "285398ad-679c-4797-878d-75a3bbd03903",
-                "material": "424C957D-FBE8-42C3-B541-B962F57FDD50",
                 "matrix": [
                     6.57462215423584,
                     0,
@@ -366,7 +251,9 @@
                     0.6913999915122986,
                     0.3937999904155731,
                     1
-                ]
+                ],
+                "components": {},
+                "prefab": "Torch"
             }
         ]
     }

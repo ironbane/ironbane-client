@@ -32,4 +32,23 @@ angular.module('engine.entity-builder', ['ces', 'three'])
 
             return entity;
         };
+
+        // load from ib-entities.json export
+        this.load = function (json) {
+            var builder = this,
+                root = new Entity();
+
+            function parse (data, parent) {
+                var entity = builder.build(data.name, data);
+                parent.add(entity);
+
+                angular.forEach(data.children, function(child) {
+                    parse(child, entity);
+                });
+            }
+
+            parse(json.entities, root);
+
+            return root;
+        };
     });

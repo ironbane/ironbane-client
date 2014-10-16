@@ -1,4 +1,4 @@
-angular.module('components.scene.scene', ['ces', 'three'])
+angular.module('components.scene.scene', ['ces', 'three', 'engine.entity-builder'])
     .config(function ($componentsProvider) {
         'use strict';
 
@@ -8,7 +8,7 @@ angular.module('components.scene.scene', ['ces', 'three'])
             }
         });
     })
-    .factory('SceneSystem', function (System, THREE, $http, TextureLoader) {
+    .factory('SceneSystem', function (System, THREE, $http, TextureLoader, EntityBuilder) {
         'use strict';
 
         var SceneSystem = System.extend({
@@ -30,9 +30,8 @@ angular.module('components.scene.scene', ['ces', 'three'])
                 // these are clara.io exports
                 var loader = new THREE.ObjectLoader();
 
-                $http.get('assets/scene/' + component.id + '/ib-world.json')
+                var meshTask = $http.get('assets/scene/' + component.id + '/ib-world.json')
                     .success(function (data) {
-
                         // THREE does not store material names/metadata when it recreates the materials
                         // so we need to store them here and then load the material maps ourselves
 
@@ -60,6 +59,13 @@ angular.module('components.scene.scene', ['ces', 'three'])
                         component.scene.material.needsUpdate = true;
 
                         entity.add(component.scene);
+                    });
+
+                var entitiesTask = $http.get('assets/scene/' + component.id + '/ib-entities.json')
+                    .then(function(response) {
+                        var entities = EntityBuilder.load(response.data);
+
+                        entity.add(entities);
                     });
             },
             onEntityRemoved: function (entity) {

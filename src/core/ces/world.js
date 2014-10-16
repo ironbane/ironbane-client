@@ -86,8 +86,12 @@ angular.module('ces.world', [
                     self._onComponentRemoved(entity, component);
                 });
 
-                entity.onChildAdded.add(self._onEntityAddChild);
-                entity.onChildRemoved.add(self._onEntityRemoveChild);
+                entity.onChildAdded.add(function (entity, child) {
+                    self._onEntityAddChild(entity, child);
+                });
+                entity.onChildRemoved.add(function (entity, child) {
+                    self._onEntityRemoveChild(entity, child);
+                });
 
                 this._entities.add(entity);
 
@@ -108,9 +112,6 @@ angular.module('ces.world', [
                 for (familyId in families) {
                     families[familyId].removeEntity(entity);
                 }
-
-                entity.onChildAdded.remove(self._onEntityAddChild);
-                entity.onChildRemoved.remove(self._onEntityRemoveChild);
 
                 this._entities.remove(entity);
 
@@ -245,15 +246,12 @@ angular.module('ces.world', [
             _onEntityAddChild: function (entity, child) {
                 var world = this;
 
-                $log.debug('_onEntityAddChild: ', entity, child);
+                //$log.debug('_onEntityAddChild: ', entity, child);
 
                 // check if children are entities and add them
-                if(child.children && child.children.length > 0) {
-                    $log.debug('gots kids');
-                    child.children.forEach(function(c) {
-                        $log.debug('lookin at the kids', c, c instanceof Entity);
-                        if(c instanceof Entity) {
-                            $log.debug('Entity: ', entity, ' add child ', child);
+                if (child.children && child.children.length > 0) {
+                    child.children.forEach(function (c) {
+                        if (c instanceof Entity) {
                             // the add entity workflow will end up handling the recursion here
                             world.addEntity(c);
                         }
@@ -264,9 +262,9 @@ angular.module('ces.world', [
             _onEntityRemoveChild: function (entity, child) {
                 var world = this;
 
-                if(child.children && child.children.length > 0) {
-                    angular.forEach(child.children, function(c) {
-                        if(c instanceof Entity) {
+                if (child.children && child.children.length > 0) {
+                    angular.forEach(child.children, function (c) {
+                        if (c instanceof Entity) {
                             world.removeEntity(c);
                         }
                     });
