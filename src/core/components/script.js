@@ -50,7 +50,7 @@ angular.module('components.script', ['ces'])
                     angular.forEach(scriptData.scripts, function(scriptPath) {
                         ScriptBank.get(scriptPath)
                             .then(function(Script) {
-                                scriptData._scripts.push(new Script(entity));
+                                scriptData._scripts.push(new Script(entity, world));
                             }, function(err) {
                                 $log.error('Error fetching script! ', scriptPath, err);
                             });

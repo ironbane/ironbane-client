@@ -7,5 +7,6 @@ angular.module('components', [
     'components.scene.sprite',
     'components.scene.scene',
     'components.script',
+    'components.sound',
     'components.gameplay.health'
 ]);

@@ -5,9 +5,21 @@ angular.module('Ironbane.CharPreviewApp', [
     'three',
     'components',
     'game.scripts',
-    'engine.entity-builder'
+    'engine.entity-builder',
+    'engine.sound-system'
 ])
-    .run(function (System, CameraSystem, ModelSystem, $rootWorld, THREE, LightSystem, SpriteSystem, SceneSystem, ScriptSystem) {
+    .config(function(SoundSystemProvider) {
+        // define all of the sounds & music for the game
+        SoundSystemProvider.setAudioLibraryData({
+            theme: {
+                path: 'assets/music/ib_theme',
+                volume: 0.55,
+                loop: true,
+                type: 'music'
+            }
+        });
+    })
+    .run(function (System, CameraSystem, ModelSystem, $rootWorld, THREE, LightSystem, SpriteSystem, SceneSystem, ScriptSystem, SoundSystem) {
         'use strict';
 
         // TODO: move to directive
@@ -18,6 +30,7 @@ angular.module('Ironbane.CharPreviewApp', [
         var grid = new THREE.GridHelper(100, 1);
         $rootWorld.scene.add(grid);
 
+        $rootWorld.addSystem(new SoundSystem());
         $rootWorld.addSystem(new ScriptSystem());
         $rootWorld.addSystem(new SceneSystem());
         $rootWorld.addSystem(new SpriteSystem());
@@ -26,8 +39,19 @@ angular.module('Ironbane.CharPreviewApp', [
         // NOTE: this should be the LAST system as it does rendering!!
         $rootWorld.addSystem(new CameraSystem());
     })
-    .run(function loadWorld(Entity, $components, $rootWorld, THREE, EntityBuilder) {
+    .run(function loadWorld($log, Entity, $components, $rootWorld, THREE, EntityBuilder) {
         'use strict';
+
+        var musicEntity = EntityBuilder.build('MusicPlayer', {
+            components: {
+                sound: {
+                    asset: 'theme',
+                    loop: true
+                }
+            }
+        });
+        $log.debug('musicEntity', musicEntity);
+        $rootWorld.addEntity(musicEntity);
 
         var cameraEntity = EntityBuilder.build('MainCamera', {
             components: {

@@ -17,7 +17,8 @@ module.exports = {
 
     bower: {
         packages: [
-            'angular'
+            'angular',
+            'howler.js'
         ],
         localFolders: [
             'src/lib'
@@ -25,10 +26,12 @@ module.exports = {
         filesNeeded: {
             js: [
                 'angular/angular.js',
+                'howler.js/howler.js',
 
                 'lib/game-shim.js',
                 'lib/three.js',
-                'lib/three-angular.js'
+                'lib/three-angular.js',
+                'lib/howler-angular.js'
             ],
 
             less: [],
