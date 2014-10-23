@@ -19,7 +19,7 @@ angular.module('components.script', ['ces'])
             } else {
                 return $http.get(path)
                     .then(function(response) {
-                        var Script = eval(response.data);
+                        var Script = eval(response.data); // jshint ignore:line
                         cache.put(path, Script);
 
                         return Script;
@@ -54,6 +54,17 @@ angular.module('components.script', ['ces'])
                             }, function(err) {
                                 $log.error('Error fetching script! ', scriptPath, err);
                             });
+                    });
+                });
+
+                world.entityRemoved('script').add(function (entity) {
+                    var scripts = entity.getComponent('script')._scripts;
+
+                    angular.forEach(scripts, function(script) {
+                        // destroy lifecycle for each script
+                        if(angular.isFunction(script.destroy)) {
+                            script.destroy.call(script);
+                        }
                     });
                 });
             },

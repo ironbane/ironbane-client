@@ -6,7 +6,8 @@ angular.module('Ironbane.CharPreviewApp', [
     'components',
     'game.scripts',
     'engine.entity-builder',
-    'engine.sound-system'
+    'engine.sound-system',
+    'engine.input.input-system'
 ])
     .config(function(SoundSystemProvider) {
         // define all of the sounds & music for the game
@@ -19,7 +20,7 @@ angular.module('Ironbane.CharPreviewApp', [
             }
         });
     })
-    .run(function (System, CameraSystem, ModelSystem, $rootWorld, THREE, LightSystem, SpriteSystem, SceneSystem, ScriptSystem, SoundSystem) {
+    .run(function (System, CameraSystem, ModelSystem, $rootWorld, THREE, LightSystem, SpriteSystem, SceneSystem, ScriptSystem, SoundSystem, InputSystem) {
         'use strict';
 
         // TODO: move to directive
@@ -30,6 +31,7 @@ angular.module('Ironbane.CharPreviewApp', [
         var grid = new THREE.GridHelper(100, 1);
         $rootWorld.scene.add(grid);
 
+        $rootWorld.addSystem(new InputSystem(), 'input');
         $rootWorld.addSystem(new SoundSystem());
         $rootWorld.addSystem(new ScriptSystem());
         $rootWorld.addSystem(new SceneSystem());
@@ -75,7 +77,8 @@ angular.module('Ironbane.CharPreviewApp', [
                 },
                 script: {
                     scripts: [
-                        'assets/scripts/test.js'
+                        'assets/scripts/test.js',
+                        '/scripts/built-in/input-test.js'
                     ]
                 }
             }

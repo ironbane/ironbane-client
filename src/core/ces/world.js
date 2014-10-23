@@ -26,6 +26,7 @@ angular.module('ces.world', [
                  * @private
                  */
                 this._systems = [];
+                this._systemRegistry = {};
 
                 /**
                  * @private
@@ -38,8 +39,13 @@ angular.module('ces.world', [
              * @public
              * @param {System} system
              */
-            addSystem: function (system) {
+            addSystem: function (system, name) {
                 this._systems.push(system);
+                if (name) {
+                    this._systemRegistry[name] = system;
+                } else {
+                    this._systemRegistry[Date.now()] = system;
+                }
                 system.addedToWorld(this);
                 return this;
             },
@@ -49,8 +55,12 @@ angular.module('ces.world', [
              * @public
              * @param {System} system
              */
-            removeSystem: function (system) {
+            removeSystem: function (system, name) {
                 var systems, i, len;
+
+                if (name) {
+                    delete this._systemRegistry[name];
+                }
 
                 systems = this._systems;
                 for (i = 0, len = systems.length; i < len; ++i) {
@@ -59,6 +69,10 @@ angular.module('ces.world', [
                         system.removedFromWorld();
                     }
                 }
+            },
+
+            getSystem: function (name) {
+                return this._systemRegistry[name];
             },
 
             /**

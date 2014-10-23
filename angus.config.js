@@ -18,7 +18,8 @@ module.exports = {
     bower: {
         packages: [
             'angular',
-            'howler.js'
+            'howler.js',
+            'Keypress'
         ],
         localFolders: [
             'src/lib'
@@ -27,6 +28,7 @@ module.exports = {
             js: [
                 'angular/angular.js',
                 'howler.js/howler.js',
+                'Keypress/keypress.js',
 
                 'lib/game-shim.js',
                 'lib/three.js',
