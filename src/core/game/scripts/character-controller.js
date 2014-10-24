@@ -111,10 +111,10 @@ angular.module('game.scripts.character-controller', ['components.script'])
             // console.log(this.moveForward);
 
             if (this.moveForward) {
-                this.entity.translateZ( moveSpeed * dt );
+                this.entity.translateZ( -moveSpeed * dt );
             }
             if (this.moveBackward) {
-                this.entity.translateZ( -moveSpeed * dt );
+                this.entity.translateZ( moveSpeed * dt );
             }
             if (this.moveLeft) {
                 this.entity.rotateY( rotateSpeed * dt );
@@ -124,10 +124,10 @@ angular.module('game.scripts.character-controller', ['components.script'])
             }
 
             if (this.rotateLeft) {
-                this.entity.translateX( moveSpeed * dt );
+                this.entity.translateX( -moveSpeed * dt );
             }
             if (this.rotateRight) {
-                this.entity.translateX( -moveSpeed * dt );
+                this.entity.translateX( moveSpeed * dt );
             }
             // if (this.rotateRight) {
             //     this.entity.translateX( moveSpeed * dt );

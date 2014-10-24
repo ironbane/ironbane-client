@@ -53,30 +53,16 @@ angular.module('Ironbane.CharPreviewApp', [
     .run(function loadWorld($log, Entity, $components, $rootWorld, THREE, EntityBuilder) {
         'use strict';
 
-        var musicEntity = EntityBuilder.build('MusicPlayer', {
-            components: {
-                sound: {
-                    asset: 'theme',
-                    loop: true
-                }
-            }
-        });
-        $log.debug('musicEntity', musicEntity);
-        $rootWorld.addEntity(musicEntity);
-
-        var cameraEntity = EntityBuilder.build('MainCamera', {
-            components: {
-                camera: {
-                    // defaults
-                },
-                script: {
-                    scripts: [
-                        '/scripts/built-in/camera-pan.js'
-                    ]
-                }
-            }
-        });
-        $rootWorld.addEntity(cameraEntity);
+        // var musicEntity = EntityBuilder.build('MusicPlayer', {
+        //     components: {
+        //         sound: {
+        //             asset: 'theme',
+        //             loop: true
+        //         }
+        //     }
+        // });
+        // $log.debug('musicEntity', musicEntity);
+        // $rootWorld.addEntity(musicEntity);
 
         var cube = EntityBuilder.build('Cubey-Doobey-Doo', {
             position: [0, 3, 0],
@@ -87,7 +73,9 @@ angular.module('Ironbane.CharPreviewApp', [
                 script: {
                     scripts: [
                         'assets/scripts/test.js',
-                        '/scripts/built-in/input-test.js'
+
+                        // Disabled as it interferes with regular DOM keyevent listeners
+                        // '/scripts/built-in/input-test.js'
                     ]
                 }
             }
@@ -116,6 +104,13 @@ angular.module('Ironbane.CharPreviewApp', [
                 health: {
                     max: 5,
                     value: 5
+                },
+                camera: {},
+                script: {
+                    scripts: [
+                        '/scripts/built-in/character-controller.js',
+                        '/scripts/built-in/character-multicam.js',
+                    ]
                 },
                 // add a little personal torchlight
                 light: {
