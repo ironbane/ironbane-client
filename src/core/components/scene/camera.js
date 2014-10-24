@@ -35,6 +35,12 @@ angular.module('components.scene.camera', ['ces', 'three'])
 
                     if(camData.projection === 'perspective') {
                         cam = new THREE.PerspectiveCamera(camData.fov, camData.aspectRatio, camData.nearClip, camData.farClip);
+
+                        // TODO: remove on destroy?
+                        window.addEventListener('resize', function () {
+                            cam.aspect = window.innerWidth / window.innerHeight;
+                            cam.updateProjectionMatrix();
+                        }, false );
                     } else {
                         cam = new THREE.OrthographicCamera(camData.left, camData.right, camData.top, camData.bottom, camData.nearClip, camData.farClip);
                     }

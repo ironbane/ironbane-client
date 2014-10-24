@@ -32,6 +32,10 @@ angular.module('Ironbane.CharPreviewApp', [
         $rootWorld.renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild($rootWorld.renderer.domElement);
 
+        window.addEventListener('resize', function () {
+            $rootWorld.renderer.setSize(window.innerWidth, window.innerHeight);
+        }, false );
+
         // DEBUG editor mode?
         var grid = new THREE.GridHelper(100, 1);
         $rootWorld.scene.add(grid);
