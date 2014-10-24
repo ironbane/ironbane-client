@@ -7,6 +7,7 @@ angular.module('Ironbane.CharPreviewApp', [
     'game.scripts',
     'engine.entity-builder',
     'engine.sound-system',
+    'engine.ib-config',
     'engine.input.input-system'
 ])
     .config(function(SoundSystemProvider) {
@@ -19,6 +20,10 @@ angular.module('Ironbane.CharPreviewApp', [
                 type: 'music'
             }
         });
+    })
+    .config(function(IbConfigProvider) {
+        // Used for input events
+        IbConfigProvider.set('domElement', document);
     })
     .run(function (System, CameraSystem, ModelSystem, $rootWorld, THREE, LightSystem, SpriteSystem, SceneSystem, ScriptSystem, SoundSystem, InputSystem) {
         'use strict';
