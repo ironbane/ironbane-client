@@ -86,5 +86,24 @@ angular.module('ces.entity', [
             this.onComponentRemoved.emit(this, componentName);
         };
 
+
+        /**
+         * Shortcut method to get a script component
+         * @public
+         * @param {String} componentName
+         * @return {Component}
+         */
+        Entity.prototype.getScript = function (scriptname) {
+            var scriptComponent = this.getComponent('script');
+
+            if (scriptComponent) {
+                for (var i = 0; i < scriptComponent.scripts.length; i++) {
+                    if (scriptComponent.scripts[i] === scriptname) {
+                        return scriptComponent._scripts[i];
+                    }
+                }
+            }
+        };
+
         return Entity;
     });
