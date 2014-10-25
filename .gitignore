@@ -5,3 +5,4 @@ npm-debug.log
 public/
 *.sublime*
 clara.json
+src/assets/scene
