@@ -16,7 +16,14 @@ angular.module('engine.material-loader', ['three', 'engine.texture-loader', 'eng
 
                 switch (options.type) {
                     // TODO: other material types
-
+                    case 'phong':
+                        material = new THREE.MeshPhongMaterial(options);
+                        $materialCache.put(materialName, material);
+                        break;
+                    case 'lambert':
+                        material = new THREE.MeshLambertMaterial(options);
+                        $materialCache.put(materialName, material);
+                        break;
                     default:
                         material = new THREE.MeshBasicMaterial(options);
                         $materialCache.put(materialName, material);
