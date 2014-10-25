@@ -16,6 +16,13 @@ angular.module('engine.texture-loader', ['three', 'engine.texture-cache'])
                     deferred.resolve(cached);
                 } else {
                     _loader.load(src, function (texture) {
+
+                        // Set IB specific filters here
+                        texture.magFilter = THREE.NearestFilter;
+                        texture.minFilter = THREE.NearestMipMapLinearFilter;
+                        texture.wrapS = THREE.RepeatWrapping;
+                        texture.wrapT = THREE.RepeatWrapping;
+
                         $textureCache.put(src, texture);
 
                         deferred.resolve(texture);

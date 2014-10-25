@@ -45,14 +45,16 @@ angular.module('components.scene.scene', ['ces', 'three', 'engine.entity-builder
 
                                 var texName = originalMats[i].name.split('.')[0];
 
-                                var texture = THREE.ImageUtils.loadTexture('assets/scene/' + component.id + '/' + texName + '.png');
-                                texture.magFilter = THREE.NearestFilter;
-                                texture.minFilter = THREE.LinearMipMapLinearFilter;
-                                texture.wrapS = THREE.RepeatWrapping;
-                                texture.wrapT = THREE.RepeatWrapping;
+                                (function (texName, material, geometry) {
+                                    TextureLoader.load('assets/scene/' + component.id + '/' + texName + '.png')
+                                        .then(function (texture) {
+                                            material.map = texture;
+                                            material.needsUpdate = true;
+                                            geometry.buffersNeedUpdate = true;
+                                            geometry.uvsNeedUpdate = true;
+                                        });
+                                })(texName, component.scene.material.materials[i], component.scene.geometry);
 
-                                component.scene.material.materials[i].map = texture;
-                                component.scene.material.materials[i].needsUpdate = true;
                             }
                         }
 
