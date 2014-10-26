@@ -33,9 +33,7 @@ module.exports = {
                 'lib/game-shim.js',
                 'lib/three.js',
                 'lib/three-angular.js',
-                'lib/howler-angular.js',
-                'lib/ammo.js',
-                'lib/ammo-angular.js',
+                'lib/howler-angular.js'
             ],
 
             less: [],

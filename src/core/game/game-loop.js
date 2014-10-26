@@ -22,8 +22,6 @@ angular.module('game.game-loop', ['game.world-root'])
 
                 $rootWorld.update(_timing.frameTime, _timing.elapsed, _timing.timestamp);
 
-                $rootWorld.physicsWorld.stepSimulation(_timing.frameTime);
-
                 lastTimestamp = timestamp;
             }
 
