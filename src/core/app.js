@@ -31,6 +31,7 @@ angular.module('Ironbane.CharPreviewApp', [
         // TODO: move to directive
         $rootWorld.renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild($rootWorld.renderer.domElement);
+        $rootWorld.renderer.setClearColorHex(0xd3fff8);
 
         window.addEventListener('resize', function () {
             $rootWorld.renderer.setSize(window.innerWidth, window.innerHeight);
