@@ -32,7 +32,7 @@ var claraOptions = function (url, encoding) {
 module.exports = function (angus, gulp) {
     return function (done) {
 
-        var exportClaraScenes = function () {
+        var exportClaraScenes = function (sceneNameToExport) {
             curl.request(claraOptions('http://clara.io/api/users/' + claraUser.name + '/scenes'), function (err, file) {
                 var promises = [];
 
@@ -40,10 +40,13 @@ module.exports = function (angus, gulp) {
 
                 json.models.forEach(function (model) {
                     var ibSceneId = model.name.toLowerCase().replace(/ /g, '-');
-                    console.log(ibSceneId);
-                    console.log(model.id);
 
-                    promises.push(extractWorld(ibSceneId, model.id));
+                    if ((sceneNameToExport && sceneNameToExport === ibSceneId) || !sceneNameToExport) {
+                        console.log(ibSceneId);
+                        console.log(model.id);
+                        promises.push(extractWorld(ibSceneId, model.id));
+                    }
+
                 });
 
                 Q.all(promises).then(function () {
@@ -309,7 +312,7 @@ module.exports = function (angus, gulp) {
             return deferred.promise;
         };
 
-        exportClaraScenes();
+        exportClaraScenes(angus.args.scene);
 
         // For testing...
         // var zonePath = angus.appPath + '/src/assets/scene/storage-room';
