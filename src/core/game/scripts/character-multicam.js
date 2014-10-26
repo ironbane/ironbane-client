@@ -7,15 +7,17 @@ angular.module('game.scripts.character-multicam', ['components.script'])
         // In first person, you control it with the mouse and arrow/wasd
         // Using the 'V' key you can switch between these views. (later add mousewheel support)
 
-        var camMode = {
+        var camModeEnum = {
             FirstPerson: 1,
             FirstPersonToThirdPerson: 2,
             ThirdPerson: 3,
             ThirdPersonToFirstPerson: 4
         };
 
+        var camMode = camModeEnum.ThirdPerson;
+
         var lat = 0;
-        var lon = 0;
+        var lon = -90;
         var phi = 0;
         var theta = 0;
 
@@ -31,7 +33,7 @@ angular.module('game.scripts.character-multicam', ['components.script'])
             };
         };
 
-        var PointerLockScript = function (entity, world) {
+        var MultiCamScript = function (entity, world) {
             var me = this;
 
             this.entity = entity;
@@ -40,13 +42,13 @@ angular.module('game.scripts.character-multicam', ['components.script'])
             var cameraComponent = this.entity.getComponent('camera');
 
             if (cameraComponent) {
-                // cameraComponent.camera.rotation.set( 0, 0, 0 );
+                cameraComponent.camera.rotation.set( 0, 0, 0 );
             }
 
             IbConfig.get('domElement').addEventListener( 'mousemove', bind(this, this.onMouseMove), false );
         };
 
-        PointerLockScript.prototype.onMouseMove = function ( event ) {
+        MultiCamScript.prototype.onMouseMove = function ( event ) {
             var movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
             var movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
 
@@ -66,16 +68,21 @@ angular.module('game.scripts.character-multicam', ['components.script'])
 
         };
 
-        PointerLockScript.prototype.update = function (dt, elapsed, timestamp) {
+        MultiCamScript.prototype.update = function (dt, elapsed, timestamp) {
             var cameraComponent = this.entity.getComponent('camera');
 
             if (cameraComponent) {
-                cameraComponent.camera.lookAt(targetPosition);
+                if (camMode === camModeEnum.FirstPerson) {
+                    cameraComponent.camera.lookAt(targetPosition);
 
-                this.entity.quaternion.copy(cameraComponent.camera.quaternion);
-                cameraComponent.camera.quaternion.copy(new THREE.Quaternion());
+                    this.entity.quaternion.copy(cameraComponent.camera.quaternion);
+                    cameraComponent.camera.quaternion.copy(new THREE.Quaternion());
+                }
+                if (camMode === camModeEnum.ThirdPerson) {
+                    cameraComponent.camera.position.set(0, 1, 4);
+                }
             }
         };
 
-        ScriptBank.add('/scripts/built-in/character-multicam.js', PointerLockScript);
+        ScriptBank.add('/scripts/built-in/character-multicam.js', MultiCamScript);
     });
