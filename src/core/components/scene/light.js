@@ -34,6 +34,14 @@ angular.module('components.scene.light', ['ces', 'three'])
                         throw new TypeError('Invalid light type!');
                     }
 
+                    // Hack for Clara's inability to export Hemisphere or
+                    // ambient lights (TODO make a bug report)
+                    // When the name is an "AmbientLight" we simply change the
+                    // light component to be an AmbientLight as well
+                    if (entity.name === 'AmbientLight') {
+                        lightData.type = 'AmbientLight';
+                    }
+
                     switch (lightData.type) {
                         case 'DirectionalLight':
                             light = new THREE.DirectionalLight(lightData.color, lightData.intensity);
