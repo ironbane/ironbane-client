@@ -5,6 +5,8 @@ angular.module('Ironbane', [
     'game.world-root',
     'ces',
     'three',
+    'ammo',
+    'ammo.physics-world',
     'components',
     'game.scripts',
     'engine.entity-builder',
@@ -27,7 +29,7 @@ angular.module('Ironbane', [
         // Used for input events
         IbConfigProvider.set('domElement', document);
     })
-    .run(function (System, CameraSystem, ModelSystem, $rootWorld, THREE, LightSystem, SpriteSystem, QuadSystem, HelperSystem, SceneSystem, ScriptSystem, SoundSystem, InputSystem) {
+    .run(function (System, CameraSystem, ModelSystem, $rootWorld, THREE, LightSystem, SpriteSystem, QuadSystem, HelperSystem, SceneSystem, ScriptSystem, SoundSystem, InputSystem, RigidBodySystem, CollisionReporterSystem) {
         'use strict';
 
         // TODO: move to directive
@@ -51,6 +53,8 @@ angular.module('Ironbane', [
         $rootWorld.addSystem(new ModelSystem());
         $rootWorld.addSystem(new LightSystem());
         $rootWorld.addSystem(new QuadSystem());
+        $rootWorld.addSystem(new RigidBodySystem());
+        $rootWorld.addSystem(new CollisionReporterSystem());
         $rootWorld.addSystem(new HelperSystem());
         // NOTE: this should be the LAST system as it does rendering!!
         $rootWorld.addSystem(new CameraSystem());
@@ -88,11 +92,37 @@ angular.module('Ironbane', [
         $rootWorld.addEntity(cube);
 
         var player = EntityBuilder.build('Player', {
-            position: [0, 0.5, -18],
+            position: [0, 50.0, -18],
             components: {
                 quad: {
                     transparent: true,
                     texture: 'assets/images/characters/skin/2.png'
+                },
+                rigidBody: {
+                    shape: {
+                        type: 'capsule',
+                        height: 1,
+                        radius: 0.1
+                    },
+                    mass: 1,
+                    friction: 0,
+                    restitution: 0,
+                    allowSleep: false,
+                    lock: {
+                        position: {
+                            x: false,
+                            y: false,
+                            z: false
+                        },
+                        rotation: {
+                            x: true,
+                            y: true,
+                            z: true
+                        }
+                    }
+                },
+                collisionReporter: {
+
                 },
                 helper: {
                     line: true
@@ -147,6 +177,12 @@ angular.module('Ironbane', [
             components: {
                 scene: {
                     id: 'dev-zone'
+                },
+                rigidBody: {
+                    shape: {
+                        type: 'concave'
+                    },
+                    mass: 0
                 },
                 light: {
                     type: 'AmbientLight',

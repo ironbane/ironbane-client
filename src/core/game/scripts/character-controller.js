@@ -1,9 +1,12 @@
-angular.module('game.scripts.character-controller', ['components.script'])
-    .run(function ($log, ScriptBank) {
+angular.module('game.scripts.character-controller', ['components.script', 'three', 'ammo'])
+    .run(function ($log, ScriptBank, THREE, Ammo) {
         'use strict';
 
-        var moveSpeed = 10;
-        var rotateSpeed = 3;
+        var acceleration = 0.7;
+        var rotateSpeed = 2;
+        var maxspeed = 4;
+
+        var btVec3 = new Ammo.btVector3();
 
         var CharacterControllerScript = function (entity, world) {
             this.entity = entity;
@@ -11,11 +14,31 @@ angular.module('game.scripts.character-controller', ['components.script'])
 
             this.moveForward = false;
             this.moveBackward = false;
+            this.rotateLeft = false;
+            this.rotateRight = false;
+
             this.moveLeft = false;
             this.moveRight = false;
 
-            this.rotateLeft = false;
-            this.rotateRight = false;
+            this.canJump = true;
+            this.jump = false;
+
+            this.activeCollisions = [];
+
+            var collisionReporterComponent = entity.getComponent('collisionReporter');
+
+            var me = this;
+
+            if (collisionReporterComponent) {
+                collisionReporterComponent.collisionStart.add(function (contact) {
+                    console.log('collision start!');
+                    me.activeCollisions.push(contact);
+                });
+                collisionReporterComponent.collisionEnd.add(function (contact) {
+                    console.log('collision end!');
+                    me.activeCollisions.splice(me.activeCollisions.indexOf(contact), 1);
+                });
+            }
         };
 
         CharacterControllerScript.prototype.update = function (dt, elapsed, timestamp) {
@@ -26,10 +49,22 @@ angular.module('game.scripts.character-controller', ['components.script'])
             // reset these every frame
             this.moveForward = false;
             this.moveBackward = false;
-            this.moveLeft = false;
-            this.moveRight = false;
             this.rotateLeft = false;
             this.rotateRight = false;
+            this.moveLeft = false;
+            this.moveRight = false;
+            this.jump = false;
+            this.canJump = false;
+            var me = this;
+
+            // Are we allowed to jump?
+            this.activeCollisions.forEach(function (activeCollision) {
+                activeCollision.contacts.forEach(function (contact) {
+                    if (contact.normal.y > 0.5) {
+                        me.canJump = true;
+                    }
+                });
+            });
 
             // virtual gamepad (touch ipad) controls
             if (leftStick) {
@@ -41,10 +76,10 @@ angular.module('game.scripts.character-controller', ['components.script'])
                 }
 
                 if (leftStick.delta.x < 0) {
-                    this.moveLeft = true;
+                    this.rotateLeft = true;
                 }
                 if (leftStick.delta.x > 0) {
-                    this.moveRight = true;
+                    this.rotateRight = true;
                 }
             }
 
@@ -58,45 +93,87 @@ angular.module('game.scripts.character-controller', ['components.script'])
             }
 
             if (input.keyboard.isDown(input.KEYS.A) || input.keyboard.isDown(input.KEYS.LEFT)) {
-                this.moveLeft = true;
-            }
-
-            if (input.keyboard.isDown(input.KEYS.D) || input.keyboard.isDown(input.KEYS.RIGHT)) {
-                this.moveRight = true;
-            }
-
-            if (input.keyboard.isDown(input.KEYS.Q)) {
                 this.rotateLeft = true;
             }
 
-            if (input.keyboard.isDown(input.KEYS.E)) {
+            if (input.keyboard.isDown(input.KEYS.D) || input.keyboard.isDown(input.KEYS.RIGHT)) {
                 this.rotateRight = true;
             }
 
+            if (input.keyboard.isDown(input.KEYS.Q)) {
+                this.moveLeft = true;
+            }
+
+            if (input.keyboard.isDown(input.KEYS.E)) {
+                this.moveRight = true;
+            }
+
+            if (input.keyboard.isDown(input.KEYS.SPACE)) {
+                this.jump = true;
+            }
+
+            var inputVector = new THREE.Vector3();
+
             // react to changes
             if (this.moveForward) {
-                this.entity.translateZ(-moveSpeed * dt);
+                inputVector.z -= 1;
             }
             if (this.moveBackward) {
-                this.entity.translateZ(moveSpeed * dt);
+                inputVector.z += 1;
             }
             if (this.moveLeft) {
-                this.entity.rotateY(rotateSpeed * dt);
+                inputVector.x -= 1;
             }
             if (this.moveRight) {
-                this.entity.rotateY(-rotateSpeed * dt);
+                inputVector.x += 1;
+            }
+
+            // Make sure they can't gain extra speed if moving diagonally
+            inputVector.normalize();
+
+            var rigidBodyComponent = this.entity.getComponent('rigidBody');
+            if (rigidBodyComponent) {
+
+                // We need to rotate the vector ourselves
+                var v1 = new THREE.Vector3();
+                v1.copy( inputVector ).applyQuaternion( this.entity.quaternion );
+                v1.multiplyScalar(acceleration);
+
+                var currentVel = rigidBodyComponent.rigidBody.getLinearVelocity();
+                currentVel = currentVel.toTHREEVector3();
+
+                if (this.jump && this.canJump && currentVel.y < 1) {
+                    console.log(currentVel.y);
+                    btVec3.setValue(0, 5, 0);
+                    rigidBodyComponent.rigidBody.applyCentralImpulse(btVec3);
+                }
+
+                currentVel.y = 0;
+                if (currentVel.lengthSq() < maxspeed * maxspeed) {
+                    btVec3.setValue(v1.x, 0, v1.z);
+                    rigidBodyComponent.rigidBody.applyCentralImpulse(btVec3);
+                }
+
+                // Add custom friction, otherwise physics friction prevents
+                // characters from jumping upwards against a wall which is annoying
+                var invertedVelocity = currentVel.clone().multiplyScalar(-0.2);
+                btVec3.setValue(invertedVelocity.x, 0, invertedVelocity.z);
+                rigidBodyComponent.rigidBody.applyCentralImpulse(btVec3);
+
+                // Experimental...
+                // rigidBodyComponent.rigidBody.applyCentralForce(btVec3);
+                // rigidBodyComponent.rigidBody.setLinearVelocity(btVec3);
+            }
+            else {
+                this.entity.translateOnAxis(inputVector, acceleration * dt);
             }
 
             if (this.rotateLeft) {
-                this.entity.translateX(-moveSpeed * dt);
+                this.entity.rotateY(rotateSpeed * dt);
             }
             if (this.rotateRight) {
-                this.entity.translateX(moveSpeed * dt);
+                this.entity.rotateY(-rotateSpeed * dt);
             }
-
-
-            // cameraComponent.camera.position.set(Math.cos(timestamp / 1000) * 10, 20, Math.sin(timestamp / 1000) * 15);
-            // cameraComponent.camera.lookAt(new THREE.Vector3(0, 0, 0));
         };
 
         ScriptBank.add('/scripts/built-in/character-controller.js', CharacterControllerScript);
