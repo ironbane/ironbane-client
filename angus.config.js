@@ -18,6 +18,7 @@ module.exports = {
     bower: {
         packages: [
             'angular',
+            'angular-ui-router',
             'howler.js',
             'Keypress'
         ],
@@ -27,6 +28,7 @@ module.exports = {
         filesNeeded: {
             js: [
                 'angular/angular.js',
+                'angular-ui-router/release/angular-ui-router.js',
                 'howler.js/howler.js',
                 'Keypress/keypress.js',
 

@@ -1,4 +1,6 @@
-angular.module('Ironbane.CharPreviewApp', [
+angular.module('Ironbane', [
+    'angus.templates.app',
+    'game.ui',
     'game.game-loop',
     'game.world-root',
     'ces',
@@ -175,13 +177,4 @@ angular.module('Ironbane.CharPreviewApp', [
             }
         });
         $rootWorld.addEntity(level);
-    })
-    .controller('MainController', function ($scope, $rootWorld) {
-        'use strict';
-
-        $scope.title = 'Hello world!';
-
-        $scope.timing = $rootWorld._timing;
-
-        $scope.world = $rootWorld;
     });

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="Ironbane.CharPreviewApp">
+<html ng-app="Ironbane">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
@@ -9,11 +9,9 @@
     <!-- autoInclude: css !-->
 
 </head>
-<body ng-controller="MainController">
+<body>
 
-    <div id="main" class="ui-overlay">
-        <h1>{{ title }}</h1>
-    </div>
+    <ui-view id="main" class="ui-overlay"></ui-view>
 
     <!-- autoInclude: jsLib !-->
 
