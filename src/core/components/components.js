@@ -6,6 +6,7 @@ angular.module('components', [
     'components.scene.light',
     'components.scene.sprite',
     'components.scene.scene',
+    'components.scene.quad',
     'components.script',
     'components.sound',
     'components.gameplay.health'

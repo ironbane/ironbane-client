@@ -25,7 +25,7 @@ angular.module('Ironbane.CharPreviewApp', [
         // Used for input events
         IbConfigProvider.set('domElement', document);
     })
-    .run(function (System, CameraSystem, ModelSystem, $rootWorld, THREE, LightSystem, SpriteSystem, SceneSystem, ScriptSystem, SoundSystem, InputSystem) {
+    .run(function (System, CameraSystem, ModelSystem, $rootWorld, THREE, LightSystem, SpriteSystem, QuadSystem, SceneSystem, ScriptSystem, SoundSystem, InputSystem) {
         'use strict';
 
         // TODO: move to directive
@@ -48,6 +48,7 @@ angular.module('Ironbane.CharPreviewApp', [
         $rootWorld.addSystem(new SpriteSystem());
         $rootWorld.addSystem(new ModelSystem());
         $rootWorld.addSystem(new LightSystem());
+        $rootWorld.addSystem(new QuadSystem());
         // NOTE: this should be the LAST system as it does rendering!!
         $rootWorld.addSystem(new CameraSystem());
     })
