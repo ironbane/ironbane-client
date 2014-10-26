@@ -18,6 +18,8 @@ angular.module('game.game-loop', ['game.world-root'])
                 _timing.elapsed = timestamp - startTime;
                 _timing.frameTime = timestamp - lastTimestamp;
 
+                _timing.frameTime = Math.min(_timing.frameTime, 0.3);
+
                 $rootWorld.update(_timing.frameTime, _timing.elapsed, _timing.timestamp);
 
                 $rootWorld.physicsWorld.stepSimulation(_timing.frameTime);
