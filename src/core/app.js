@@ -66,13 +66,13 @@ angular.module('Ironbane', [
         $rootWorld.physicsWorld = new Ammo.btDiscreteDynamicsWorld( dispatcher, broadphase, solver, collisionConfiguration );
         $rootWorld.physicsWorld.setGravity(new Ammo.btVector3(0,-10,0));
 
-        var groundShape = new Ammo.btStaticPlaneShape(new Ammo.btVector3(0, 1, 0), 1);
-        var groundMotionState = new Ammo.btDefaultMotionState(new Ammo.btTransform(new Ammo.btQuaternion(0, 0, 0, 1), new Ammo.btVector3(0, -1, 0)));
-        var rigidBodyInfo = new Ammo.btRigidBodyConstructionInfo(0, groundMotionState, groundShape, new Ammo.btVector3(0, 0, 0));
+        // var groundShape = new Ammo.btStaticPlaneShape(new Ammo.btVector3(0, 1, 0), 1);
+        // var groundMotionState = new Ammo.btDefaultMotionState(new Ammo.btTransform(new Ammo.btQuaternion(0, 0, 0, 1), new Ammo.btVector3(0, -1, 0)));
+        // var rigidBodyInfo = new Ammo.btRigidBodyConstructionInfo(0, groundMotionState, groundShape, new Ammo.btVector3(0, 0, 0));
 
-        var rigidBody = new Ammo.btRigidBody( rigidBodyInfo );
+        // var rigidBody = new Ammo.btRigidBody( rigidBodyInfo );
 
-        $rootWorld.physicsWorld.addRigidBody( rigidBody );
+        // $rootWorld.physicsWorld.addRigidBody( rigidBody );
     })
     .run(function loadWorld($log, Entity, $components, $rootWorld, THREE, EntityBuilder) {
         'use strict';

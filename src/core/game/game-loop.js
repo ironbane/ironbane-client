@@ -22,7 +22,7 @@ angular.module('game.game-loop', ['game.world-root'])
 
                 $rootWorld.update(_timing.frameTime, _timing.elapsed, _timing.timestamp);
 
-                $rootWorld.physicsWorld.stepSimulation(_timing.frameTime);
+                $rootWorld.physicsWorld.stepSimulation(1 / 60, 10, 1 / 60);
 
                 lastTimestamp = timestamp;
             }

@@ -11,6 +11,14 @@ angular.module('components.scene.rigid-body', ['ces', 'three', 'ammo'])
     .factory('RigidBodySystem', function (System, THREE, Ammo, $rootWorld) {
         'use strict';
 
+        var activationStates = {
+            RIGIDBODY_ACTIVE_TAG: 1,
+            RIGIDBODY_ISLAND_SLEEPING: 2,
+            RIGIDBODY_WANTS_DEACTIVATION: 3,
+            RIGIDBODY_DISABLE_DEACTIVATION: 4,
+            RIGIDBODY_DISABLE_SIMULATION: 5,
+        };
+
         var RigidBodySystem = System.extend({
             addedToWorld: function (world) {
                 var sys = this;
@@ -35,6 +43,8 @@ angular.module('components.scene.rigid-body', ['ces', 'three', 'ammo'])
                     $rootWorld.physicsWorld.addRigidBody( rigidBody );
 
                     rigidBodyData.rigidBody = rigidBody;
+                    rigidBody.forceActivationState(activationStates.RIGIDBODY_ACTIVE_TAG);
+
                 });
 
             },
@@ -49,7 +59,9 @@ angular.module('components.scene.rigid-body', ['ces', 'three', 'ammo'])
                     if (rigidBodyComponent) {
                         var trans = new Ammo.btTransform();
                         rigidBodyComponent.rigidBody.getMotionState().getWorldTransform(trans);
+                        // console.log(trans.getOrigin().x());
                         console.log(trans.getOrigin().y());
+                        // console.log(trans.getOrigin().z());
                     }
 
                 });
