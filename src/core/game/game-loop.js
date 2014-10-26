@@ -5,12 +5,12 @@ angular.module('game.game-loop', ['game.world-root'])
         function ($rootWorld, $window) {
             'use strict';
 
-            var startTime = $window.performance.now();
+            var startTime = $window.performance.now() / 1000.0;
             var lastTimestamp = startTime;
             var _timing = $rootWorld._timing;
 
             function onRequestedFrame() {
-                var timestamp = $window.performance.now();
+                var timestamp = $window.performance.now() / 1000.0;
 
                 $window.requestAnimationFrame(onRequestedFrame);
 

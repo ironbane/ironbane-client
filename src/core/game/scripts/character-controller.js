@@ -2,8 +2,8 @@ angular.module('game.scripts.character-controller', ['components.script'])
     .run(function ($log, ScriptBank, IbConfig) {
         'use strict';
 
-        var moveSpeed = 0.01;
-        var rotateSpeed = 0.003;
+        var moveSpeed = 10;
+        var rotateSpeed = 3;
 
         var bind = function (scope, fn) {
             return function () {
