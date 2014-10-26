@@ -92,9 +92,6 @@ angular.module('Ironbane.CharPreviewApp', [
                     transparent: true,
                     texture: 'assets/images/characters/skin/2.png'
                 },
-                rigidBody: {
-
-                },
                 helper: {
                     line: true
                 },
