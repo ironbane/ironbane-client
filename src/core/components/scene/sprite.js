@@ -27,12 +27,6 @@ angular.module('components.scene.sprite', ['ces', 'three', 'engine.texture-loade
                     if (spriteData.texture) {
                         TextureLoader.load(spriteData.texture)
                             .then(function (texture) {
-                                // this is sort of specific, TODO: move this somehow into a "character sprite"
-                                texture.repeat.set(1 / 3, 1 / 8);
-                                texture.magFilter = THREE.NearestFilter;
-                                texture.minFilter = THREE.NearestMipMapLinearFilter;
-                                texture.offset.set(1 / 3, 2 / 8);
-
                                 sprite.material.map = texture;
                                 sprite.material.needsUpdate = true;
                             });
