@@ -101,7 +101,8 @@ angular.module('Ironbane.CharPreviewApp', [
         var player = EntityBuilder.build('Player', {
             position: [0, 0.5, -18],
             components: {
-                sprite: {
+                quad: {
+                    transparent: true,
                     texture: 'assets/images/characters/skin/2.png'
                 },
                 helper: {
@@ -116,6 +117,8 @@ angular.module('Ironbane.CharPreviewApp', [
                     scripts: [
                         '/scripts/built-in/character-controller.js',
                         '/scripts/built-in/character-multicam.js',
+                        '/scripts/built-in/look-at-camera.js',
+                        '/scripts/built-in/sprite-sheet.js',
                     ]
                 },
                 // add a little personal torchlight
