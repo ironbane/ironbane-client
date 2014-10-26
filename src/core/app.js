@@ -94,7 +94,7 @@ angular.module('Ironbane.CharPreviewApp', [
                 },
                 script: {
                     scripts: [
-                        'assets/scripts/test.js',
+                        {src: 'assets/scripts/test.js', params: {speed: 0.5}}
 
                         // Disabled as it interferes with regular DOM keyevent listeners
                         // '/scripts/built-in/input-test.js'
@@ -102,19 +102,6 @@ angular.module('Ironbane.CharPreviewApp', [
                 }
             }
         });
-        // this tests that a child added prior to the parent being added to the world
-        // is still registered by the entity list
-        /*for (var x = 0; x < 10; x++) {
-            cube.add(EntityBuilder.build('Test Light ' + x, {
-                position: [x * 2, 5, 0],
-                components: {
-                    light: {
-                        type: 'PointLight'
-                    }
-                }
-            }));
-        }*/
-        //cube.add(testChild);
         $rootWorld.addEntity(cube);
 
         var player = EntityBuilder.build('Player', {

@@ -47,13 +47,25 @@ angular.module('components.script', ['ces'])
 
                     // instances are created and stored in _scripts
                     scriptData._scripts = [];
-                    angular.forEach(scriptData.scripts, function(scriptPath) {
+
+                    angular.forEach(scriptData.scripts, function(scr) {
+                        var scriptPath,
+                            scriptParams = {};
+
+                        if(angular.isString(scr)) {
+                            scriptPath = scr;
+                        } else {
+                            scriptPath = scr.src;
+                            scriptParams = scr.params;
+                        }
+
                         ScriptBank.get(scriptPath)
                             .then(function(Script) {
-                                scriptData._scripts.push(new Script(entity, world));
+                                scriptData._scripts.push(new Script(entity, world, scriptParams));
                             }, function(err) {
                                 $log.error('Error fetching script! ', scriptPath, err);
                             });
+
                     });
                 });
 
