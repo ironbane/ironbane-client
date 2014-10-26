@@ -25,7 +25,7 @@ angular.module('Ironbane.CharPreviewApp', [
         // Used for input events
         IbConfigProvider.set('domElement', document);
     })
-    .run(function (System, CameraSystem, ModelSystem, $rootWorld, THREE, LightSystem, SpriteSystem, QuadSystem, SceneSystem, ScriptSystem, SoundSystem, InputSystem) {
+    .run(function (System, CameraSystem, ModelSystem, $rootWorld, THREE, LightSystem, SpriteSystem, QuadSystem, HelperSystem, SceneSystem, ScriptSystem, SoundSystem, InputSystem) {
         'use strict';
 
         // TODO: move to directive
@@ -49,6 +49,7 @@ angular.module('Ironbane.CharPreviewApp', [
         $rootWorld.addSystem(new ModelSystem());
         $rootWorld.addSystem(new LightSystem());
         $rootWorld.addSystem(new QuadSystem());
+        $rootWorld.addSystem(new HelperSystem());
         // NOTE: this should be the LAST system as it does rendering!!
         $rootWorld.addSystem(new CameraSystem());
     })
@@ -103,6 +104,9 @@ angular.module('Ironbane.CharPreviewApp', [
                 sprite: {
                     texture: 'assets/images/characters/skin/2.png'
                 },
+                helper: {
+                    line: true
+                },
                 health: {
                     max: 5,
                     value: 5
@@ -128,6 +132,9 @@ angular.module('Ironbane.CharPreviewApp', [
             components: {
                 quad: {
                     texture: 'assets/images/characters/skin/29.png'
+                },
+                helper: {
+                    line: true
                 },
                 script: {
                     scripts: [
