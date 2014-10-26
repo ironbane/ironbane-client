@@ -132,6 +132,7 @@ angular.module('Ironbane.CharPreviewApp', [
             components: {
                 quad: {
                     texture: 'assets/images/characters/skin/29.png'
+                    transparent: true,
                 },
                 helper: {
                     line: true

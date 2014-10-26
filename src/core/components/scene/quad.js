@@ -4,6 +4,7 @@ angular.module('components.scene.quad', ['ces', 'three', 'engine.texture-loader'
 
         $componentsProvider.addComponentData({
             'quad': {
+                transparent: false,
                 color: 0xffffff,
                 texture: null
             }
@@ -36,6 +37,7 @@ angular.module('components.scene.quad', ['ces', 'three', 'engine.texture-loader'
                                 quad.material.needsUpdate = true;
                                 quad.geometry.buffersNeedUpdate = true;
                                 quad.geometry.uvsNeedUpdate = true;
+                                quad.material.transparent = quadData.transparent;
                             });
                     }
 
