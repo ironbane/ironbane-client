@@ -98,7 +98,7 @@ angular.module('Ironbane.CharPreviewApp', [
         $rootWorld.addEntity(cube);
 
         var player = EntityBuilder.build('Player', {
-            position: [0, 0.5, -2],
+            position: [0, 0.5, -18],
             components: {
                 sprite: {
                     texture: 'assets/images/characters/skin/2.png'
@@ -123,10 +123,29 @@ angular.module('Ironbane.CharPreviewApp', [
         });
         $rootWorld.addEntity(player);
 
+        var bunny = EntityBuilder.build('Bunny', {
+            position: [0, 0.5, -20],
+            components: {
+                quad: {
+                    texture: 'assets/images/characters/skin/29.png'
+                },
+                script: {
+                    scripts: [
+                        '/scripts/built-in/look-at-camera.js',
+                    ]
+                },
+                health: {
+                    max: 5,
+                    value: 5
+                }
+            }
+        });
+        $rootWorld.addEntity(bunny);
+
         var level = EntityBuilder.build('TestLevel', {
             components: {
                 scene: {
-                    id: 'storage-room'
+                    id: 'dev-zone'
                 },
                 light: {
                     type: 'AmbientLight',
