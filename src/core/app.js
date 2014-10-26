@@ -131,8 +131,8 @@ angular.module('Ironbane.CharPreviewApp', [
             position: [0, 0.5, -20],
             components: {
                 quad: {
-                    texture: 'assets/images/characters/skin/29.png'
                     transparent: true,
+                    texture: 'assets/images/characters/skin/3.png'
                 },
                 helper: {
                     line: true
@@ -140,6 +140,7 @@ angular.module('Ironbane.CharPreviewApp', [
                 script: {
                     scripts: [
                         '/scripts/built-in/look-at-camera.js',
+                        '/scripts/built-in/sprite-sheet.js',
                     ]
                 },
                 health: {
