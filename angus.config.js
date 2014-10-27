@@ -33,6 +33,7 @@ module.exports = {
                 'Keypress/keypress.js',
 
                 'lib/game-shim.js',
+                'lib/hand-1.3.8.js',
                 'lib/three.js',
                 'lib/three-angular.js',
                 'lib/howler-angular.js'
