@@ -5,18 +5,19 @@ angular.module('engine.input.virtual-gamepad', [])
         // on detecting pointer events, create the pointer object to add to the collection
         // for different input type, show different color and text
         function createPointerObject(event) {
+            //console.log('pointer event!!', event);
             var type, color;
 
             switch (event.pointerType) {
-            case event.POINTER_TYPE_MOUSE:
+            case event.POINTER_TYPE_MOUSE || 'mouse':
                 type = 'MOUSE';
                 color = 'red';
                 break;
-            case event.POINTER_TYPE_PEN:
+            case event.POINTER_TYPE_PEN || 'pen':
                 type = 'PEN';
                 color = 'lime';
                 break;
-            case event.POINTER_TYPE_TOUCH:
+            case event.POINTER_TYPE_TOUCH || 'touch':
                 type = 'TOUCH';
                 color = 'cyan';
                 break;
@@ -63,6 +64,7 @@ angular.module('engine.input.virtual-gamepad', [])
             this.canvas.style.left = '0px';
             this.canvas.style.zIndex = '5';
             this.canvas.style.msTouchAction = 'none';
+            this.canvas.style.touchAction = 'none';
             this.canvasContext = this.canvas.getContext('2d');
             this.canvasContext.strokeStyle = '#ffffff';
             this.canvasContext.lineWidth = 2;
@@ -77,6 +79,33 @@ angular.module('engine.input.virtual-gamepad', [])
             this.canvas.addEventListener('contextmenu', function (e) {
                 e.preventDefault(); // Disables system menu
             }, false);
+        };
+
+        VirtualGamepad.prototype.draw = function () {
+            var canvas = this.canvas,
+                context = this.canvasContext,
+                keys,
+                self = this;
+
+            context.clearRect(0, 0, canvas.width, canvas.height);
+
+            keys = Object.keys(this._pointers);
+            keys.forEach(function (pointerId) {
+                var pointer = self._pointers[pointerId];
+
+                context.beginPath();
+                context.fillStyle = 'white';
+                context.fillText(pointer.type + ' id : ' + pointer.id + ' x:' + pointer.x + ' y:' +
+                    pointer.y, pointer.x + 30, pointer.y - 30);
+
+                context.beginPath();
+                context.strokeStyle = pointer.color;
+                context.lineWidth = '6';
+                context.arc(pointer.x, pointer.y, 40, 0, Math.PI * 2, true);
+                context.stroke();
+            });
+
+            window.requestAnimationFrame(this.draw.bind(this));
         };
 
         return VirtualGamepad;

@@ -10,7 +10,8 @@ angular.module('Ironbane', [
     'engine.entity-builder',
     'engine.sound-system',
     'engine.ib-config',
-    'engine.input.input-system'
+    'engine.input.input-system',
+    'engine.input.virtual-gamepad'
 ])
     .config(function(SoundSystemProvider) {
         // define all of the sounds & music for the game
@@ -55,7 +56,7 @@ angular.module('Ironbane', [
         // NOTE: this should be the LAST system as it does rendering!!
         $rootWorld.addSystem(new CameraSystem());
     })
-    .run(function loadWorld($log, Entity, $components, $rootWorld, THREE, EntityBuilder) {
+    .run(function loadWorld($log, Entity, $components, $rootWorld, THREE, EntityBuilder, VirtualGamepad) {
         'use strict';
 
         // var musicEntity = EntityBuilder.build('MusicPlayer', {
@@ -155,4 +156,6 @@ angular.module('Ironbane', [
             }
         });
         $rootWorld.addEntity(level);
+
+        window.VGP = new VirtualGamepad();
     });
