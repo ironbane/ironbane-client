@@ -47,13 +47,15 @@ angular.module('engine.input.virtual-gamepad', [])
 
             gamepad._pointers[e.pointerId] = createPointerObject(e);
 
-            if(e.clientX < gamepad.canvasHalfWidth) {
-                if(!gamepad.leftThumbstick) {
+            if (e.clientX < gamepad.canvasHalfWidth) {
+                if (!gamepad.leftThumbstick) {
                     gamepad.leftThumbstick = gamepad._pointers[e.pointerId];
+                    gamepad.leftThumbstick.color = 'green';
                 }
             } else {
-                if(!gamepad.rightThumbstick) {
+                if (!gamepad.rightThumbstick) {
                     gamepad.rightThumbstick = gamepad._pointers[e.pointerId];
+                    gamepad.rightThumbstick.color = 'aqua';
                 }
             }
         };
@@ -69,8 +71,10 @@ angular.module('engine.input.virtual-gamepad', [])
                 pointer.delta.y = pointer.y - pointer.start.y;
 
                 // normalize delta (for stick movement)
-                pointer.delta.vx = Math.min(1, Math.max(-1, pointer.delta.x));
-                pointer.delta.vy = Math.min(1, Math.max(-1, pointer.delta.y));
+                pointer.delta.vx = pointer.delta.x / (1/(25/1000)); // sensitivity
+                pointer.delta.vy = pointer.delta.y / (1/(25/1000)); // sensitivity
+                pointer.delta.vx = Math.min(1, Math.max(-1, pointer.delta.vx));
+                pointer.delta.vy = Math.min(1, Math.max(-1, pointer.delta.vy));
             }
         };
 
@@ -79,7 +83,7 @@ angular.module('engine.input.virtual-gamepad', [])
 
             delete gamepad._pointers[e.pointerId];
 
-            if(e.clientX < gamepad.canvasHalfWidth) {
+            if (e.clientX < gamepad.canvasHalfWidth) {
                 delete gamepad.leftThumbstick;
             } else {
                 delete gamepad.rightThumbstick;
@@ -150,15 +154,33 @@ angular.module('engine.input.virtual-gamepad', [])
             keys.forEach(function (pointerId) {
                 var pointer = gamepad._pointers[pointerId];
 
-                context.beginPath();
-                context.fillStyle = 'white';
-                context.fillText(JSON.stringify(pointer), pointer.x + 30, pointer.y - 30);
+                if (gamepad.leftThumbstick && pointer.id === gamepad.leftThumbstick.id) {
+                    context.beginPath();
+                    context.strokeStyle = pointer.color;
+                    context.lineWidth = 6;
+                    context.arc(pointer.start.x, pointer.start.y, 40, 0, Math.PI * 2, true);
+                    context.stroke();
+                    context.beginPath();
+                    context.strokeStyle = pointer.color;
+                    context.lineWidth = 2;
+                    context.arc(pointer.start.x, pointer.start.y, 60, 0, Math.PI * 2, true);
+                    context.stroke();
+                    context.beginPath();
+                    context.strokeStyle = pointer.color;
+                    context.arc(pointer.x, pointer.y, 40, 0, Math.PI * 2, true);
+                    context.stroke();
+                } else {
+                    // just draw touches
+                    context.beginPath();
+                    context.fillStyle = 'white';
+                    context.fillText(JSON.stringify(pointer), pointer.x + 30, pointer.y - 30);
 
-                context.beginPath();
-                context.strokeStyle = pointer.color;
-                context.lineWidth = '6';
-                context.arc(pointer.x, pointer.y, 40, 0, Math.PI * 2, true);
-                context.stroke();
+                    context.beginPath();
+                    context.strokeStyle = pointer.color;
+                    context.lineWidth = '6';
+                    context.arc(pointer.x, pointer.y, 40, 0, Math.PI * 2, true);
+                    context.stroke();
+                }
             });
 
             window.requestAnimationFrame(gamepad.draw.bind(gamepad));

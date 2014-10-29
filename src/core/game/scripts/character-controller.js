@@ -6,153 +6,74 @@ angular.module('game.scripts.character-controller', ['components.script'])
         var rotateSpeed = 3;
 
         var CharacterControllerScript = function (entity, world) {
-            var me = this;
-
             this.entity = entity;
             this.world = world;
 
-            me.moveForward = false;
-            me.moveBackward = false;
-            me.moveLeft = false;
-            me.moveRight = false;
+            this.moveForward = false;
+            this.moveBackward = false;
+            this.moveLeft = false;
+            this.moveRight = false;
 
-            me.rotateLeft = false;
-            me.rotateRight = false;
-
-            // TODO: move into input mgr
-            //var domElement = $rootWorld.renderer.domElement;
-
-            document.addEventListener('keydown', me.onKeyDown.bind(me), false);
-            document.addEventListener('keyup', me.onKeyUp.bind(me), false);
-        };
-
-        CharacterControllerScript.prototype.onKeyDown = function (event) {
-
-            switch (event.keyCode) {
-
-            case 38:
-                /*up*/
-            case 87:
-                /*W*/
-                this.moveForward = true;
-                break;
-
-            case 37:
-                /*left*/
-            case 65:
-                /*A*/
-                this.moveLeft = true;
-                break;
-
-            case 40:
-                /*down*/
-            case 83:
-                /*S*/
-                this.moveBackward = true;
-                break;
-
-            case 39:
-                /*right*/
-            case 68:
-                /*D*/
-                this.moveRight = true;
-                break;
-
-            case 82:
-                /*R*/
-                this.moveUp = true;
-                break;
-            case 70:
-                /*F*/
-                this.moveDown = true;
-                break;
-
-            case 81:
-                /*Q*/
-                this.rotateLeft = true;
-                break;
-            case 69:
-                /*Q*/
-                this.rotateRight = true;
-                break;
-
-            }
-
-        };
-
-        CharacterControllerScript.prototype.onKeyUp = function (event) {
-
-            switch (event.keyCode) {
-
-            case 38:
-                /*up*/
-            case 87:
-                /*W*/
-                this.moveForward = false;
-                break;
-
-            case 37:
-                /*left*/
-            case 65:
-                /*A*/
-                this.moveLeft = false;
-                break;
-
-            case 40:
-                /*down*/
-            case 83:
-                /*S*/
-                this.moveBackward = false;
-                break;
-
-            case 39:
-                /*right*/
-            case 68:
-                /*D*/
-                this.moveRight = false;
-                break;
-
-            case 82:
-                /*R*/
-                this.moveUp = false;
-                break;
-            case 70:
-                /*F*/
-                this.moveDown = false;
-                break;
-
-            case 81:
-                /*Q*/
-                this.rotateLeft = false;
-                break;
-            case 69:
-                /*Q*/
-                this.rotateRight = false;
-                break;
-
-            }
-
-        };
-
-        CharacterControllerScript.prototype.destroy = function () {
-            // prolly don't want to reset all input all the time...
-            this.world.getSystem('input').keyboard.reset();
+            this.rotateLeft = false;
+            this.rotateRight = false;
         };
 
         CharacterControllerScript.prototype.update = function (dt, elapsed, timestamp) {
 
-            // this script should be attached to an entity with a camera component....
-            // var cameraComponent = this.entity.getComponent('camera');
+            var input = this.world.getSystem('input'), // should cache this during init?
+                leftStick = input.virtualGamepad.leftThumbstick;
 
+            // reset these every frame
+            this.moveForward = false;
+            this.moveBackward = false;
+            this.moveLeft = false;
+            this.moveRight = false;
+            this.rotateLeft = false;
+            this.rotateRight = false;
 
+            // virtual gamepad (touch ipad) controls
+            if (leftStick) {
+                if (leftStick.delta.y < 0) {
+                    this.moveForward = true;
+                }
+                if (leftStick.delta.y > 0) {
+                    this.moveBackward = true;
+                }
 
-            // if (!cameraComponent) {
-            //     // throw error?weqq2hh
-            //     return;
-            // }
+                if (leftStick.delta.x < 0) {
+                    this.moveLeft = true;
+                }
+                if (leftStick.delta.x > 0) {
+                    this.moveRight = true;
+                }
+            }
 
-            // console.log(this.moveForward);
+            // keyboard controls
+            if (input.keyboard.isDown(input.KEYS.W) || input.keyboard.isDown(input.KEYS.UP)) {
+                this.moveForward = true;
+            }
 
+            if (input.keyboard.isDown(input.KEYS.S) || input.keyboard.isDown(input.KEYS.DOWN)) {
+                this.moveBackward = true;
+            }
+
+            if (input.keyboard.isDown(input.KEYS.A) || input.keyboard.isDown(input.KEYS.LEFT)) {
+                this.moveLeft = true;
+            }
+
+            if (input.keyboard.isDown(input.KEYS.D) || input.keyboard.isDown(input.KEYS.RIGHT)) {
+                this.moveRight = true;
+            }
+
+            if (input.keyboard.isDown(input.KEYS.Q)) {
+                this.rotateLeft = true;
+            }
+
+            if (input.keyboard.isDown(input.KEYS.E)) {
+                this.rotateRight = true;
+            }
+
+            // react to changes
             if (this.moveForward) {
                 this.entity.translateZ(-moveSpeed * dt);
             }
@@ -172,9 +93,6 @@ angular.module('game.scripts.character-controller', ['components.script'])
             if (this.rotateRight) {
                 this.entity.translateX(moveSpeed * dt);
             }
-            // if (this.rotateRight) {
-            //     this.entity.translateX( moveSpeed * dt );
-            // }
 
 
             // cameraComponent.camera.position.set(Math.cos(timestamp / 1000) * 10, 20, Math.sin(timestamp / 1000) * 15);
