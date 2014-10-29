@@ -28,75 +28,131 @@ angular.module('engine.input.virtual-gamepad', [])
                 x: event.clientX,
                 y: event.clientY,
                 type: type,
-                color: color
+                color: color,
+                start: {
+                    x: event.clientX,
+                    y: event.clientY
+                },
+                delta: {
+                    x: 0,
+                    y: 0,
+                    vx: 0,
+                    vy: 0
+                }
             };
         }
 
-        function onPointerDown(e) {
-            this._pointers[e.pointerId] = createPointerObject(e);
-        }
+        var onPointerDown = function (e) {
+            var gamepad = this;
 
-        function onPointerMove(e) {
-            if (this._pointers[e.pointerId]) {
-                this._pointers[e.pointerId].x = e.clientX;
-                this._pointers[e.pointerId].y = e.clientY;
+            gamepad._pointers[e.pointerId] = createPointerObject(e);
+
+            if(e.clientX < gamepad.canvasHalfWidth) {
+                if(!gamepad.leftThumbstick) {
+                    gamepad.leftThumbstick = gamepad._pointers[e.pointerId];
+                }
+            } else {
+                if(!gamepad.rightThumbstick) {
+                    gamepad.rightThumbstick = gamepad._pointers[e.pointerId];
+                }
             }
-        }
+        };
 
-        function onPointerUp(e) {
-            delete this._pointers[e.pointerId];
-        }
+        var onPointerMove = function (e) {
+            var pointer = this._pointers[e.pointerId];
+
+            if (pointer) {
+                pointer.x = e.clientX;
+                pointer.y = e.clientY;
+
+                pointer.delta.x = pointer.x - pointer.start.x;
+                pointer.delta.y = pointer.y - pointer.start.y;
+
+                // normalize delta (for stick movement)
+                pointer.delta.vx = Math.min(1, Math.max(-1, pointer.delta.x));
+                pointer.delta.vy = Math.min(1, Math.max(-1, pointer.delta.y));
+            }
+        };
+
+        var onPointerUp = function (e) {
+            var gamepad = this;
+
+            delete gamepad._pointers[e.pointerId];
+
+            if(e.clientX < gamepad.canvasHalfWidth) {
+                delete gamepad.leftThumbstick;
+            } else {
+                delete gamepad.rightThumbstick;
+            }
+        };
 
         var VirtualGamepad = function () {
+            var gamepad = this;
+
             // track touches / clicks
-            this._pointers = {};
+            gamepad._pointers = {};
 
             // create overlay canvas
-            this.canvas = document.createElement('canvas');
+            gamepad.canvas = document.createElement('canvas');
 
-            this.canvas.width = window.innerWidth;
-            this.canvas.height = window.innerHeight;
-            this.canvas.style.width = '100%';
-            this.canvas.style.height = '100%';
-            this.canvas.style.position = 'absolute';
-            this.canvas.style.backgroundColor = 'transparent';
-            this.canvas.style.top = '0px';
-            this.canvas.style.left = '0px';
-            this.canvas.style.zIndex = '5';
-            this.canvas.style.msTouchAction = 'none';
-            this.canvas.style.touchAction = 'none';
-            this.canvasContext = this.canvas.getContext('2d');
-            this.canvasContext.strokeStyle = '#ffffff';
-            this.canvasContext.lineWidth = 2;
+            gamepad.canvasWidth = window.innerWidth;
+            gamepad.canvasHeight = window.innerHeight;
+            gamepad.canvasHalfWidth = gamepad.canvasWidth / 2;
+            gamepad.canvasHalfHeight = gamepad.canvasHeight / 2;
+            gamepad.canvas.width = gamepad.canvasWidth;
+            gamepad.canvas.height = gamepad.canvasHeight;
+            gamepad.canvas.style.width = '100%';
+            gamepad.canvas.style.height = '100%';
+            gamepad.canvas.style.position = 'absolute';
+            gamepad.canvas.style.backgroundColor = 'transparent';
+            gamepad.canvas.style.top = '0px';
+            gamepad.canvas.style.left = '0px';
+            gamepad.canvas.style.zIndex = '5';
+            gamepad.canvas.style.msTouchAction = 'none';
+            gamepad.canvas.style.touchAction = 'none';
+            gamepad.canvasContext = gamepad.canvas.getContext('2d');
+            gamepad.canvasContext.strokeStyle = '#ffffff';
+            gamepad.canvasContext.lineWidth = 2;
 
-            document.body.appendChild(this.canvas);
+            document.body.appendChild(gamepad.canvas);
 
-            this.canvas.addEventListener('pointerdown', onPointerDown.bind(this), false);
-            this.canvas.addEventListener('pointermove', onPointerMove.bind(this), false);
-            this.canvas.addEventListener('pointerup', onPointerUp.bind(this), false);
-            this.canvas.addEventListener('pointerout', onPointerUp.bind(this), false);
+            gamepad.canvas.addEventListener('pointerdown', onPointerDown.bind(gamepad), false);
+            gamepad.canvas.addEventListener('pointermove', onPointerMove.bind(gamepad), false);
+            gamepad.canvas.addEventListener('pointerup', onPointerUp.bind(gamepad), false);
+            gamepad.canvas.addEventListener('pointerout', onPointerUp.bind(gamepad), false);
 
-            this.canvas.addEventListener('contextmenu', function (e) {
+            gamepad.canvas.addEventListener('contextmenu', function (e) {
                 e.preventDefault(); // Disables system menu
+            }, false);
+
+            window.addEventListener('resize', function () {
+                gamepad.canvasWidth = window.innerWidth;
+                gamepad.canvasHeight = window.innerHeight;
+
+                gamepad.canvasHalfWidth = gamepad.canvasWidth / 2;
+                gamepad.canvasHalfHeight = gamepad.canvasHeight / 2;
+
+                gamepad.canvas.width = gamepad.canvasWidth;
+                gamepad.canvas.height = gamepad.canvasHeight;
+
             }, false);
         };
 
         VirtualGamepad.prototype.draw = function () {
-            var canvas = this.canvas,
-                context = this.canvasContext,
-                keys,
-                self = this;
+            var gamepad = this,
+                canvas = gamepad.canvas,
+                context = gamepad.canvasContext,
+                keys;
 
             context.clearRect(0, 0, canvas.width, canvas.height);
 
-            keys = Object.keys(this._pointers);
+            keys = Object.keys(gamepad._pointers);
             keys.forEach(function (pointerId) {
-                var pointer = self._pointers[pointerId];
+                var pointer = gamepad._pointers[pointerId];
 
                 context.beginPath();
                 context.fillStyle = 'white';
-                context.fillText(pointer.type + ' id : ' + pointer.id + ' x:' + pointer.x + ' y:' +
-                    pointer.y, pointer.x + 30, pointer.y - 30);
+                context.fillText(JSON.stringify(pointer), pointer.x + 30, pointer.y - 30);
 
                 context.beginPath();
                 context.strokeStyle = pointer.color;
@@ -105,7 +161,7 @@ angular.module('engine.input.virtual-gamepad', [])
                 context.stroke();
             });
 
-            window.requestAnimationFrame(this.draw.bind(this));
+            window.requestAnimationFrame(gamepad.draw.bind(gamepad));
         };
 
         return VirtualGamepad;

@@ -34,7 +34,7 @@ angular.module('Ironbane', [
         // TODO: move to directive
         $rootWorld.renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild($rootWorld.renderer.domElement);
-        $rootWorld.renderer.setClearColorHex(0xd3fff8);
+        //$rootWorld.renderer.setClearColorHex(0xd3fff8);
 
         window.addEventListener('resize', function () {
             $rootWorld.renderer.setSize(window.innerWidth, window.innerHeight);
@@ -157,5 +157,7 @@ angular.module('Ironbane', [
         });
         $rootWorld.addEntity(level);
 
+        // temp tacked onto window for easy debug
         window.VGP = new VirtualGamepad();
+        window.VGP.draw();
     });
