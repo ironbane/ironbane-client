@@ -12,13 +12,17 @@ angular.module('engine.input.keyboard', [])
         };
 
         Keyboard.prototype._onKeyDown = function (e) {
-            e.preventDefault();
+            // TODO only preventDefault for specific keys
+            // can't access dev tools otherwise
+            // e.preventDefault();
 
             this.keys[e.keyCode] = true;
         };
 
         Keyboard.prototype._onKeyUp = function (e) {
-            e.preventDefault();
+            // TODO only preventDefault for specific keys
+            // can't access dev tools otherwise
+            // e.preventDefault();
 
             this.keys[e.keyCode] = false;
         };
