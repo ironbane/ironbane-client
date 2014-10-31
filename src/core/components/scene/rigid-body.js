@@ -37,13 +37,13 @@ angular.module('components.scene.rigid-body', ['ces', 'three', 'ammo'])
                     var fallMotionState =
                         new Ammo.btDefaultMotionState(new Ammo.btTransform(new Ammo.btQuaternion(0, 0, 0, 1), new Ammo.btVector3(0, 50, 0)));
 
-                    var rigidBodyInfo = new Ammo.btRigidBodyConstructionInfo(0, fallMotionState, fallShape, new Ammo.btVector3(0, 0, 0));
+                    var rigidBodyInfo = new Ammo.btRigidBodyConstructionInfo(mass, fallMotionState, fallShape, new Ammo.btVector3(0, 0, 0));
                     var rigidBody = new Ammo.btRigidBody( rigidBodyInfo );
 
                     $rootWorld.physicsWorld.addRigidBody( rigidBody );
 
                     rigidBodyData.rigidBody = rigidBody;
-                    rigidBody.forceActivationState(activationStates.RIGIDBODY_ACTIVE_TAG);
+                    // rigidBody.forceActivationState(activationStates.RIGIDBODY_ACTIVE_TAG);
 
                 });
 
