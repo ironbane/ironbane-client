@@ -69,6 +69,11 @@ angular.module('components.scene.scene', ['ces', 'three', 'engine.entity-builder
 
                         entity.add(entities);
                     });
+
+                // Link the promises to the component so we can
+                // wait for the mesh to load in other components
+                component.meshTask = meshTask;
+                component.entitiesTask = entitiesTask;
             },
             onEntityRemoved: function (entity) {
                 // TODO

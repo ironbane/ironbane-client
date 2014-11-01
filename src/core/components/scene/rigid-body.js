@@ -8,11 +8,12 @@ angular.module('components.scene.rigid-body', ['ces', 'three', 'ammo'])
                 shape: {
                     type: 'sphere',
                     radius: 1
-                }
+                },
+                allowSleep: true
             }
         });
     })
-    .factory('RigidBodySystem', function (System, THREE, Ammo, $rootWorld) {
+    .factory('RigidBodySystem', function (System, THREE, Ammo, $rootWorld, $q) {
         'use strict';
 
         // A lot of code here is based on Chandler Prall's Physijs
@@ -200,6 +201,40 @@ angular.module('components.scene.rigid-body', ['ces', 'three', 'ammo'])
             return shape;
         };
 
+        var getTrianglesFromMesh = function (mesh) {
+            var face, i, triangles = [];
+            var geometry = mesh.geometry;
+            var vertices = geometry.vertices;
+
+            for ( i = 0; i < geometry.faces.length; i++ ) {
+                face = geometry.faces[i];
+                if ( face instanceof THREE.Face3) {
+
+                    triangles.push([
+                        { x: vertices[face.a].x, y: vertices[face.a].y, z: vertices[face.a].z },
+                        { x: vertices[face.b].x, y: vertices[face.b].y, z: vertices[face.b].z },
+                        { x: vertices[face.c].x, y: vertices[face.c].y, z: vertices[face.c].z }
+                    ]);
+
+                } else if ( face instanceof THREE.Face4 ) {
+
+                    triangles.push([
+                        { x: vertices[face.a].x, y: vertices[face.a].y, z: vertices[face.a].z },
+                        { x: vertices[face.b].x, y: vertices[face.b].y, z: vertices[face.b].z },
+                        { x: vertices[face.d].x, y: vertices[face.d].y, z: vertices[face.d].z }
+                    ]);
+                    triangles.push([
+                        { x: vertices[face.b].x, y: vertices[face.b].y, z: vertices[face.b].z },
+                        { x: vertices[face.c].x, y: vertices[face.c].y, z: vertices[face.c].z },
+                        { x: vertices[face.d].x, y: vertices[face.d].y, z: vertices[face.d].z }
+                    ]);
+
+                }
+            }
+
+            return triangles;
+        };
+
         var RigidBodySystem = System.extend({
             addedToWorld: function (world) {
                 var sys = this;
@@ -211,29 +246,48 @@ angular.module('components.scene.rigid-body', ['ces', 'three', 'ammo'])
 
                     var mass = rigidBodyData.mass;
 
-                    var shape = createShape(rigidBodyData.shape);
+                    var promise = $q.when();
 
-                    var rigidBodyInfo;
-                    var rigidBody;
+                    // Preprocess triangles if we are dealing with a concave mesh
+                    if (rigidBodyData.shape.type === 'concave') {
+                        var sceneComponent = entity.getComponent('scene');
+                        if (sceneComponent) {
+                            // Wait for the triangles to load firsts
+                            promise = sceneComponent.meshTask;
+                            promise.then(function () {
+                                rigidBodyData.shape.triangles = getTrianglesFromMesh(sceneComponent.scene);
+                            });
+                        }
+                    }
 
-                    shape.calculateLocalInertia(mass, btVec3a);
+                    promise.then(function () {
+                        var shape = createShape(rigidBodyData.shape);
 
-                    // TODO watch memory usage here! potential memory leak
-                    // Ammo stuff must be cleaned up after use
-                    btVec3a.setValue(entity.position.x, entity.position.y, entity.position.z);
-                    btQuat.setValue(entity.quaternion.x, entity.quaternion.y, entity.quaternion.z, entity.quaternion.w);
-                    var btTransform = new Ammo.btTransform(btQuat, btVec3a);
-                    var state = new Ammo.btDefaultMotionState(btTransform);
+                        var rigidBodyInfo;
+                        var rigidBody;
 
-                    btVec3a.setValue(0, 0, 0);
-                    rigidBodyInfo = new Ammo.btRigidBodyConstructionInfo(mass, state, shape, btVec3a);
-                    rigidBody = new Ammo.btRigidBody(rigidBodyInfo);
 
-                    rigidBodyData.rigidBody = rigidBody;
 
-                    $rootWorld.physicsWorld.addRigidBody(rigidBody);
+                        // TODO watch memory usage here! potential memory leak
+                        // Ammo stuff must be cleaned up after use
+                        btVec3a.setValue(entity.position.x, entity.position.y, entity.position.z);
+                        btQuat.setValue(entity.quaternion.x, entity.quaternion.y, entity.quaternion.z, entity.quaternion.w);
+                        var btTransform = new Ammo.btTransform(btQuat, btVec3a);
+                        var state = new Ammo.btDefaultMotionState(btTransform);
 
-                    // rigidBody.forceActivationState(activationStates.RIGIDBODY_ACTIVE_TAG);
+                        btVec3a.setValue(0, 0, 0);
+                        shape.calculateLocalInertia(mass, btVec3a);
+                        rigidBodyInfo = new Ammo.btRigidBodyConstructionInfo(mass, state, shape, btVec3a);
+                        rigidBody = new Ammo.btRigidBody(rigidBodyInfo);
+
+                        rigidBodyData.rigidBody = rigidBody;
+
+                        if (!rigidBodyData.allowSleep) {
+                            rigidBody.setActivationState(activationStates.RIGIDBODY_DISABLE_DEACTIVATION);
+                        }
+
+                        $rootWorld.physicsWorld.addRigidBody(rigidBody);
+                    });
 
                 });
 
@@ -246,7 +300,7 @@ angular.module('components.scene.rigid-body', ['ces', 'three', 'ammo'])
 
                     var rigidBodyComponent = entity.getComponent('rigidBody');
 
-                    if (rigidBodyComponent) {
+                    if (rigidBodyComponent && rigidBodyComponent.rigidBody) {
                         var trans = new Ammo.btTransform();
                         rigidBodyComponent.rigidBody.getMotionState().getWorldTransform(trans);
                         // console.log(trans.getOrigin().x());

@@ -66,13 +66,13 @@ angular.module('Ironbane', [
         $rootWorld.physicsWorld = new Ammo.btDiscreteDynamicsWorld( dispatcher, broadphase, solver, collisionConfiguration );
         $rootWorld.physicsWorld.setGravity(new Ammo.btVector3(0,-10,0));
 
-        var groundShape = new Ammo.btStaticPlaneShape(new Ammo.btVector3(0, 1, 0), 1);
-        var groundMotionState = new Ammo.btDefaultMotionState(new Ammo.btTransform(new Ammo.btQuaternion(0, 0, 0, 1), new Ammo.btVector3(0, -1, 0)));
-        var rigidBodyInfo = new Ammo.btRigidBodyConstructionInfo(0, groundMotionState, groundShape, new Ammo.btVector3(0, 0, 0));
+        // var groundShape = new Ammo.btStaticPlaneShape(new Ammo.btVector3(0, 1, 0), 1);
+        // var groundMotionState = new Ammo.btDefaultMotionState(new Ammo.btTransform(new Ammo.btQuaternion(0, 0, 0, 1), new Ammo.btVector3(0, -1, 0)));
+        // var rigidBodyInfo = new Ammo.btRigidBodyConstructionInfo(0, groundMotionState, groundShape, new Ammo.btVector3(0, 0, 0));
 
-        var rigidBody = new Ammo.btRigidBody( rigidBodyInfo );
+        // var rigidBody = new Ammo.btRigidBody( rigidBodyInfo );
 
-        $rootWorld.physicsWorld.addRigidBody( rigidBody );
+        // $rootWorld.physicsWorld.addRigidBody( rigidBody );
     })
     .run(function loadWorld($log, Entity, $components, $rootWorld, THREE, EntityBuilder) {
         'use strict';
@@ -107,14 +107,18 @@ angular.module('Ironbane', [
         $rootWorld.addEntity(cube);
 
         var player = EntityBuilder.build('Player', {
-            position: [0, 0.5, -18],
+            position: [0, 50.0, -18],
             components: {
                 quad: {
                     transparent: true,
                     texture: 'assets/images/characters/skin/2.png'
                 },
                 rigidBody: {
-
+                    shape: {
+                        type: 'sphere',
+                        radius: 0.5
+                    },
+                    allowSleep: false
                 },
                 helper: {
                     line: true
@@ -169,6 +173,12 @@ angular.module('Ironbane', [
             components: {
                 scene: {
                     id: 'dev-zone'
+                },
+                rigidBody: {
+                    shape: {
+                        type: 'concave'
+                    },
+                    mass: 0
                 },
                 light: {
                     type: 'AmbientLight',
