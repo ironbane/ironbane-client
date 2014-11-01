@@ -4,7 +4,10 @@ angular.module('components.scene.rigid-body', ['ces', 'three', 'ammo'])
 
         $componentsProvider.addComponentData({
             'rigidBody': {
-
+                shape: 'sphere',
+                sphere: {
+                    diameter: 1
+                }
             }
         });
     })
@@ -19,6 +22,10 @@ angular.module('components.scene.rigid-body', ['ces', 'three', 'ammo'])
             RIGIDBODY_DISABLE_SIMULATION: 5,
         };
 
+        var btVec3 = new Ammo.btVector3(0, 0, 0);
+        var btQuat = new Ammo.btQuaternion(0, 0, 0, 1);
+
+
         var RigidBodySystem = System.extend({
             addedToWorld: function (world) {
                 var sys = this;
@@ -28,21 +35,24 @@ angular.module('components.scene.rigid-body', ['ces', 'three', 'ammo'])
                 world.entityAdded('rigidBody').add(function (entity) {
                     var rigidBodyData = entity.getComponent('rigidBody');
 
-                    var fallShape = new Ammo.btSphereShape(1);
+                    var shape = new Ammo.btSphereShape(rigidBodyData.sphere.diameter);
 
                     var mass = 1;
-                    var fallInertia = new Ammo.btVector3(0, 0, 0);
-                    fallShape.calculateLocalInertia(mass, fallInertia);
 
-                    var fallMotionState =
-                        new Ammo.btDefaultMotionState(new Ammo.btTransform(new Ammo.btQuaternion(0, 0, 0, 1), new Ammo.btVector3(0, 50, 0)));
+                    shape.calculateLocalInertia(mass, btVec3);
 
-                    var rigidBodyInfo = new Ammo.btRigidBodyConstructionInfo(mass, fallMotionState, fallShape, new Ammo.btVector3(0, 0, 0));
+                    btVec3.setY(50);
+                    var btTransform = new Ammo.btTransform(btQuat, btVec3);
+                    var state = new Ammo.btDefaultMotionState(btTransform);
+
+                    btVec3.setY(0);
+                    var rigidBodyInfo = new Ammo.btRigidBodyConstructionInfo(mass, state, shape, btVec3);
                     var rigidBody = new Ammo.btRigidBody( rigidBodyInfo );
+
+                    rigidBodyData.rigidBody = rigidBody;
 
                     $rootWorld.physicsWorld.addRigidBody( rigidBody );
 
-                    rigidBodyData.rigidBody = rigidBody;
                     // rigidBody.forceActivationState(activationStates.RIGIDBODY_ACTIVE_TAG);
 
                 });
@@ -62,6 +72,11 @@ angular.module('components.scene.rigid-body', ['ces', 'three', 'ammo'])
                         // console.log(trans.getOrigin().x());
                         console.log(trans.getOrigin().y());
                         // console.log(trans.getOrigin().z());
+                        var origin = trans.getOrigin();
+
+                        entity.position.setX(origin.x());
+                        entity.position.setY(origin.y());
+                        entity.position.setZ(origin.z());
                     }
 
                 });
