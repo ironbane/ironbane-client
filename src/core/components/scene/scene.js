@@ -53,7 +53,7 @@ angular.module('components.scene.scene', ['ces', 'three', 'engine.entity-builder
                                             geometry.buffersNeedUpdate = true;
                                             geometry.uvsNeedUpdate = true;
                                         });
-                                })(texName, component.scene.material.materials[i], component.scene.geometry);
+                                })(texName, component.scene.material.materials[i], component.scene.geometry); //jshint ignore:line
 
                             }
                         }
