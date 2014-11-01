@@ -77,6 +77,19 @@ angular.module('components.scene.rigid-body', ['ces', 'three', 'ammo'])
                         entity.position.setX(origin.x());
                         entity.position.setY(origin.y());
                         entity.position.setZ(origin.z());
+
+                        // Hacky fix for Quads to update their position
+                        // as the attached entity now moved, causing
+                        // a delay in the quad's position update
+                        // Is there another way to solve this?
+                        var quadComponent = entity.getComponent('quad');
+                        if (quadComponent) {
+                            var lookAtCameraScript = entity.getScript('/scripts/built-in/look-at-camera.js');
+                            if (lookAtCameraScript) {
+                                quadComponent.quad.position.copy(entity.position);
+                            }
+                        }
+
                     }
 
                 });
