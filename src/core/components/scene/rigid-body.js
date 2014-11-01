@@ -13,8 +13,16 @@ angular.module('components.scene.rigid-body', ['ces', 'three', 'ammo'])
             }
         });
     })
-    .factory('RigidBodySystem', function (System, THREE, Ammo, $rootWorld, $q) {
+    .factory('RigidBodySystem', function (System, THREE, Ammo, $q) {
         'use strict';
+
+        var broadphase = new Ammo.btDbvtBroadphase();
+        var collisionConfiguration = new Ammo.btDefaultCollisionConfiguration();
+        var dispatcher = new Ammo.btCollisionDispatcher(collisionConfiguration);
+        var solver = new Ammo.btSequentialImpulseConstraintSolver();
+
+        var physicsWorld = new Ammo.btDiscreteDynamicsWorld( dispatcher, broadphase, solver, collisionConfiguration );
+        physicsWorld.setGravity(new Ammo.btVector3(0,-10,0));
 
         // A lot of code here is based on Chandler Prall's Physijs
         // https://github.com/chandlerprall/Physijs/
@@ -286,7 +294,7 @@ angular.module('components.scene.rigid-body', ['ces', 'three', 'ammo'])
                             rigidBody.setActivationState(activationStates.RIGIDBODY_DISABLE_DEACTIVATION);
                         }
 
-                        $rootWorld.physicsWorld.addRigidBody(rigidBody);
+                        physicsWorld.addRigidBody(rigidBody);
                     });
 
                 });
@@ -295,6 +303,8 @@ angular.module('components.scene.rigid-body', ['ces', 'three', 'ammo'])
             update: function (dt) {
                 var world = this.world;
                 var rigidBodies = world.getEntities('rigidBody');
+
+                physicsWorld.stepSimulation(dt);
 
                 rigidBodies.forEach(function (entity) {
 
