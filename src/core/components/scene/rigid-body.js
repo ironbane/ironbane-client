@@ -41,11 +41,11 @@ angular.module('components.scene.rigid-body', ['ces', 'three', 'ammo'])
 
                     shape.calculateLocalInertia(mass, btVec3);
 
-                    btVec3.setY(50);
+                    btVec3.setValue(entity.position.x, entity.position.y, entity.position.z);
                     var btTransform = new Ammo.btTransform(btQuat, btVec3);
                     var state = new Ammo.btDefaultMotionState(btTransform);
 
-                    btVec3.setY(0);
+                    btVec3.setValue(0, 0, 0);
                     var rigidBodyInfo = new Ammo.btRigidBodyConstructionInfo(mass, state, shape, btVec3);
                     var rigidBody = new Ammo.btRigidBody( rigidBodyInfo );
 
