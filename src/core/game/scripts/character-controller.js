@@ -102,8 +102,10 @@ angular.module('game.scripts.character-controller', ['components.script', 'three
                 v1.copy( inputVector ).applyQuaternion( this.entity.quaternion );
                 v1.multiplyScalar(moveSpeed);
 
-                // this.entity.translateOnAxis(inputVector, moveSpeed * dt);
-                btVec3.setValue(v1.x, v1.y, v1.z);
+                var currentVel = rigidBodyComponent.rigidBody.getLinearVelocity();
+                btVec3.setX(v1.x);
+                btVec3.setY(currentVel.y());
+                btVec3.setZ(v1.z);
                 rigidBodyComponent.rigidBody.setLinearVelocity(btVec3);
             }
             else {
