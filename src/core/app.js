@@ -6,6 +6,7 @@ angular.module('Ironbane', [
     'ces',
     'three',
     'ammo',
+    'ammo.physics-world',
     'components',
     'game.scripts',
     'engine.entity-builder',

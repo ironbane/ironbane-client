@@ -1,4 +1,4 @@
-angular.module('components.scene.rigid-body', ['ces', 'three', 'ammo'])
+angular.module('components.scene.rigid-body', ['ces', 'three', 'ammo', 'ammo.physics-world'])
     .config(function ($componentsProvider) {
         'use strict';
 
@@ -13,20 +13,16 @@ angular.module('components.scene.rigid-body', ['ces', 'three', 'ammo'])
             }
         });
     })
-    .factory('RigidBodySystem', function (System, THREE, Ammo, $q) {
+    .factory('RigidBodySystem', function (System, THREE, Ammo, $q, PhysicsWorld) {
         'use strict';
-
-        var broadphase = new Ammo.btDbvtBroadphase();
-        var collisionConfiguration = new Ammo.btDefaultCollisionConfiguration();
-        var dispatcher = new Ammo.btCollisionDispatcher(collisionConfiguration);
-        var solver = new Ammo.btSequentialImpulseConstraintSolver();
-
-        var physicsWorld = new Ammo.btDiscreteDynamicsWorld( dispatcher, broadphase, solver, collisionConfiguration );
-        physicsWorld.setGravity(new Ammo.btVector3(0,-10,0));
 
         // A lot of code here is based on Chandler Prall's Physijs
         // https://github.com/chandlerprall/Physijs/
 
+        // Some is also from PlayCanvas
+        // https://github.com/playcanvas/engine
+
+        // http://bulletphysics.org/mediawiki-1.5.8/index.php/Activation_States
         var activationStates = {
             RIGIDBODY_ACTIVE_TAG: 1,
             RIGIDBODY_ISLAND_SLEEPING: 2,
@@ -40,9 +36,7 @@ angular.module('components.scene.rigid-body', ['ces', 'three', 'ammo'])
         var btVec3a = new Ammo.btVector3(0, 0, 0);
         var btVec3b = new Ammo.btVector3(0, 0, 0);
         var btVec3c = new Ammo.btVector3(0, 0, 0);
-
         var btQuat = new Ammo.btQuaternion(0, 0, 0, 1);
-
         var btTransform = new Ammo.btTransform();
 
         // Cache for bullet shapes
@@ -53,11 +47,9 @@ angular.module('components.scene.rigid-body', ['ces', 'three', 'ammo'])
             }
             return null;
         };
-
         var setShapeCache = function (key, shape) {
             objectShapes[key] = shape;
         };
-
         var nonCachedShapes = {};
 
         var createShape = function (description) {
@@ -260,7 +252,7 @@ angular.module('components.scene.rigid-body', ['ces', 'three', 'ammo'])
                     if (rigidBodyData.shape.type === 'concave') {
                         var sceneComponent = entity.getComponent('scene');
                         if (sceneComponent) {
-                            // Wait for the triangles to load firsts
+                            // Wait for the triangles to load first
                             promise = sceneComponent.meshTask;
                             promise.then(function () {
                                 rigidBodyData.shape.triangles = getTrianglesFromMesh(sceneComponent.scene);
@@ -288,26 +280,26 @@ angular.module('components.scene.rigid-body', ['ces', 'three', 'ammo'])
                         rigidBodyInfo = new Ammo.btRigidBodyConstructionInfo(mass, state, shape, btVec3a);
                         rigidBody = new Ammo.btRigidBody(rigidBodyInfo);
 
+                        // Keep a link to this entity for when
+                        // we want collision data later
+                        rigidBody.entity = entity;
+
                         rigidBodyData.rigidBody = rigidBody;
 
                         if (!rigidBodyData.allowSleep) {
                             rigidBody.setActivationState(activationStates.RIGIDBODY_DISABLE_DEACTIVATION);
                         }
 
-                        physicsWorld.addRigidBody(rigidBody);
+                        PhysicsWorld.addRigidBody(rigidBody);
                     });
 
                 });
 
             },
-            update: function (dt) {
-                var world = this.world;
-                var rigidBodies = world.getEntities('rigidBody');
-
-                physicsWorld.stepSimulation(dt);
+            syncEntities: function () {
+                var rigidBodies = this.world.getEntities('rigidBody');
 
                 rigidBodies.forEach(function (entity) {
-
                     var rigidBodyComponent = entity.getComponent('rigidBody');
 
                     if (rigidBodyComponent && rigidBodyComponent.rigidBody) {
@@ -333,11 +325,13 @@ angular.module('components.scene.rigid-body', ['ces', 'three', 'ammo'])
                                 quadComponent.quad.position.copy(entity.position);
                             }
                         }
-
                     }
-
                 });
-                // console.log(dt);
+            },
+            update: function (dt) {
+                PhysicsWorld.stepSimulation(dt);
+
+                this.syncEntities();
             }
         });
 
