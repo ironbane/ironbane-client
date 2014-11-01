@@ -1,9 +1,11 @@
-angular.module('game.scripts.character-controller', ['components.script', 'three'])
-    .run(function ($log, ScriptBank, THREE) {
+angular.module('game.scripts.character-controller', ['components.script', 'three', 'ammo'])
+    .run(function ($log, ScriptBank, THREE, Ammo) {
         'use strict';
 
         var moveSpeed = 10;
         var rotateSpeed = 3;
+
+        var btVec3 = new Ammo.btVector3();
 
         var CharacterControllerScript = function (entity, world) {
             this.entity = entity;
@@ -92,7 +94,22 @@ angular.module('game.scripts.character-controller', ['components.script', 'three
             // Make sure they can't gain extra speed if moving diagonally
             inputVector.normalize();
 
-            this.entity.translateOnAxis(inputVector, moveSpeed * dt);
+            var rigidBodyComponent = this.entity.getComponent('rigidBody');
+            if (rigidBodyComponent) {
+
+                // We need to rotate the vector ourselves
+                var v1 = new THREE.Vector3();
+                v1.copy( inputVector ).applyQuaternion( this.entity.quaternion );
+                v1.multiplyScalar(moveSpeed);
+
+                // this.entity.translateOnAxis(inputVector, moveSpeed * dt);
+                btVec3.setValue(v1.x, v1.y, v1.z);
+                rigidBodyComponent.rigidBody.setLinearVelocity(btVec3);
+            }
+            else {
+                this.entity.translateOnAxis(inputVector, moveSpeed * dt);
+            }
+
 
             if (this.rotateLeft) {
                 this.entity.rotateY(rotateSpeed * dt);
