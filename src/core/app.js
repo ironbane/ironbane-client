@@ -29,7 +29,7 @@ angular.module('Ironbane', [
         // Used for input events
         IbConfigProvider.set('domElement', document);
     })
-    .run(function (System, CameraSystem, ModelSystem, $rootWorld, THREE, LightSystem, SpriteSystem, QuadSystem, HelperSystem, SceneSystem, ScriptSystem, SoundSystem, InputSystem, RigidBodySystem) {
+    .run(function (System, CameraSystem, ModelSystem, $rootWorld, THREE, LightSystem, SpriteSystem, QuadSystem, HelperSystem, SceneSystem, ScriptSystem, SoundSystem, InputSystem, RigidBodySystem, CollisionReporterSystem) {
         'use strict';
 
         // TODO: move to directive
@@ -54,6 +54,7 @@ angular.module('Ironbane', [
         $rootWorld.addSystem(new LightSystem());
         $rootWorld.addSystem(new QuadSystem());
         $rootWorld.addSystem(new RigidBodySystem());
+        $rootWorld.addSystem(new CollisionReporterSystem());
         $rootWorld.addSystem(new HelperSystem());
         // NOTE: this should be the LAST system as it does rendering!!
         $rootWorld.addSystem(new CameraSystem());
@@ -103,6 +104,9 @@ angular.module('Ironbane', [
                         radius: 0.5
                     },
                     allowSleep: false
+                },
+                collisionReporter: {
+
                 },
                 helper: {
                     line: true

@@ -3,6 +3,7 @@
 angular.module('components', [
 
     'components.scene.camera',
+    'components.scene.collision-reporter',
     'components.scene.helper',
     'components.scene.light',
     'components.scene.model',
