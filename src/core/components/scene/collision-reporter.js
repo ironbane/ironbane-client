@@ -1,6 +1,6 @@
 /* jshint bitwise: false */
 
-angular.module('components.scene.collision-reporter', ['ces', 'three', 'ammo', 'ammo.physics-world'])
+angular.module('components.scene.collision-reporter', ['ces', 'three', 'ammo', 'ammo.physics-world', 'ces.signal'])
     .config(function ($componentsProvider) {
         'use strict';
 
@@ -10,7 +10,7 @@ angular.module('components.scene.collision-reporter', ['ces', 'three', 'ammo', '
             }
         });
     })
-    .factory('CollisionReporterSystem', function (System, Ammo, $q, PhysicsWorld, THREE) {
+    .factory('CollisionReporterSystem', function (System, Ammo, $q, PhysicsWorld, THREE, Signal) {
         'use strict';
 
         // A lot of code here is based on Chandler Prall's Physijs
@@ -25,11 +25,11 @@ angular.module('components.scene.collision-reporter', ['ces', 'three', 'ammo', '
         var contacts0 = [];
         var contacts1 = [];
 
-        var EVENT_CONTACT = 'contact';
-        var EVENT_COLLISION_START = 'collisionstart';
-        var EVENT_COLLISION_END = 'collisionend';
-        var EVENT_TRIGGER_ENTER = 'triggerenter';
-        var EVENT_TRIGGER_LEAVE = 'triggerleave';
+        // var EVENT_CONTACT = 'contact';
+        // var EVENT_COLLISION_START = 'collisionstart';
+        // var EVENT_COLLISION_END = 'collisionend';
+        // var EVENT_TRIGGER_ENTER = 'triggerenter';
+        // var EVENT_TRIGGER_LEAVE = 'triggerleave';
 
         var FLAG_CONTACT = 1;
         var FLAG_COLLISION_START = 2;
@@ -88,34 +88,35 @@ angular.module('components.scene.collision-reporter', ['ces', 'three', 'ammo', '
 
             var flags = collisionTable[row][col];
 
-            if (flags) {
-                var collision = entity.collision;
+            // TODO optimize flags
+            // if (flags) {
+            //     var collision = entity.collision;
 
-                // turn off flags that do not correspond to event listeners
-                if (!this.hasEvent(EVENT_CONTACT)) {
-                    flags = flags & (~FLAG_GLOBAL_CONTACT);
-                }
+            //     // turn off flags that do not correspond to event listeners
+            //     if (!this.hasEvent(EVENT_CONTACT)) {
+            //         flags = flags & (~FLAG_GLOBAL_CONTACT);
+            //     }
 
-                if (!collision.hasEvent(EVENT_CONTACT)) {
-                    flags = flags & (~FLAG_CONTACT);
-                }
+            //     if (!collision.hasEvent(EVENT_CONTACT)) {
+            //         flags = flags & (~FLAG_CONTACT);
+            //     }
 
-                if (!collision.hasEvent(EVENT_COLLISION_START)) {
-                    flags = flags & (~FLAG_COLLISION_START);
-                }
+            //     if (!collision.hasEvent(EVENT_COLLISION_START)) {
+            //         flags = flags & (~FLAG_COLLISION_START);
+            //     }
 
-                if (!collision.hasEvent(EVENT_COLLISION_END)) {
-                    flags = flags & (~FLAG_COLLISION_END);
-                }
+            //     if (!collision.hasEvent(EVENT_COLLISION_END)) {
+            //         flags = flags & (~FLAG_COLLISION_END);
+            //     }
 
-                if (!collision.hasEvent(EVENT_TRIGGER_ENTER)) {
-                    flags = flags & (~FLAG_TRIGGER_ENTER);
-                }
+            //     if (!collision.hasEvent(EVENT_TRIGGER_ENTER)) {
+            //         flags = flags & (~FLAG_TRIGGER_ENTER);
+            //     }
 
-                if (!collision.hasEvent(EVENT_TRIGGER_LEAVE)) {
-                    flags = flags & (~FLAG_TRIGGER_LEAVE);
-                }
-            }
+            //     if (!collision.hasEvent(EVENT_TRIGGER_LEAVE)) {
+            //         flags = flags & (~FLAG_TRIGGER_LEAVE);
+            //     }
+            // }
 
             return flags;
         };
@@ -165,7 +166,7 @@ angular.module('components.scene.collision-reporter', ['ces', 'three', 'ammo', '
 
         var storeCollision = function (entity, other) {
             var isNewCollision = false;
-            var guid = entity.getGuid();
+            var guid = entity.uuid;
 
             collisions[guid] = collisions[guid] || {others: [], entity: entity};
 
@@ -183,20 +184,24 @@ angular.module('components.scene.collision-reporter', ['ces', 'three', 'ammo', '
         var handleEntityCollision = function (entity, other, contactPoints, collisionFlags) {
             var result;
 
-            if (collisionFlags & FLAG_CONTACT) {
-                result = new ContactResult(other, contactPoints);
-                entity.collision.fire(EVENT_CONTACT, result);
-            }
+            var collisionReporterComponent = entity.getComponent('collisionReporter');
 
-            if (collisionFlags & (FLAG_COLLISION_START | FLAG_TRIGGER_ENTER | FLAG_COLLISION_END | FLAG_TRIGGER_LEAVE)) {
-                if (storeCollision(entity, other)) {
-                    if (collisionFlags & FLAG_COLLISION_START) {
-                        result = result || new ContactResult(other, contactPoints);
-                        entity.collision.fire(EVENT_COLLISION_START, result);
-                    }
+            if (collisionReporterComponent) {
+                if (collisionFlags & FLAG_CONTACT) {
+                    result = new ContactResult(other, contactPoints);
+                    collisionReporterComponent.contact.emit(result);
+                }
 
-                    if (collisionFlags & FLAG_TRIGGER_ENTER) {
-                        entity.collision.fire(EVENT_TRIGGER_ENTER, other);
+                if (collisionFlags & (FLAG_COLLISION_START | FLAG_TRIGGER_ENTER | FLAG_COLLISION_END | FLAG_TRIGGER_LEAVE)) {
+                    if (storeCollision(entity, other)) {
+                        if (collisionFlags & FLAG_COLLISION_START) {
+                            result = result || new ContactResult(other, contactPoints);
+                            collisionReporterComponent.collisionStart.emit(result);
+                        }
+
+                        if (collisionFlags & FLAG_TRIGGER_ENTER) {
+                            collisionReporterComponent.triggerEnter.emit(other);
+                        }
                     }
                 }
             }
@@ -209,9 +214,13 @@ angular.module('components.scene.collision-reporter', ['ces', 'three', 'ammo', '
                 sys._super(world);
 
                 world.entityAdded('collisionReporter').add(function (entity) {
-                    var collisionReporterData = entity.getComponent('collisionReporter');
+                    var collisionReporterComponent = entity.getComponent('collisionReporter');
 
-
+                    collisionReporterComponent.contact = new Signal();
+                    collisionReporterComponent.collisionStart = new Signal();
+                    collisionReporterComponent.collisionEnd = new Signal();
+                    collisionReporterComponent.triggerEnter = new Signal();
+                    collisionReporterComponent.triggerLeave = new Signal();
                 });
 
             },
@@ -256,13 +265,14 @@ angular.module('components.scene.collision-reporter', ['ces', 'three', 'ammo', '
                             for (j = 0; j < numContacts; j++) {
                                 var contactPoint = manifold.getContactPoint(j);
 
-                                if (collisionFlags0 & FLAG_GLOBAL_CONTACT) {
-                                    cachedContactPoint = createContactPointFromAmmo(contactPoint);
-                                    this.fire(EVENT_CONTACT, new SingleContactResult(e0, e1, cachedContactPoint));
-                                }
+                                // ??? Don't understand global contact
+                                // if (collisionFlags0 & FLAG_GLOBAL_CONTACT) {
+                                //     cachedContactPoint = createContactPointFromAmmo(contactPoint);
+                                //     this.fire(EVENT_CONTACT, new SingleContactResult(e0, e1, cachedContactPoint));
+                                // }
 
                                 if (useContacts0) {
-                                    cachedContactPoint = cachedContactPoint || this._createContactPointFromAmmo(contactPoint);
+                                    cachedContactPoint = cachedContactPoint || createContactPointFromAmmo(contactPoint);
                                     contacts0.push(cachedContactPoint);
                                 }
 
@@ -285,7 +295,7 @@ angular.module('components.scene.collision-reporter', ['ces', 'three', 'ammo', '
                 for (var guid in collisions) {
                     if (collisions.hasOwnProperty(guid)) {
                         var entity = collisions[guid].entity;
-                        var entityCollision = entity.collision;
+                        var collisionReporterComponent = entity.getComponent('collisionReporter');
                         var others = collisions[guid].others;
                         var length = others.length;
                         var i=length;
@@ -295,15 +305,15 @@ angular.module('components.scene.collision-reporter', ['ces', 'three', 'ammo', '
                             if (!frameCollisions[guid] || frameCollisions[guid].others.indexOf(other) < 0) {
                                 others.splice(i, 1);
 
-                                if (entityCollision && other.collision) {
+                                if (collisionReporterComponent && other.collision) {
                                     var flags = getCollisionFlags(entity, other);
 
                                     if (flags & FLAG_COLLISION_END) {
-                                        entityCollision.fire(EVENT_COLLISION_END, other);
+                                        collisionReporterComponent.collisionEnd.emit(other);
                                     }
 
                                     if (flags & FLAG_TRIGGER_LEAVE) {
-                                        entityCollision.fire(EVENT_TRIGGER_LEAVE, other);
+                                        collisionReporterComponent.triggerLeave.emit(other);
                                     }
                                 }
                             }

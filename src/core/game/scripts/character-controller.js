@@ -18,6 +18,19 @@ angular.module('game.scripts.character-controller', ['components.script', 'three
 
             this.moveLeft = false;
             this.moveRight = false;
+
+            this.jump = false;
+
+            var collisionReporterComponent = entity.getComponent('collisionReporter');
+
+            if (collisionReporterComponent) {
+                collisionReporterComponent.collisionStart.add(function () {
+                    console.log('collision start!');
+                });
+                collisionReporterComponent.collisionEnd.add(function () {
+                    console.log('collision end!');
+                });
+            }
         };
 
         CharacterControllerScript.prototype.update = function (dt, elapsed, timestamp) {
@@ -32,6 +45,7 @@ angular.module('game.scripts.character-controller', ['components.script', 'three
             this.rotateRight = false;
             this.moveLeft = false;
             this.moveRight = false;
+            this.jump = false;
 
             // virtual gamepad (touch ipad) controls
             if (leftStick) {
@@ -75,6 +89,10 @@ angular.module('game.scripts.character-controller', ['components.script', 'three
                 this.moveRight = true;
             }
 
+            if (input.keyboard.isDown(input.KEYS.SPACE)) {
+                this.jump = true;
+            }
+
             var inputVector = new THREE.Vector3();
 
             // react to changes
@@ -104,7 +122,16 @@ angular.module('game.scripts.character-controller', ['components.script', 'three
 
                 var currentVel = rigidBodyComponent.rigidBody.getLinearVelocity();
                 btVec3.setX(v1.x);
-                btVec3.setY(currentVel.y());
+
+                if (this.jump) {
+                    btVec3.setY(10);
+                }
+                else {
+                    btVec3.setY(currentVel.y());
+                }
+
+
+
                 btVec3.setZ(v1.z);
                 rigidBodyComponent.rigidBody.setLinearVelocity(btVec3);
             }

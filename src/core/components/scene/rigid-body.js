@@ -306,7 +306,7 @@ angular.module('components.scene.rigid-body', ['ces', 'three', 'ammo', 'ammo.phy
                         var trans = new Ammo.btTransform();
                         rigidBodyComponent.rigidBody.getMotionState().getWorldTransform(trans);
                         // console.log(trans.getOrigin().x());
-                        console.log(trans.getOrigin().y());
+                        // console.log(trans.getOrigin().y());
                         // console.log(trans.getOrigin().z());
                         var origin = trans.getOrigin();
 
