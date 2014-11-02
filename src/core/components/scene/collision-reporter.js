@@ -305,7 +305,10 @@ angular.module('components.scene.collision-reporter', ['ces', 'three', 'ammo', '
                             if (!frameCollisions[guid] || frameCollisions[guid].others.indexOf(other) < 0) {
                                 others.splice(i, 1);
 
-                                if (collisionReporterComponent && other.collision) {
+                                // Note: I changed the code here from PC so that it does not require the other
+                                // entity to have a collisionReporterComponent. Otherwise the end triggers
+                                // are never fired. I don't understand why this was needed in the first place...
+                                if (collisionReporterComponent) {
                                     var flags = getCollisionFlags(entity, other);
 
                                     if (flags & FLAG_COLLISION_END) {
