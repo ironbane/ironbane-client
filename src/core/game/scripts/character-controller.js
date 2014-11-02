@@ -19,16 +19,23 @@ angular.module('game.scripts.character-controller', ['components.script', 'three
             this.moveLeft = false;
             this.moveRight = false;
 
+            this.canJump = true;
             this.jump = false;
+
+            this.activeCollisions = [];
 
             var collisionReporterComponent = entity.getComponent('collisionReporter');
 
+            var me = this;
+
             if (collisionReporterComponent) {
-                collisionReporterComponent.collisionStart.add(function () {
+                collisionReporterComponent.collisionStart.add(function (contact) {
                     console.log('collision start!');
+                    me.activeCollisions.push(contact);
                 });
-                collisionReporterComponent.collisionEnd.add(function () {
+                collisionReporterComponent.collisionEnd.add(function (contact) {
                     console.log('collision end!');
+                    me.activeCollisions.splice(me.activeCollisions.indexOf(contact), 1);
                 });
             }
         };
@@ -46,6 +53,17 @@ angular.module('game.scripts.character-controller', ['components.script', 'three
             this.moveLeft = false;
             this.moveRight = false;
             this.jump = false;
+            this.canJump = false;
+            var me = this;
+
+            // Are we allowed to jump?
+            this.activeCollisions.forEach(function (activeCollision) {
+                activeCollision.contacts.forEach(function (contact) {
+                    if (contact.normal.y > 0.5) {
+                        me.canJump = true;
+                    }
+                });
+            });
 
             // virtual gamepad (touch ipad) controls
             if (leftStick) {
@@ -123,14 +141,12 @@ angular.module('game.scripts.character-controller', ['components.script', 'three
                 var currentVel = rigidBodyComponent.rigidBody.getLinearVelocity();
                 btVec3.setX(v1.x);
 
-                if (this.jump) {
-                    btVec3.setY(10);
+                if (this.jump && this.canJump) {
+                    btVec3.setY(5);
                 }
                 else {
                     btVec3.setY(currentVel.y());
                 }
-
-
 
                 btVec3.setZ(v1.z);
                 rigidBodyComponent.rigidBody.setLinearVelocity(btVec3);
@@ -138,7 +154,6 @@ angular.module('game.scripts.character-controller', ['components.script', 'three
             else {
                 this.entity.translateOnAxis(inputVector, moveSpeed * dt);
             }
-
 
             if (this.rotateLeft) {
                 this.entity.rotateY(rotateSpeed * dt);
