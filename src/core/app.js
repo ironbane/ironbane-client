@@ -100,10 +100,13 @@ angular.module('Ironbane', [
                 },
                 rigidBody: {
                     shape: {
-                        type: 'sphere',
-                        radius: 0.5
+                        type: 'capsule',
+                        height: 1,
+                        radius: 0.1
                     },
                     mass: 1,
+                    friction: 0,
+                    restitution: 0,
                     allowSleep: false,
                     lock: {
                         position: {
