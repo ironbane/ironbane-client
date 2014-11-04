@@ -2,8 +2,9 @@ angular.module('game.scripts.character-controller', ['components.script', 'three
     .run(function ($log, ScriptBank, THREE, Ammo) {
         'use strict';
 
-        var moveSpeed = 10;
-        var rotateSpeed = 3;
+        var acceleration = 0.7;
+        var rotateSpeed = 2;
+        var maxspeed = 4;
 
         var btVec3 = new Ammo.btVector3();
 
@@ -136,23 +137,35 @@ angular.module('game.scripts.character-controller', ['components.script', 'three
                 // We need to rotate the vector ourselves
                 var v1 = new THREE.Vector3();
                 v1.copy( inputVector ).applyQuaternion( this.entity.quaternion );
-                v1.multiplyScalar(moveSpeed);
+                v1.multiplyScalar(acceleration);
 
                 var currentVel = rigidBodyComponent.rigidBody.getLinearVelocity();
-                btVec3.setX(v1.x);
+                currentVel = currentVel.toTHREEVector3();
 
-                if (this.jump && this.canJump) {
-                    btVec3.setY(5);
-                }
-                else {
-                    btVec3.setY(currentVel.y());
+                if (this.jump && this.canJump && currentVel.y < 1) {
+                    console.log(currentVel.y);
+                    btVec3.setValue(0, 5, 0);
+                    rigidBodyComponent.rigidBody.applyCentralImpulse(btVec3);
                 }
 
-                btVec3.setZ(v1.z);
-                rigidBodyComponent.rigidBody.setLinearVelocity(btVec3);
+                currentVel.y = 0;
+                if (currentVel.lengthSq() < maxspeed * maxspeed) {
+                    btVec3.setValue(v1.x, 0, v1.z);
+                    rigidBodyComponent.rigidBody.applyCentralImpulse(btVec3);
+                }
+
+                // Add custom friction, otherwise physics friction prevents
+                // characters from jumping upwards against a wall which is annoying
+                var invertedVelocity = currentVel.clone().multiplyScalar(-0.2);
+                btVec3.setValue(invertedVelocity.x, 0, invertedVelocity.z);
+                rigidBodyComponent.rigidBody.applyCentralImpulse(btVec3);
+
+                // Experimental...
+                // rigidBodyComponent.rigidBody.applyCentralForce(btVec3);
+                // rigidBodyComponent.rigidBody.setLinearVelocity(btVec3);
             }
             else {
-                this.entity.translateOnAxis(inputVector, moveSpeed * dt);
+                this.entity.translateOnAxis(inputVector, acceleration * dt);
             }
 
             if (this.rotateLeft) {
