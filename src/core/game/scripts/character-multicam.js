@@ -51,6 +51,15 @@ angular.module('game.scripts.character-multicam', ['components.script'])
             }
 
             thirdPersonCam = cameraComponent.camera.clone();
+
+            // TODO: move this event listener some place else
+            // maybe to constructor of Camera somehow?
+            // it's annoying that the clone() doesn't do this
+            window.addEventListener('resize', function () {
+                thirdPersonCam.aspect = window.innerWidth / window.innerHeight;
+                thirdPersonCam.updateProjectionMatrix();
+            }, false );
+
             entity.parent.add(thirdPersonCam);
 
             firstPersonCam = cameraComponent.camera;
