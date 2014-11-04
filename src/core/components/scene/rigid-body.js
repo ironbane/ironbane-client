@@ -9,7 +9,21 @@ angular.module('components.scene.rigid-body', ['ces', 'three', 'ammo', 'ammo.phy
                     type: 'sphere',
                     radius: 1
                 },
-                allowSleep: true
+                allowSleep: true,
+                lock: {
+                    position: {
+                        x: false,
+                        y: false,
+                        z: false
+                    },
+                    rotation: {
+                        x: false,
+                        y: false,
+                        z: false
+                    }
+                },
+                restitution: 0.003,
+                friction: 0.5
             }
         });
     })
@@ -278,7 +292,12 @@ angular.module('components.scene.rigid-body', ['ces', 'three', 'ammo', 'ammo.phy
                         btVec3a.setValue(0, 0, 0);
                         shape.calculateLocalInertia(mass, btVec3a);
                         rigidBodyInfo = new Ammo.btRigidBodyConstructionInfo(mass, state, shape, btVec3a);
+
                         rigidBody = new Ammo.btRigidBody(rigidBodyInfo);
+
+                        // rigidBody.setDamping(0.001);
+                        rigidBody.setRestitution(rigidBodyData.restitution);
+                        rigidBody.setFriction(rigidBodyData.friction);
 
                         // Keep a link to this entity for when
                         // we want collision data later
@@ -289,6 +308,15 @@ angular.module('components.scene.rigid-body', ['ces', 'three', 'ammo', 'ammo.phy
                         if (!rigidBodyData.allowSleep) {
                             rigidBody.setActivationState(activationStates.RIGIDBODY_DISABLE_DEACTIVATION);
                         }
+
+                        // Lock positions and rotations if set
+                        var lp = rigidBodyData.lock.position;
+                        btVec3a.setValue(lp.x ? 0 : 1,lp.y ? 0 : 1,lp.z ? 0 : 1);
+                        rigidBody.setLinearFactor(btVec3a);
+
+                        var lr = rigidBodyData.lock.rotation;
+                        btVec3a.setValue(lr.x ? 0 : 1,lr.y ? 0 : 1,lr.z ? 0 : 1);
+                        rigidBody.setAngularFactor(btVec3a);
 
                         PhysicsWorld.addRigidBody(rigidBody);
                     });

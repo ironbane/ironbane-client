@@ -103,7 +103,20 @@ angular.module('Ironbane', [
                         type: 'sphere',
                         radius: 0.5
                     },
-                    allowSleep: false
+                    mass: 1,
+                    allowSleep: false,
+                    lock: {
+                        position: {
+                            x: false,
+                            y: false,
+                            z: false
+                        },
+                        rotation: {
+                            x: true,
+                            y: true,
+                            z: true
+                        }
+                    }
                 },
                 collisionReporter: {
 
