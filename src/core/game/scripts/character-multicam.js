@@ -33,6 +33,11 @@ angular.module('game.scripts.character-multicam', ['components.script'])
             };
         };
 
+        var thirdPersonCam;
+        var firstPersonCam;
+
+        var cameraThirdPersonLookAtTarget = new THREE.Vector3();
+
         var MultiCamScript = function (entity, world) {
             var me = this;
 
@@ -44,6 +49,13 @@ angular.module('game.scripts.character-multicam', ['components.script'])
             if (cameraComponent) {
                 cameraComponent.camera.rotation.set( 0, 0, 0 );
             }
+
+            thirdPersonCam = cameraComponent.camera.clone();
+            entity.parent.add(thirdPersonCam);
+
+            firstPersonCam = cameraComponent.camera;
+            firstPersonCam.position.set(0, 1, 4);
+            cameraComponent.camera = thirdPersonCam;
 
             IbConfig.get('domElement').addEventListener( 'mousemove', bind(this, this.onMouseMove), false );
         };
@@ -79,7 +91,15 @@ angular.module('game.scripts.character-multicam', ['components.script'])
                     cameraComponent.camera.quaternion.copy(new THREE.Quaternion());
                 }
                 if (camMode === camModeEnum.ThirdPerson) {
-                    cameraComponent.camera.position.set(0, 1, 4);
+                    var worldPos = new THREE.Vector3();
+                    worldPos.setFromMatrixPosition(firstPersonCam.matrixWorld);
+
+                    var v1 = new THREE.Vector3(0, 1, -1);
+                    v1.applyQuaternion( this.entity.quaternion );
+
+                    thirdPersonCam.position.lerp(worldPos, dt*5);
+                    cameraThirdPersonLookAtTarget.lerp(this.entity.position.clone().add(v1), dt*5);
+                    thirdPersonCam.lookAt(cameraThirdPersonLookAtTarget);
                 }
             }
         };
