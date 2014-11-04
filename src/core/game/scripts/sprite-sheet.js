@@ -110,6 +110,10 @@ angular.module('game.scripts.sprite-sheet', ['components.script', 'three'])
         var SpriteSheetScript = function (entity, world) {
             this.entity = entity;
             this.world = world;
+
+            this.walkTimer = 0.0;
+            this.walkIndex = 1;
+            this.walkForward = true;
         };
 
         SpriteSheetScript.prototype.update = function (dt, elapsed, timestamp) {
@@ -121,7 +125,35 @@ angular.module('game.scripts.sprite-sheet', ['components.script', 'three'])
 
                 var dirIndex = getDirectionSpriteIndex(this.entity, this.world);
 
-                displayUVFrame(quad, 1, dirIndex, 3, 8, false);
+                var rigidBodyComponent = this.entity.getComponent('rigidBody');
+
+                if (rigidBodyComponent) {
+                    var currentVel = rigidBodyComponent.rigidBody.getLinearVelocity();
+                    currentVel = currentVel.toTHREEVector3();
+
+                    if ( currentVel.lengthSq() > 0.1 ) {
+                        this.walkTimer += dt;
+                    }
+                    else {
+                        this.walkIndex = 1;
+                    }
+
+                    if (this.walkTimer > 0.1) {
+                        this.walkTimer = 0;
+                        if (this.walkForward) {
+                            this.walkIndex++;
+                        }
+                        else {
+                            this.walkIndex--;
+                        }
+
+                        if (this.walkIndex !== 1) {
+                            this.walkForward = !this.walkForward;
+                        }
+                    }
+                }
+
+                displayUVFrame(quad, this.walkIndex, dirIndex, 3, 8, false);
             }
 
         };
