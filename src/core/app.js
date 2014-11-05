@@ -12,7 +12,8 @@ angular.module('Ironbane', [
     'engine.entity-builder',
     'engine.sound-system',
     'engine.ib-config',
-    'engine.input.input-system'
+    'engine.input.input-system',
+    'engine.util',
 ])
     .config(function(SoundSystemProvider) {
         // define all of the sounds & music for the game
@@ -35,7 +36,7 @@ angular.module('Ironbane', [
         // TODO: move to directive
         $rootWorld.renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild($rootWorld.renderer.domElement);
-        //$rootWorld.renderer.setClearColorHex(0xd3fff8);
+        $rootWorld.renderer.setClearColorHex(0xd3fff8);
 
         window.addEventListener('resize', function () {
             $rootWorld.renderer.setSize(window.innerWidth, window.innerHeight);
@@ -59,7 +60,7 @@ angular.module('Ironbane', [
         // NOTE: this should be the LAST system as it does rendering!!
         $rootWorld.addSystem(new CameraSystem());
     })
-    .run(function loadWorld($log, Entity, $components, $rootWorld, THREE, EntityBuilder) {
+    .run(function loadWorld($log, Entity, $components, $rootWorld, THREE, EntityBuilder, Util) {
         'use strict';
 
         // var musicEntity = EntityBuilder.build('MusicPlayer', {
@@ -92,7 +93,7 @@ angular.module('Ironbane', [
         $rootWorld.addEntity(cube);
 
         var player = EntityBuilder.build('Player', {
-            position: [0, 50.0, -18],
+            position: [-50, 30.0, -50],
             components: {
                 quad: {
                     transparent: true,
@@ -100,9 +101,9 @@ angular.module('Ironbane', [
                 },
                 rigidBody: {
                     shape: {
-                        type: 'capsule',
-                        height: 1,
-                        radius: 0.1
+                        type: 'sphere',
+                        // height: 1,
+                        radius: 0.5
                     },
                     mass: 1,
                     friction: 0,
@@ -139,44 +140,70 @@ angular.module('Ironbane', [
                         '/scripts/built-in/look-at-camera.js',
                         '/scripts/built-in/sprite-sheet.js',
                     ]
-                },
-                // add a little personal torchlight
-                light: {
-                    type: 'PointLight',
-                    distance: 1
                 }
             }
         });
         $rootWorld.addEntity(player);
 
-        var bunny = EntityBuilder.build('Bunny', {
-            position: [0, 0.5, -20],
-            components: {
-                quad: {
-                    transparent: true,
-                    texture: 'assets/images/characters/skin/3.png'
-                },
-                helper: {
-                    line: true
-                },
-                script: {
-                    scripts: [
-                        '/scripts/built-in/look-at-camera.js',
-                        '/scripts/built-in/sprite-sheet.js',
-                    ]
-                },
-                health: {
-                    max: 5,
-                    value: 5
-                }
-            }
-        });
-        $rootWorld.addEntity(bunny);
+        for (var i = 0; i < 10; i++) {
+            (function (i) {
+
+                setTimeout(function () {
+                    console.log('Spawning ' + i);
+                    var bunny = EntityBuilder.build('Bunny', {
+                        position: [Util.getRandomInt(-55, -45), 100, Util.getRandomInt(-55, -45)],
+                        components: {
+                            quad: {
+                                transparent: true,
+                                texture: 'assets/images/characters/skin/29.png'
+                            },
+                            rigidBody: {
+                                shape: {
+                                    type: 'sphere',
+                                    // height: 1,
+                                    radius: 0.5
+                                },
+                                mass: 1,
+                                friction: 0,
+                                restitution: 0,
+                                allowSleep: false,
+                                lock: {
+                                    position: {
+                                        x: false,
+                                        y: false,
+                                        z: false
+                                    },
+                                    rotation: {
+                                        x: true,
+                                        y: true,
+                                        z: true
+                                    }
+                                }
+                            },
+                            helper: {
+                                line: true
+                            },
+                            script: {
+                                scripts: [
+                                    '/scripts/built-in/look-at-camera.js',
+                                    '/scripts/built-in/sprite-sheet.js',
+                                ]
+                            },
+                            health: {
+                                max: 5,
+                                value: 5
+                            }
+                        }
+                    });
+                    $rootWorld.addEntity(bunny);
+                }, i * 500);
+            })(i);
+        }
 
         var level = EntityBuilder.build('TestLevel', {
             components: {
                 scene: {
-                    id: 'dev-zone'
+                    id: 'ravenwood-village'
                 },
                 rigidBody: {
                     shape: {
