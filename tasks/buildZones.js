@@ -38,6 +38,13 @@ module.exports = function (angus, gulp) {
 
                 var json = JSON.parse(file);
 
+                if (!sceneNameToExport) {
+                    // Filter the models by the list of scenes we want to export in clara.json
+                    json.models = _.filter(json.models, function (model) {
+                        return _.contains(claraUser.sceneNamesToExport, model.name);
+                    });
+                }
+
                 json.models.forEach(function (model) {
                     var ibSceneId = model.name.toLowerCase().replace(/ /g, '-');
 
