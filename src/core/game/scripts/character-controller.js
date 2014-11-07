@@ -6,6 +6,9 @@ angular.module('game.scripts.character-controller', ['components.script', 'three
         var rotateSpeed = 2;
         var maxspeed = 4;
 
+        // The time that that must pass before you can jump again
+        var minimumJumpDelay = 1.0;
+
         var btVec3 = new Ammo.btVector3();
 
         var CharacterControllerScript = function (entity, world) {
@@ -22,6 +25,7 @@ angular.module('game.scripts.character-controller', ['components.script', 'three
 
             this.canJump = true;
             this.jump = false;
+            this.jumpTimer = 0.0;
 
             this.activeCollisions = [];
 
@@ -44,6 +48,8 @@ angular.module('game.scripts.character-controller', ['components.script', 'three
             var input = this.world.getSystem('input'), // should cache this during init?
                 leftStick = input.virtualGamepad.leftThumbstick;
 
+            var me = this;
+
             // reset these every frame
             this.moveForward = false;
             this.moveBackward = false;
@@ -53,7 +59,8 @@ angular.module('game.scripts.character-controller', ['components.script', 'three
             this.moveRight = false;
             this.jump = false;
             this.canJump = false;
-            var me = this;
+
+            this.jumpTimer += dt;
 
             var rigidBodyComponent = me.entity.getComponent('rigidBody');
 
@@ -155,7 +162,8 @@ angular.module('game.scripts.character-controller', ['components.script', 'three
                 var currentVel = rigidBodyComponent.rigidBody.getLinearVelocity();
                 currentVel = currentVel.toTHREEVector3();
 
-                if (this.jump && this.canJump && currentVel.y < 1) {
+                if (this.jump && this.canJump && currentVel.y < 1 && this.jumpTimer > minimumJumpDelay) {
+                    this.jumpTimer = 0.0;
                     console.log(currentVel.y);
                     btVec3.setValue(0, 5, 0);
                     rigidBodyComponent.rigidBody.applyCentralImpulse(btVec3);
