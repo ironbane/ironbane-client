@@ -14,6 +14,7 @@ angular.module('Ironbane', [
     'engine.ib-config',
     'engine.input.input-system',
     'engine.util',
+    'engine.socket'
 ])
     .config(function(SoundSystemProvider) {
         // define all of the sounds & music for the game
@@ -29,6 +30,15 @@ angular.module('Ironbane', [
     .config(function(IbConfigProvider) {
         // Used for input events
         IbConfigProvider.set('domElement', document);
+    })
+    .run(function(Socket, $log) {
+        var socket = new Socket('http://localhost:3000');
+
+        socket.on('chat message', function(msg) {
+            $log.log('got socket msg!', msg);
+        });
+
+        socket.connect();
     })
     .run(function (System, CameraSystem, ModelSystem, $rootWorld, THREE, LightSystem, SpriteSystem, QuadSystem, HelperSystem, SceneSystem, ScriptSystem, SoundSystem, InputSystem, RigidBodySystem, CollisionReporterSystem) {
         'use strict';
