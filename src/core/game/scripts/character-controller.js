@@ -31,11 +31,9 @@ angular.module('game.scripts.character-controller', ['components.script', 'three
 
             if (collisionReporterComponent) {
                 collisionReporterComponent.collisionStart.add(function (contact) {
-                    console.log('collision start!');
                     me.activeCollisions.push(contact);
                 });
                 collisionReporterComponent.collisionEnd.add(function (contact) {
-                    console.log('collision end!');
                     me.activeCollisions.splice(me.activeCollisions.indexOf(contact), 1);
                 });
             }
@@ -57,11 +55,27 @@ angular.module('game.scripts.character-controller', ['components.script', 'three
             this.canJump = false;
             var me = this;
 
+            var rigidBodyComponent = me.entity.getComponent('rigidBody');
+
+            if (rigidBodyComponent) {
+                // We only set a friction when the character is on the ground, to prevent
+                // side-friction from allowing character to stop in midair
+                // First reset the friction here
+                rigidBodyComponent.rigidBody.setFriction(0);
+            }
+
             // Are we allowed to jump?
             this.activeCollisions.forEach(function (activeCollision) {
                 activeCollision.contacts.forEach(function (contact) {
+
+                    // When we are on ground that is relatively flat
+                    // we allow jumping and set friction so we don't slide off
                     if (contact.normal.y > 0.5) {
                         me.canJump = true;
+
+                        if (rigidBodyComponent) {
+                            rigidBodyComponent.rigidBody.setFriction(1.0);
+                        }
                     }
                 });
             });
@@ -131,7 +145,6 @@ angular.module('game.scripts.character-controller', ['components.script', 'three
             // Make sure they can't gain extra speed if moving diagonally
             inputVector.normalize();
 
-            var rigidBodyComponent = this.entity.getComponent('rigidBody');
             if (rigidBodyComponent) {
 
                 // We need to rotate the vector ourselves
@@ -154,9 +167,8 @@ angular.module('game.scripts.character-controller', ['components.script', 'three
                     rigidBodyComponent.rigidBody.applyCentralImpulse(btVec3);
                 }
 
-                // Add custom friction, otherwise physics friction prevents
-                // characters from jumping upwards against a wall which is annoying
-                var invertedVelocity = currentVel.clone().multiplyScalar(-0.2);
+                // Add a little bit custom friction for finetuning
+                var invertedVelocity = currentVel.clone().multiplyScalar(-0.1);
                 btVec3.setValue(invertedVelocity.x, 0, invertedVelocity.z);
                 rigidBodyComponent.rigidBody.applyCentralImpulse(btVec3);
 
