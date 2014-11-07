@@ -14,9 +14,11 @@ angular.module('Ironbane', [
     'engine.ib-config',
     'engine.input.input-system',
     'engine.util',
-    'engine.socket'
+    'game.game-socket'
 ])
-    .config(function(SoundSystemProvider) {
+    .config(function(SoundSystemProvider, $gameSocketProvider) {
+        $gameSocketProvider.setUrl('http://localhost:3000');
+
         // define all of the sounds & music for the game
         SoundSystemProvider.setAudioLibraryData({
             theme: {
@@ -31,14 +33,12 @@ angular.module('Ironbane', [
         // Used for input events
         IbConfigProvider.set('domElement', document);
     })
-    .run(function(Socket, $log) {
-        var socket = new Socket('http://localhost:3000');
+    .run(function($gameSocket, $log) {
 
-        socket.on('chat message', function(msg) {
+        // event handlers are promise based and can be added any time
+        $gameSocket.on('chat message', function(msg) {
             $log.log('got socket msg!', msg);
         });
-
-        socket.connect();
     })
     .run(function (System, CameraSystem, ModelSystem, $rootWorld, THREE, LightSystem, SpriteSystem, QuadSystem, HelperSystem, SceneSystem, ScriptSystem, SoundSystem, InputSystem, RigidBodySystem, CollisionReporterSystem) {
         'use strict';
