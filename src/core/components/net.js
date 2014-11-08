@@ -2,6 +2,11 @@ angular.component('components.net', ['ces', 'game.game-socket'])
     .config(function ($componentsProvider) {
         'use strict';
 
+        // Ghosting – The server keeps track of all the "true" objects in play,
+        // and "Ghosts" or copies data for each of them to the Clients by using Scoping.
+        // What this means the server has a master list of objects, and sends updated information
+        // for them to a local copy of the object on the client.
+
         $componentsProvider.addComponentData({
             'ghost': {
                 id: -1
