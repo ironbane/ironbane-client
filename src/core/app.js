@@ -70,7 +70,7 @@ angular.module('Ironbane', [
         // NOTE: this should be the LAST system as it does rendering!!
         $rootWorld.addSystem(new CameraSystem());
     })
-    .run(function loadWorld($log, Entity, $components, $rootWorld, THREE, EntityBuilder, Util) {
+    .run(function loadWorld($log, Entity, $components, $rootWorld, THREE, EntityBuilder, Util, $gameSocket) {
         'use strict';
 
         // var musicEntity = EntityBuilder.build('MusicPlayer', {
@@ -156,6 +156,27 @@ angular.module('Ironbane', [
             }
         });
         $rootWorld.addEntity(player);
+
+        $gameSocket.on('connected', function () {
+            $gameSocket.emit('myPlayer', player.id);
+        });
+
+        $gameSocket.on('playerJoin', function(ghostId, name, pos) {
+
+            EntityBuilder.build(name, {
+                position: pos,
+                components: {
+                    ghost: {
+                        id: ghostId
+                    },
+                    quad: {
+                        transparent: true,
+                        texture: 'assets/images/characters/skin/2.png'
+                    }
+                }
+            });
+
+        });
 
         for (var i = 0; i < 10; i++) {
             (function (i) {
