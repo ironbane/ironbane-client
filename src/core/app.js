@@ -142,7 +142,9 @@ angular.module('Ironbane', [
                     max: 5,
                     value: 5
                 },
-                camera: {},
+                camera: {
+                    aspectRatio: $rootWorld.renderer.domElement.width / $rootWorld.renderer.domElement.height
+                },
                 script: {
                     scripts: [
                         '/scripts/built-in/character-controller.js',
