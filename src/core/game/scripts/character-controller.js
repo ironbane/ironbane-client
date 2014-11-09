@@ -7,7 +7,7 @@ angular.module('game.scripts.character-controller', ['components.script', 'three
         var maxspeed = 4;
 
         // The time that that must pass before you can jump again
-        var minimumJumpDelay = 1.0;
+        var minimumJumpDelay = 0.5;
 
         var btVec3 = new Ammo.btVector3();
 
