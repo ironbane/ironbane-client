@@ -1,4 +1,4 @@
-angular.component('components.net', ['ces', 'game.game-socket'])
+angular.module('components.net', ['ces', 'game.game-socket'])
     .config(function ($componentsProvider) {
         'use strict';
 
