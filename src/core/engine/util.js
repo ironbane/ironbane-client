@@ -11,5 +11,10 @@ angular.module('engine.util', [])
                 precision = precision || 2;
                 return parseFloat(Math.min(minValue + (Math.random() * (maxValue - minValue)), maxValue).toFixed(precision));
             };
+
+            this.roundNumber = function (number, decimals) {
+              var newnumber = new Number(number+'').toFixed(parseInt(decimals));
+              return parseFloat(newnumber);
+            };
         }
     );
