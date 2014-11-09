@@ -81,13 +81,15 @@ angular.module('engine.input.virtual-gamepad', [])
         var onPointerUp = function (e) {
             var gamepad = this;
 
-            delete gamepad._pointers[e.pointerId];
-
-            if (e.clientX < gamepad.canvasHalfWidth) {
+            if(gamepad.leftThumbstick && gamepad.leftThumbstick.id === e.pointerId) {
                 delete gamepad.leftThumbstick;
-            } else {
+            }
+
+            if(gamepad.rightThumbstick && gamepad.rightThumbstick.id === e.pointerId) {
                 delete gamepad.rightThumbstick;
             }
+
+            delete gamepad._pointers[e.pointerId];
         };
 
         var VirtualGamepad = function () {
@@ -155,6 +157,9 @@ angular.module('engine.input.virtual-gamepad', [])
                 var pointer = gamepad._pointers[pointerId];
 
                 if (gamepad.leftThumbstick && pointer.id === gamepad.leftThumbstick.id) {
+                    //context.beginPath();
+                    //context.fillStyle = 'white';
+                    //context.fillText(JSON.stringify(pointer), pointer.x + 30, pointer.y - 30);
                     context.beginPath();
                     context.strokeStyle = pointer.color;
                     context.lineWidth = 6;
@@ -171,9 +176,9 @@ angular.module('engine.input.virtual-gamepad', [])
                     context.stroke();
                 } else {
                     // just draw touches
-                    context.beginPath();
-                    context.fillStyle = 'white';
-                    context.fillText(JSON.stringify(pointer), pointer.x + 30, pointer.y - 30);
+                    //context.beginPath();
+                    //context.fillStyle = 'white';
+                    //context.fillText(JSON.stringify(pointer), pointer.x + 30, pointer.y - 30);
 
                     context.beginPath();
                     context.strokeStyle = pointer.color;
