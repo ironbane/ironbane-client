@@ -16,7 +16,7 @@ angular.module('Ironbane', [
     'engine.util',
     'game.game-socket'
 ])
-    .config(function(SoundSystemProvider, $gameSocketProvider) {
+    .config(function (SoundSystemProvider, $gameSocketProvider) {
         $gameSocketProvider.setUrl('http://localhost:3000');
 
         // define all of the sounds & music for the game
@@ -29,7 +29,7 @@ angular.module('Ironbane', [
             }
         });
     })
-    .config(function(IbConfigProvider) {
+    .config(function (IbConfigProvider) {
         // Used for input events
         IbConfigProvider.set('domElement', document);
     })
@@ -40,7 +40,9 @@ angular.module('Ironbane', [
 
         // asset preload here
         // TODO: at some point have a loading screen with this preloading everything needed rather than just one
-        $rootScope.ironbaneReady = $http.get('assets/scene/' + starterScene + '/ib-world.json', {cache: true});
+        $rootScope.ironbaneReady = $http.get('assets/scene/' + starterScene + '/ib-world.json', {
+            cache: true
+        });
 
         // TODO: move to directive
         $rootWorld.renderer.setSize(window.innerWidth, window.innerHeight);
@@ -49,7 +51,7 @@ angular.module('Ironbane', [
 
         window.addEventListener('resize', function () {
             $rootWorld.renderer.setSize(window.innerWidth, window.innerHeight);
-        }, false );
+        }, false);
 
         // DEBUG editor mode?
         var grid = new THREE.GridHelper(100, 1);
@@ -72,165 +74,169 @@ angular.module('Ironbane', [
     .run(function loadWorld($rootScope, $log, Entity, $components, $rootWorld, THREE, EntityBuilder, Util) {
         'use strict';
 
-        $rootScope.ironbaneReady.then(function() {
+        $rootScope.ironbaneReady.then(function () {
 
-        // var musicEntity = EntityBuilder.build('MusicPlayer', {
-        //     components: {
-        //         sound: {
-        //             asset: 'theme',
-        //             loop: true
-        //         }
-        //     }
-        // });
-        // $log.debug('musicEntity', musicEntity);
-        // $rootWorld.addEntity(musicEntity);
+            // var musicEntity = EntityBuilder.build('MusicPlayer', {
+            //     components: {
+            //         sound: {
+            //             asset: 'theme',
+            //             loop: true
+            //         }
+            //     }
+            // });
+            // $log.debug('musicEntity', musicEntity);
+            // $rootWorld.addEntity(musicEntity);
 
-        var cube = EntityBuilder.build('Cubey-Doobey-Doo', {
-            position: [0, 3, 0],
-            components: {
-                model: {
-                    //default
-                },
-                script: {
-                    scripts: [
-                        {src: 'assets/scripts/test.js', params: {speed: 0.5}}
-
-                        // Disabled as it interferes with regular DOM keyevent listeners
-                        // '/scripts/built-in/input-test.js'
-                    ]
-                }
-            }
-        });
-        $rootWorld.addEntity(cube);
-
-        var player = EntityBuilder.build('Player', {
-            position: [0,5,20],
-            components: {
-                quad: {
-                    transparent: true,
-                    texture: 'assets/images/characters/skin/2.png'
-                },
-                rigidBody: {
-                    shape: {
-                        type: 'sphere',
-                        // height: 1,
-                        radius: 0.5
+            var cube = EntityBuilder.build('Cubey-Doobey-Doo', {
+                position: [0, 3, 0],
+                components: {
+                    model: {
+                        //default
                     },
-                    mass: 1,
-                    friction: 0,
-                    restitution: 0,
-                    allowSleep: false,
-                    lock: {
-                        position: {
-                            x: false,
-                            y: false,
-                            z: false
-                        },
-                        rotation: {
-                            x: true,
-                            y: true,
-                            z: true
-                        }
-                    }
-                },
-                collisionReporter: {
-
-                },
-                helper: {
-                    line: true
-                },
-                health: {
-                    max: 5,
-                    value: 5
-                },
-                camera: {
-                    aspectRatio: $rootWorld.renderer.domElement.width / $rootWorld.renderer.domElement.height
-                },
-                script: {
-                    scripts: [
-                        '/scripts/built-in/character-controller.js',
-                        '/scripts/built-in/character-multicam.js',
-                        '/scripts/built-in/look-at-camera.js',
-                        '/scripts/built-in/sprite-sheet.js',
-                    ]
-                }
-            }
-        });
-        $rootWorld.addEntity(player);
-
-        for (var i = 0; i < 10; i++) {
-            (function (i) {
-
-                setTimeout(function () {
-                    console.log('Spawning ' + i);
-                    var bunny = EntityBuilder.build('Bunny', {
-                        position: [Util.getRandomInt(-55, -45), 100, Util.getRandomInt(-55, -45)],
-                        components: {
-                            quad: {
-                                transparent: true,
-                                texture: 'assets/images/characters/skin/29.png'
-                            },
-                            rigidBody: {
-                                shape: {
-                                    type: 'sphere',
-                                    // height: 1,
-                                    radius: 0.5
-                                },
-                                mass: 1,
-                                friction: 0,
-                                restitution: 0,
-                                allowSleep: false,
-                                lock: {
-                                    position: {
-                                        x: false,
-                                        y: false,
-                                        z: false
-                                    },
-                                    rotation: {
-                                        x: true,
-                                        y: true,
-                                        z: true
-                                    }
+                    script: {
+                        scripts: [{
+                                src: 'assets/scripts/test.js',
+                                params: {
+                                    speed: 0.5
                                 }
+                            }
+
+                            // Disabled as it interferes with regular DOM keyevent listeners
+                            // '/scripts/built-in/input-test.js'
+                        ]
+                    }
+                }
+            });
+            $rootWorld.addEntity(cube);
+
+            var player = EntityBuilder.build('Player', {
+                position: [0, 5, 20],
+                components: {
+                    quad: {
+                        transparent: true,
+                        texture: 'assets/images/characters/skin/2.png'
+                    },
+                    rigidBody: {
+                        shape: {
+                            type: 'sphere',
+                            // height: 1,
+                            radius: 0.5
+                        },
+                        mass: 1,
+                        friction: 0,
+                        restitution: 0,
+                        allowSleep: false,
+                        lock: {
+                            position: {
+                                x: false,
+                                y: false,
+                                z: false
                             },
-                            helper: {
-                                line: true
-                            },
-                            script: {
-                                scripts: [
-                                    '/scripts/built-in/look-at-camera.js',
-                                    '/scripts/built-in/sprite-sheet.js',
-                                ]
-                            },
-                            health: {
-                                max: 5,
-                                value: 5
+                            rotation: {
+                                x: true,
+                                y: true,
+                                z: true
                             }
                         }
-                    });
-                    $rootWorld.addEntity(bunny);
-                }, i * 500);
-            })(i);
-        }
-
-        var level = EntityBuilder.build('TestLevel', {
-            components: {
-                scene: {
-                    id: 'obstacle-test-course-one'
-                },
-                rigidBody: {
-                    shape: {
-                        type: 'concave'
                     },
-                    mass: 0
-                },
-                light: {
-                    type: 'AmbientLight',
-                    color: 0x333333
-                }
-            }
-        });
-        $rootWorld.addEntity(level);
+                    collisionReporter: {
 
-    });
+                    },
+                    helper: {
+                        line: true
+                    },
+                    health: {
+                        max: 5,
+                        value: 5
+                    },
+                    camera: {
+                        aspectRatio: $rootWorld.renderer.domElement.width / $rootWorld.renderer.domElement.height
+                    },
+                    script: {
+                        scripts: [
+                            '/scripts/built-in/character-controller.js',
+                            '/scripts/built-in/character-multicam.js',
+                            '/scripts/built-in/look-at-camera.js',
+                            '/scripts/built-in/sprite-sheet.js',
+                        ]
+                    }
+                }
+            });
+            $rootWorld.addEntity(player);
+
+            for (var i = 0; i < 10; i++) {
+                (function (i) {
+
+                    setTimeout(function () {
+                        console.log('Spawning ' + i);
+                        var bunny = EntityBuilder.build('Bunny', {
+                            position: [Util.getRandomInt(-55, -45), 100, Util.getRandomInt(-55, -45)],
+                            components: {
+                                quad: {
+                                    transparent: true,
+                                    texture: 'assets/images/characters/skin/29.png'
+                                },
+                                rigidBody: {
+                                    shape: {
+                                        type: 'sphere',
+                                        // height: 1,
+                                        radius: 0.5
+                                    },
+                                    mass: 1,
+                                    friction: 0,
+                                    restitution: 0,
+                                    allowSleep: false,
+                                    lock: {
+                                        position: {
+                                            x: false,
+                                            y: false,
+                                            z: false
+                                        },
+                                        rotation: {
+                                            x: true,
+                                            y: true,
+                                            z: true
+                                        }
+                                    }
+                                },
+                                helper: {
+                                    line: true
+                                },
+                                script: {
+                                    scripts: [
+                                        '/scripts/built-in/look-at-camera.js',
+                                        '/scripts/built-in/sprite-sheet.js',
+                                    ]
+                                },
+                                health: {
+                                    max: 5,
+                                    value: 5
+                                }
+                            }
+                        });
+                        $rootWorld.addEntity(bunny);
+                    }, i * 500);
+                })(i);
+            }
+
+            var level = EntityBuilder.build('TestLevel', {
+                components: {
+                    scene: {
+                        id: 'obstacle-test-course-one'
+                    },
+                    rigidBody: {
+                        shape: {
+                            type: 'concave'
+                        },
+                        mass: 0
+                    },
+                    light: {
+                        type: 'AmbientLight',
+                        color: 0x333333
+                    }
+                }
+            });
+            $rootWorld.addEntity(level);
+
+        });
     });
