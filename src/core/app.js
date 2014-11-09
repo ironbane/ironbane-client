@@ -75,6 +75,7 @@ angular.module('Ironbane', [
             $rootWorld.addSystem(new RigidBodySystem());
             $rootWorld.addSystem(new CollisionReporterSystem());
             $rootWorld.addSystem(new HelperSystem());
+            $rootWorld.addSystem(new WieldItemSystem());
             // NOTE: this should be the LAST system as it does rendering!!
             $rootWorld.addSystem(new CameraSystem());
 
@@ -112,7 +113,8 @@ angular.module('Ironbane', [
             $rootWorld.addEntity(cube);
 
             var player = EntityBuilder.build('Player', {
-                position: [0, 5, 20],
+                rotation: [0, Math.PI - 0.4, 0],
+                position: [22, 5, -10],
                 components: {
                     quad: {
                         transparent: true,
@@ -120,12 +122,16 @@ angular.module('Ironbane', [
                     },
                     rigidBody: {
                         shape: {
-                            type: 'sphere',
-                            // height: 1,
-                            radius: 0.5
+                            type: 'box',
+                            width: 0.5,
+                            height: 1.0,
+                            depth: 0.5
+
+                            // type: 'sphere',
+                            // radius: 0.5
                         },
                         mass: 1,
-                        friction: 0,
+                        friction: 0.0,
                         restitution: 0,
                         allowSleep: false,
                         lock: {
@@ -144,9 +150,9 @@ angular.module('Ironbane', [
                     collisionReporter: {
 
                     },
-                    helper: {
-                        line: true
-                    },
+                    // helper: {
+                    //     line: true
+                    // },
                     health: {
                         max: 5,
                         value: 5
@@ -165,13 +171,15 @@ angular.module('Ironbane', [
             });
             $rootWorld.addEntity(player);
 
-            for (var i = 0; i < 10; i++) {
+            for (var i = 0; i < 1; i++) {
                 (function (i) {
 
                     setTimeout(function () {
-                        console.log('Spawning ' + i);
+                        // console.log('Spawning ' + i);
                         var bunny = EntityBuilder.build('Bunny', {
-                            position: [Util.getRandomInt(-55, -45), 100, Util.getRandomInt(-55, -45)],
+                            rotation: [0, Math.PI/2, 0],
+                            position: [-2, 17, -8],
+                            // position: [Util.getRandomInt(-55, -45), 100, Util.getRandomInt(-55, -45)],
                             components: {
                                 quad: {
                                     transparent: true,
@@ -200,12 +208,13 @@ angular.module('Ironbane', [
                                         }
                                     }
                                 },
-                                helper: {
-                                    line: true
-                                },
+                                // helper: {
+                                //     line: true
+                                // },
                                 script: {
                                     scripts: [
                                         '/scripts/built-in/sprite-sheet.js',
+                                        '/scripts/special/spawn-100-bunnies.js'
                                     ]
                                 },
                                 health: {

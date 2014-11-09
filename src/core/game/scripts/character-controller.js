@@ -68,7 +68,7 @@ angular.module('game.scripts.character-controller', ['components.script', 'three
                 // We only set a friction when the character is on the ground, to prevent
                 // side-friction from allowing character to stop in midair
                 // First reset the friction here
-                rigidBodyComponent.rigidBody.setFriction(0);
+                // rigidBodyComponent.rigidBody.setFriction(0);
             }
 
             // Are we allowed to jump?
@@ -77,11 +77,12 @@ angular.module('game.scripts.character-controller', ['components.script', 'three
 
                     // When we are on ground that is relatively flat
                     // we allow jumping and set friction so we don't slide off
+                    me.canJump = true;
                     if (contact.normal.y > 0.5) {
-                        me.canJump = true;
+
 
                         if (rigidBodyComponent) {
-                            rigidBodyComponent.rigidBody.setFriction(1.0);
+                            // rigidBodyComponent.rigidBody.setFriction(1.0);
                         }
                     }
                 });
@@ -164,7 +165,6 @@ angular.module('game.scripts.character-controller', ['components.script', 'three
 
                 if (this.jump && this.canJump && currentVel.y < 1 && this.jumpTimer > minimumJumpDelay) {
                     this.jumpTimer = 0.0;
-                    console.log(currentVel.y);
                     btVec3.setValue(0, 5, 0);
                     rigidBodyComponent.rigidBody.applyCentralImpulse(btVec3);
                 }
@@ -176,7 +176,7 @@ angular.module('game.scripts.character-controller', ['components.script', 'three
                 }
 
                 // Add a little bit custom friction for finetuning
-                var invertedVelocity = currentVel.clone().multiplyScalar(-0.1);
+                var invertedVelocity = currentVel.clone().multiplyScalar(-0.2);
                 btVec3.setValue(invertedVelocity.x, 0, invertedVelocity.z);
                 rigidBodyComponent.rigidBody.applyCentralImpulse(btVec3);
 

@@ -63,7 +63,7 @@ angular.module('game.scripts.character-multicam', ['components.script'])
             entity.parent.add(thirdPersonCam);
 
             firstPersonCam = cameraComponent.camera;
-            firstPersonCam.position.set(0, 1, 4);
+            firstPersonCam.position.set(0, 1.5, 4);
             cameraComponent.camera = thirdPersonCam;
 
             IbConfig.get('domElement').addEventListener( 'mousemove', bind(this, this.onMouseMove), false );
