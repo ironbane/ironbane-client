@@ -33,7 +33,10 @@ angular.module('Ironbane', [
         // Used for input events
         IbConfigProvider.set('domElement', document);
     })
-    .run(function ($rootScope, System, CameraSystem, ModelSystem, $rootWorld, THREE, LightSystem, SpriteSystem, QuadSystem, HelperSystem, SceneSystem, ScriptSystem, SoundSystem, InputSystem, RigidBodySystem, CollisionReporterSystem, $http) {
+    .run(function ($rootScope, System, CameraSystem, ModelSystem, $rootWorld, THREE,
+        LightSystem, SpriteSystem, QuadSystem, HelperSystem, SceneSystem, ScriptSystem,
+        SoundSystem, InputSystem, RigidBodySystem, CollisionReporterSystem, $http, $log,
+        EntityBuilder, Util) {
         'use strict';
 
         var starterScene = 'obstacle-test-course-one';
@@ -53,28 +56,27 @@ angular.module('Ironbane', [
             $rootWorld.renderer.setSize(window.innerWidth, window.innerHeight);
         }, false);
 
-        // DEBUG editor mode?
-        var grid = new THREE.GridHelper(100, 1);
-        $rootWorld.scene.add(grid);
-
-        $rootWorld.addSystem(new InputSystem(), 'input');
-        $rootWorld.addSystem(new SoundSystem());
-        $rootWorld.addSystem(new ScriptSystem());
-        $rootWorld.addSystem(new SceneSystem());
-        $rootWorld.addSystem(new SpriteSystem());
-        $rootWorld.addSystem(new ModelSystem());
-        $rootWorld.addSystem(new LightSystem());
-        $rootWorld.addSystem(new QuadSystem());
-        $rootWorld.addSystem(new RigidBodySystem());
-        $rootWorld.addSystem(new CollisionReporterSystem());
-        $rootWorld.addSystem(new HelperSystem());
-        // NOTE: this should be the LAST system as it does rendering!!
-        $rootWorld.addSystem(new CameraSystem());
-    })
-    .run(function loadWorld($rootScope, $log, Entity, $components, $rootWorld, THREE, EntityBuilder, Util) {
-        'use strict';
-
         $rootScope.ironbaneReady.then(function () {
+
+            // DEBUG editor mode?
+            var grid = new THREE.GridHelper(100, 1);
+            $rootWorld.scene.add(grid);
+
+            $rootWorld.addSystem(new InputSystem(), 'input');
+            $rootWorld.addSystem(new SoundSystem());
+            $rootWorld.addSystem(new ScriptSystem());
+            $rootWorld.addSystem(new SceneSystem());
+            $rootWorld.addSystem(new SpriteSystem());
+            $rootWorld.addSystem(new ModelSystem());
+            $rootWorld.addSystem(new LightSystem());
+            $rootWorld.addSystem(new QuadSystem());
+            $rootWorld.addSystem(new RigidBodySystem());
+            $rootWorld.addSystem(new CollisionReporterSystem());
+            $rootWorld.addSystem(new HelperSystem());
+            // NOTE: this should be the LAST system as it does rendering!!
+            $rootWorld.addSystem(new CameraSystem());
+
+
 
             // var musicEntity = EntityBuilder.build('MusicPlayer', {
             //     components: {
