@@ -97,7 +97,18 @@ module.exports = function (angus, gulp) {
                                 Q.all([
                                     saveProcessedWorld(ibWorld.worldMesh, ibWorldFilepath),
                                     saveProcessedEntities(ibWorld.entities, ibEntitiesFilepath)
-                                ]).then(deferred.resolve, deferred.reject);
+                                ]).then(deferred.resolve, deferred.reject).then(function () {
+                                    fs.unlink(zipFilepath, function (err) {
+                                        if (err) {
+                                            throw err;
+                                        }
+                                    });
+                                    fs.unlink(claraExportFilepath, function (err) {
+                                        if (err) {
+                                            throw err;
+                                        }
+                                    });
+                                });
                             }
                         });
                     }
