@@ -33,15 +33,14 @@ angular.module('Ironbane', [
         // Used for input events
         IbConfigProvider.set('domElement', document);
     })
-    .run(function($gameSocket, $log) {
-
-        // event handlers are promise based and can be added any time
-        $gameSocket.on('chat message', function(msg) {
-            $log.log('got socket msg!', msg);
-        });
-    })
-    .run(function (System, CameraSystem, ModelSystem, $rootWorld, THREE, LightSystem, SpriteSystem, QuadSystem, HelperSystem, SceneSystem, ScriptSystem, SoundSystem, InputSystem, RigidBodySystem, CollisionReporterSystem) {
+    .run(function (System, CameraSystem, ModelSystem, $rootWorld, THREE, LightSystem, SpriteSystem, QuadSystem, HelperSystem, SceneSystem, ScriptSystem, SoundSystem, InputSystem, RigidBodySystem, CollisionReporterSystem, $http) {
         'use strict';
+
+        var starterScene = 'obstacle-test-course-one';
+
+        // asset preload here
+        // TODO: at some point have a loading screen with this
+        $http.get('assets/scene/' + starterScene + '/ib-world.json', {cache: true});
 
         // TODO: move to directive
         $rootWorld.renderer.setSize(window.innerWidth, window.innerHeight);
@@ -103,7 +102,7 @@ angular.module('Ironbane', [
         $rootWorld.addEntity(cube);
 
         var player = EntityBuilder.build('Player', {
-            position: [-50, 30.0, -50],
+            position: [0,5,20],
             components: {
                 quad: {
                     transparent: true,
@@ -215,7 +214,7 @@ angular.module('Ironbane', [
         var level = EntityBuilder.build('TestLevel', {
             components: {
                 scene: {
-                    id: 'ravenwood-village'
+                    id: 'obstacle-test-course-one'
                 },
                 rigidBody: {
                     shape: {
