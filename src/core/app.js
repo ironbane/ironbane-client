@@ -37,7 +37,8 @@ angular.module('Ironbane', [
     .run(function ($rootScope, System, CameraSystem, ModelSystem, $rootWorld, THREE,
         LightSystem, SpriteSystem, QuadSystem, HelperSystem, SceneSystem, ScriptSystem,
         SoundSystem, InputSystem, RigidBodySystem, CollisionReporterSystem, $http, $log,
-        EntityBuilder, Util) {
+        EntityBuilder, WieldItemSystem, Util) {
+
         'use strict';
 
         var starterScene = 'obstacle-test-course-one';
