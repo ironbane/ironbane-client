@@ -58,6 +58,7 @@ angular.module('components.scene.quad', ['ces', 'three', 'engine.texture-loader'
                     activeCamera;
 
                 if (entitiesWithCamera.length) {
+                    // HACK: this might not be the active camera someday...
                     activeCamera = entitiesWithCamera[0].getComponent('camera').camera;
                 }
 

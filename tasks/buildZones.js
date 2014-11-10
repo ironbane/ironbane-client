@@ -128,8 +128,12 @@ module.exports = function (angus, gulp) {
                         // Otherwise it would be no use since the parent will be merged into one world mesh
                         child.parentUuid = obj.uuid;
                     }
+                    child.updateMatrixWorld(true);
                     // store to array for later (don't mess with the tree during traversal)
-                    ents.push(child);
+                    if(child.parent === obj) {
+                        // only push in parent ents, don't want parent jacking later...
+                        ents.push(child);
+                    }
                 } else {
                     if (child.geometry) {
 
