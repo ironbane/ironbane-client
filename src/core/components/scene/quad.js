@@ -1,3 +1,4 @@
+// a "quad" is a billboard that doesn't look up
 angular.module('components.scene.quad', ['ces', 'three', 'engine.texture-loader'])
     .config(function ($componentsProvider) {
         'use strict';
@@ -10,7 +11,7 @@ angular.module('components.scene.quad', ['ces', 'three', 'engine.texture-loader'
             }
         });
     })
-    .factory('QuadSystem', function (System, THREE, TextureLoader) {
+    .factory('QuadSystem', function (System, THREE, TextureLoader, $log) {
         'use strict';
 
         var QuadSystem = System.extend({
@@ -42,11 +43,38 @@ angular.module('components.scene.quad', ['ces', 'three', 'engine.texture-loader'
                     }
 
                     quadData.quad = quad;
-                    entity.add(quad);
+                    // It's not worth it to keep the quad as a child of the original entity,
+                    // because the only thing that needs to be sync'd is the position.
+                    // It's hard to get the rotations and scaling right in terms of math (atleast for me)
+                    // and probably also for CPU, so we just copy the position instead
+                    // and set the parent to be the same as the entity's parent (usually the scene)
+                    world.scene.add(quad);
                 });
             },
             update: function () {
-                var world = this.world;
+                var world = this.world,
+                    quads = world.getEntities('quad'),
+                    entitiesWithCamera = this.world.getEntities('camera'),
+                    activeCamera;
+
+                if (entitiesWithCamera.length) {
+                    activeCamera = entitiesWithCamera[0].getComponent('camera').camera;
+                }
+
+                if (!activeCamera) {
+                    $log.warn('No camera to look at!');
+                    return;
+                }
+
+                quads.forEach(function (quadEnt) {
+                    var quad = quadEnt.getComponent('quad').quad;
+                    quad.position.copy(quadEnt.position);
+
+                    var camWorldPos = new THREE.Vector3();
+                    camWorldPos.setFromMatrixPosition(activeCamera.matrixWorld);
+
+                    quad.lookAt(camWorldPos, quad.position, quad.up);
+                });
             }
         });
 

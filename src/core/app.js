@@ -76,8 +76,6 @@ angular.module('Ironbane', [
             // NOTE: this should be the LAST system as it does rendering!!
             $rootWorld.addSystem(new CameraSystem());
 
-
-
             // var musicEntity = EntityBuilder.build('MusicPlayer', {
             //     components: {
             //         sound: {
@@ -158,7 +156,6 @@ angular.module('Ironbane', [
                         scripts: [
                             '/scripts/built-in/character-controller.js',
                             '/scripts/built-in/character-multicam.js',
-                            '/scripts/built-in/look-at-camera.js',
                             '/scripts/built-in/sprite-sheet.js',
                         ]
                     }
@@ -206,7 +203,6 @@ angular.module('Ironbane', [
                                 },
                                 script: {
                                     scripts: [
-                                        '/scripts/built-in/look-at-camera.js',
                                         '/scripts/built-in/sprite-sheet.js',
                                     ]
                                 },
