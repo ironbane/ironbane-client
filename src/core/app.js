@@ -9,6 +9,7 @@ angular.module('Ironbane', [
     'ammo.physics-world',
     'components',
     'game.scripts',
+    'game.prefabs',
     'engine.entity-builder',
     'engine.sound-system',
     'engine.ib-config',
@@ -235,6 +236,9 @@ angular.module('Ironbane', [
                 }
             });
             $rootWorld.addEntity(level);
+
+            // HACK for easy debug
+            window.rw = $rootWorld;
 
         });
     });

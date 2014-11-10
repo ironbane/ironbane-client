@@ -8,7 +8,7 @@ angular.module('components.scene.scene', ['ces', 'three', 'engine.entity-builder
             }
         });
     })
-    .factory('SceneSystem', function (System, THREE, $http, TextureLoader, EntityBuilder) {
+    .factory('SceneSystem', function (System, THREE, $http, TextureLoader, EntityBuilder, $log) {
         'use strict';
 
         var SceneSystem = System.extend({
@@ -66,6 +66,8 @@ angular.module('components.scene.scene', ['ces', 'three', 'engine.entity-builder
                 var entitiesTask = $http.get('assets/scene/' + component.id + '/ib-entities.json')
                     .then(function(response) {
                         var entities = EntityBuilder.load(response.data);
+
+                        $log.log('scene loader ents: ', entities);
 
                         entity.add(entities);
                     });

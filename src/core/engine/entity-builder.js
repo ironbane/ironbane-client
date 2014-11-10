@@ -1,5 +1,5 @@
-angular.module('engine.entity-builder', ['ces', 'three'])
-    .service('EntityBuilder', function (Entity, THREE, $components) {
+angular.module('engine.entity-builder', ['ces', 'three', 'engine.geometry-cache', 'engine.material-cache'])
+    .service('EntityBuilder', function (Entity, THREE, $components, $geometryCache, $materialCache, $injector) {
         this.build = function (name, data) {
             var entity = new Entity(),
                 transform = data.matrix || {
@@ -39,6 +39,24 @@ angular.module('engine.entity-builder', ['ces', 'three'])
                 root = new Entity();
 
             function parse (data, parent) {
+                if(data.prefab) {
+                    angular.extend(data, $injector.get(data.prefab + 'Prefab'));
+                }
+
+                // special handling for models
+                // TODO: handle more of this during the original parse
+                if(data.components && data.components.model) {
+                    var gid = data.components.model.geometry;
+                    var mid = data.components.model.material;
+                    var geoData = _.findWhere(json.geometries, {uuid: gid});
+                    var matData = _.findWhere(json.materials, {uuid: mid});
+
+                    // these get cached just so other services don't have to pass the whole JSON file around
+                    $geometryCache.put(gid, geoData);
+                    $materialCache.put(mid, matData);
+                }
+
+                // build the entity
                 var entity = builder.build(data.name, data);
                 parent.add(entity);
 

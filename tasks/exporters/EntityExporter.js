@@ -209,8 +209,10 @@ EntityExporter.prototype = {
                         groundColor: object.groundColor.getHex()
                     };
                 } else if (object instanceof THREE.Mesh && object.userData.entity === 'model') {
-                    // TODO: parse through geometries to test for stuff like BoxGeometry
+                    var modelType = object.userData.modelType || 'mesh';
+
                     data.components.model = {
+                        type: modelType,
                         geometry: parseGeometry(object.geometry),
                         material: parseMaterial(object.material)
                     };
