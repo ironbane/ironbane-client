@@ -18,7 +18,7 @@ angular.module('Ironbane', [
     'game.game-socket'
 ])
     .config(function (SoundSystemProvider, $gameSocketProvider) {
-        $gameSocketProvider.setUrl('http://localhost:3000');
+        $gameSocketProvider.setUrl('http://dev.server.ironbane.com:5001');
 
         // define all of the sounds & music for the game
         SoundSystemProvider.setAudioLibraryData({
