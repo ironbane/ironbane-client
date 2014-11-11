@@ -1,22 +1,22 @@
 angular.module('Ironbane', [
-    'angus.templates.app',
-    'game.ui',
-    'game.game-loop',
-    'game.world-root',
-    'ces',
-    'three',
-    'ammo',
-    'ammo.physics-world',
-    'components',
-    'game.scripts',
-    'game.prefabs',
-    'engine.entity-builder',
-    'engine.sound-system',
-    'engine.ib-config',
-    'engine.input.input-system',
-    'engine.util',
-    'game.game-socket'
-])
+        'angus.templates.app',
+        'game.ui',
+        'game.game-loop',
+        'game.world-root',
+        'ces',
+        'three',
+        'ammo',
+        'ammo.physics-world',
+        'components',
+        'game.scripts',
+        'game.prefabs',
+        'engine.entity-builder',
+        'engine.sound-system',
+        'engine.ib-config',
+        'engine.input.input-system',
+        'engine.util',
+        'game.game-socket'
+    ])
     .config(function (SoundSystemProvider, $gameSocketProvider) {
         $gameSocketProvider.setUrl('http://dev.server.ironbane.com:5001');
 
@@ -37,9 +37,21 @@ angular.module('Ironbane', [
     .run(function ($rootScope, System, CameraSystem, ModelSystem, $rootWorld, THREE,
         LightSystem, SpriteSystem, QuadSystem, HelperSystem, SceneSystem, ScriptSystem,
         SoundSystem, InputSystem, RigidBodySystem, CollisionReporterSystem, $http, $log,
-        EntityBuilder, WieldItemSystem, Util) {
+        EntityBuilder, WieldItemSystem, Util, $gameSocket) {
 
         'use strict';
+
+        $gameSocket.on('connect', function () {
+            $log.log('socket connect', arguments);
+        });
+
+        $gameSocket.on('error', function () {
+            $log.warn('socket error: ', arguments);
+        });
+
+        $gameSocket.on('chat message', function (message) {
+            $log.log('msg: ', message);
+        });
 
         var starterScene = 'obstacle-test-course-one';
 
@@ -177,7 +189,7 @@ angular.module('Ironbane', [
                     setTimeout(function () {
                         // console.log('Spawning ' + i);
                         var bunny = EntityBuilder.build('Bunny', {
-                            rotation: [0, Math.PI/2, 0],
+                            rotation: [0, Math.PI / 2, 0],
                             position: [-2, 17, -8],
                             // position: [Util.getRandomInt(-55, -45), 100, Util.getRandomInt(-55, -45)],
                             components: {
