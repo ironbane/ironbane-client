@@ -46,7 +46,8 @@ angular.module('game.scripts.character-controller', ['components.script', 'three
         CharacterControllerScript.prototype.update = function (dt, elapsed, timestamp) {
 
             var input = this.world.getSystem('input'), // should cache this during init?
-                leftStick = input.virtualGamepad.leftThumbstick;
+                leftStick = input.virtualGamepad.leftThumbstick,
+                rightStick = input.virtualGamepad.rightThumbstick;
 
             var me = this;
 
@@ -103,6 +104,10 @@ angular.module('game.scripts.character-controller', ['components.script', 'three
                 if (leftStick.delta.x > 0) {
                     this.rotateRight = true;
                 }
+            }
+            // right now just use right stick as jump
+            if (rightStick) {
+                this.jump = true;
             }
 
             // keyboard controls
