@@ -1,5 +1,11 @@
-angular.module('game.scripts.character-controller', ['components.script', 'three', 'ammo'])
-    .run(function ($log, ScriptBank, THREE, Ammo) {
+angular
+    .module('game.scripts.character-controller', [
+        'components.script',
+        'three',
+        'ammo',
+        'game.game-socket' // passing this in here may not be the best way...
+    ])
+    .run(function ($log, ScriptBank, THREE, Ammo, $gameSocket) {
         'use strict';
 
         var acceleration = 0.7;
@@ -162,7 +168,7 @@ angular.module('game.scripts.character-controller', ['components.script', 'three
 
                 // We need to rotate the vector ourselves
                 var v1 = new THREE.Vector3();
-                v1.copy( inputVector ).applyQuaternion( this.entity.quaternion );
+                v1.copy(inputVector).applyQuaternion(this.entity.quaternion);
                 v1.multiplyScalar(acceleration);
 
                 var currentVel = rigidBodyComponent.rigidBody.getLinearVelocity();
@@ -188,8 +194,7 @@ angular.module('game.scripts.character-controller', ['components.script', 'three
                 // Experimental...
                 // rigidBodyComponent.rigidBody.applyCentralForce(btVec3);
                 // rigidBodyComponent.rigidBody.setLinearVelocity(btVec3);
-            }
-            else {
+            } else {
                 this.entity.translateOnAxis(inputVector, acceleration * dt);
             }
 
@@ -199,6 +204,9 @@ angular.module('game.scripts.character-controller', ['components.script', 'three
             if (this.rotateRight) {
                 this.entity.rotateY(-rotateSpeed * dt);
             }
+
+            // prolly needs a perf tweak..
+            $gameSocket.emit('movement', {position: this.entity.position.toArray(), rotation: this.entity.rotation.toArray()});
         };
 
         ScriptBank.add('/scripts/built-in/character-controller.js', CharacterControllerScript);

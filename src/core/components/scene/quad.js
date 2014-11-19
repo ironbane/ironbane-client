@@ -63,7 +63,7 @@ angular.module('components.scene.quad', ['ces', 'three', 'engine.texture-loader'
                 }
 
                 if (!activeCamera) {
-                    $log.warn('No camera to look at!');
+                    //$log.warn('No camera to look at!');
                     return;
                 }
 

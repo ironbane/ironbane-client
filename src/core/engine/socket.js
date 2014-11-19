@@ -27,22 +27,23 @@ angular.module('engine.socket', [])
                     reconnect: false
                 });
 
-                socket._socket.on('connect_error', function (err) {
+                socket._socket.on('error', function (err) {
                     $log.error('socket connect error: ', err);
                     socket._deferred.reject(err);
                 });
 
                 socket._socket.on('connect', function () {
+                    $log.log('socket connected!', socket._socket);
                     socket._deferred.resolve(socket._socket);
                 });
 
             };
 
             Socket.prototype.on = function (eventName, callback) {
-                var socket = this;
+                var me = this;
 
                 // deferred events until we are connected
-                socket._promise.then(function (socket) {
+                me._promise.then(function (socket) {
                     socket.on(eventName, function () {
                         var args = arguments;
                         callback.apply(socket, args);
