@@ -15,6 +15,7 @@ angular.module('Ironbane', [
         'engine.ib-config',
         'engine.input.input-system',
         'engine.util',
+        'engine.debugger',
         'game.game-socket'
     ])
     .config(function (SoundSystemProvider, $gameSocketProvider, $locationProvider) {
@@ -35,6 +36,11 @@ angular.module('Ironbane', [
     .config(function (IbConfigProvider) {
         // Used for input events
         IbConfigProvider.set('domElement', document);
+        IbConfigProvider.set('debugDomElementId', 'debug');
+    })
+    .run(function (Debugger, $window) {
+        // for convenience
+        $window.debug = Debugger;
     })
     .run(function ($window, $rootWorld) {
 
