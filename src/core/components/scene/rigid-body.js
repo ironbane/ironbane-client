@@ -52,6 +52,9 @@ angular.module('components.scene.rigid-body', ['ces', 'three', 'ammo', 'ammo.phy
         var btVec3c = new Ammo.btVector3(0, 0, 0);
         var btQuat = new Ammo.btQuaternion(0, 0, 0, 1);
         var btTransform = new Ammo.btTransform();
+        // Lazily create temp vars
+        var ammoRayStart = new Ammo.btVector3();
+        var ammoRayEnd = new Ammo.btVector3();
 
         // Cache for bullet shapes
         var objectShapes = {};
@@ -249,6 +252,12 @@ angular.module('components.scene.rigid-body', ['ces', 'three', 'ammo', 'ammo.phy
             return triangles;
         };
 
+        var RaycastResult = function (entity, point, normal) {
+            this.entity = entity;
+            this.point = point;
+            this.normal = normal;
+        };
+
         var RigidBodySystem = System.extend({
             addedToWorld: function (world) {
                 var sys = this;
@@ -323,6 +332,32 @@ angular.module('components.scene.rigid-body', ['ces', 'three', 'ammo', 'ammo.phy
 
                 });
 
+            },
+
+            raycastFirst: function (start, end, callback) {
+                ammoRayStart.setValue(start.x, start.y, start.z);
+                ammoRayEnd.setValue(end.x, end.y, end.z);
+                var rayCallback = new Ammo.ClosestRayResultCallback(ammoRayStart, ammoRayEnd);
+
+                PhysicsWorld.rayTest(ammoRayStart, ammoRayEnd, rayCallback);
+                if (rayCallback.hasHit()) {
+                    var collisionObjPtr = rayCallback.get_m_collisionObject(); // jshint ignore:line
+                    var collisionObj = Ammo.wrapPointer(collisionObjPtr, Ammo.btCollisionObject);
+                    var body = Ammo.castObject(collisionObj, Ammo.btRigidBody);
+                    var point = rayCallback.get_m_hitPointWorld(); // jshint ignore:line
+                    var normal = rayCallback.get_m_hitNormalWorld(); // jshint ignore:line
+
+                    if (body) {
+                        callback(new RaycastResult(
+                                        body.entity,
+                                        new THREE.Vector3(point.x(), point.y(), point.z()),
+                                        new THREE.Vector3(normal.x(), normal.y(), normal.z())
+                                    )
+                                );
+                    }
+                }
+
+                Ammo.destroy(rayCallback);
             },
             syncEntities: function () {
                 var rigidBodies = this.world.getEntities('rigidBody');
