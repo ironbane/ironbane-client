@@ -125,7 +125,8 @@ angular.module('Ironbane', [
 
         // asset preload here
         // TODO: at some point have a loading screen with this preloading everything needed rather than just one
-        $rootScope.ironbaneReady = $http.get('assets/scene/' + starterScene + '/ib-world.json', {
+        $rootScope.ironbaneReady = $http.get('assets/scene/' + starterScene + '/ib-world.zip', {
+            responseType: 'arraybuffer',
             cache: true
         });
 
