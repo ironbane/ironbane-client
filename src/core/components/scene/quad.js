@@ -50,6 +50,12 @@ angular.module('components.scene.quad', ['ces', 'three', 'engine.texture-loader'
                     // and set the parent to be the same as the entity's parent (usually the scene)
                     world.scene.add(quad);
                 });
+
+                world.entityRemoved('quad').add(function(entity) {
+                    // because it was above added to the scene, now we have to manually remove it
+                    var quad = entity.getComponent('quad').quad;
+                    world.scene.remove(quad);
+                });
             },
             update: function () {
                 var world = this.world,

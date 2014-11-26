@@ -211,6 +211,15 @@ angular.module('Ironbane', [
                         buildPlayerGhost(g);
                     }
                 });
+
+                // remove ones that have left
+                var ids = _.pluck(data, '_id');
+                for (var i = ghosts.length - 1; i > 0; i--) {
+                    if (ids.indexOf(ghosts[i].getComponent('ghost').id) < 0) {
+                        $log.log('dude dropped: ', ghosts[i], ids);
+                        $rootWorld.removeEntity(ghosts[i]);
+                    }
+                }
             };
             $gameSocket.on('sync', function (data) {
                 // here is where we need to update all the other players
