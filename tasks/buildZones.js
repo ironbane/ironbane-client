@@ -38,6 +38,13 @@ module.exports = function (angus, gulp) {
 
                 var json = JSON.parse(file);
 
+                if (!sceneNameToExport) {
+                    // Filter the models by the list of scenes we want to export in clara.json
+                    json.models = _.filter(json.models, function (model) {
+                        return _.contains(claraUser.sceneNamesToExport, model.name);
+                    });
+                }
+
                 json.models.forEach(function (model) {
                     var ibSceneId = model.name.toLowerCase().replace(/ /g, '-');
 
@@ -90,7 +97,18 @@ module.exports = function (angus, gulp) {
                                 Q.all([
                                     saveProcessedWorld(ibWorld.worldMesh, ibWorldFilepath),
                                     saveProcessedEntities(ibWorld.entities, ibEntitiesFilepath)
-                                ]).then(deferred.resolve, deferred.reject);
+                                ]).then(deferred.resolve, deferred.reject).then(function () {
+                                    fs.unlink(zipFilepath, function (err) {
+                                        if (err) {
+                                            throw err;
+                                        }
+                                    });
+                                    fs.unlink(claraExportFilepath, function (err) {
+                                        if (err) {
+                                            throw err;
+                                        }
+                                    });
+                                });
                             }
                         });
                     }
@@ -121,8 +139,12 @@ module.exports = function (angus, gulp) {
                         // Otherwise it would be no use since the parent will be merged into one world mesh
                         child.parentUuid = obj.uuid;
                     }
+                    child.updateMatrixWorld(true);
                     // store to array for later (don't mess with the tree during traversal)
-                    ents.push(child);
+                    if(child.parent === obj) {
+                        // only push in parent ents, don't want parent jacking later...
+                        ents.push(child);
+                    }
                 } else {
                     if (child.geometry) {
 

@@ -1,6 +1,5 @@
-angular.module('game.entities.torch', ['ces', 'three'])
-.factory('Torch', function(Entity, $components, THREE) {
-    return {
+angular.module('game.prefabs.torch', [])
+    .constant('TorchPrefab', {
         components: {
             'model': {
                 type: 'Sphere'
@@ -9,5 +8,4 @@ angular.module('game.entities.torch', ['ces', 'three'])
                 type: 'PointLight'
             }
         }
-    };
-});
+    });

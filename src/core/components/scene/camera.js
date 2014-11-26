@@ -4,10 +4,7 @@ angular.module('components.scene.camera', ['ces', 'three'])
 
         $componentsProvider.addComponentData({
             'camera': {
-                // TODO: this needs to be linked to the actual dom element
-                // But I can't access $rootWorld here, not sure how to solve yet
-                aspectRatio: window.innerWidth / window.innerHeight,
-                // aspectRatio: $rootWorld.renderer.domElement.width / $rootWorld.renderer.domElement.height,
+                aspectRatio: 16 / 9,
                 nearClip: 0.1,
                 farClip: 1000,
                 fov: 45,

@@ -1,4 +1,4 @@
-angular.module('components.scene.model', ['ces', 'three'])
+angular.module('components.scene.model', ['ces', 'three', 'engine.geometry-cache', 'engine.material-cache'])
     .config(function ($componentsProvider) {
         'use strict';
 
@@ -12,7 +12,7 @@ angular.module('components.scene.model', ['ces', 'three'])
             }
         });
     })
-    .factory('ModelSystem', function (System, THREE) {
+    .factory('ModelSystem', function (System, THREE, $geometryCache, $materialCache, TextureLoader) {
         'use strict';
 
         function getGeometry(type) {
@@ -46,10 +46,6 @@ angular.module('components.scene.model', ['ces', 'three'])
 
             }
 
-            if (type === 'mesh') {
-                // TODO: load a json mesh from asset cache
-            }
-
             return geometry;
         }
 
@@ -66,9 +62,26 @@ angular.module('components.scene.model', ['ces', 'three'])
             update: function () {},
             onEntityAdded: function (entity) {
                 var component = entity.getComponent('model'),
-                    geometry = getGeometry(component.type);
+                    geometry;
 
-                component.model = new THREE.Mesh(geometry);
+                if (component.type === 'mesh') {
+                    // special handling, for now assume this is a json load
+                    var loader = new THREE.ObjectLoader();
+                    var fobj = {
+                        geometries: [$geometryCache.get(component.geometry)],
+                        materials: [$materialCache.get(component.material)],
+                        object: {
+                            type: 'Mesh',
+                            geometry: component.geometry,
+                            material: component.material
+                        }
+                    };
+
+                    component.model = loader.parse(fobj);
+                } else {
+                    geometry = getGeometry(component.type);
+                    component.model = new THREE.Mesh(geometry);
+                }
                 entity.add(component.model);
             },
             onEntityRemoved: function (entity) {

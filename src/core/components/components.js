@@ -11,9 +11,11 @@ angular.module('components', [
     'components.scene.sprite',
     'components.scene.scene',
     'components.scene.quad',
+    'components.scene.wield-item',
 
     'components.script',
     'components.sound',
     'components.gameplay.health',
+    'components.net'
 
 ]);

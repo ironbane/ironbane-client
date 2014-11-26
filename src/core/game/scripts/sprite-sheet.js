@@ -131,14 +131,21 @@ angular.module('game.scripts.sprite-sheet', ['components.script', 'three'])
                     var currentVel = rigidBodyComponent.rigidBody.getLinearVelocity();
                     currentVel = currentVel.toTHREEVector3();
 
-                    if ( currentVel.lengthSq() > 0.1 ) {
+                    var speed = currentVel.lengthSq();
+                    var stepFactor = speed / 12;
+
+                    stepFactor = Math.min(stepFactor, 1.0);
+                    stepFactor = 1.0 - stepFactor;
+                    stepFactor = Math.max(stepFactor, 0.1);
+
+                    if ( speed > 0.1 ) {
                         this.walkTimer += dt;
                     }
                     else {
                         this.walkIndex = 1;
                     }
 
-                    if (this.walkTimer > 0.1) {
+                    if (this.walkTimer > stepFactor) {
                         this.walkTimer = 0;
                         if (this.walkForward) {
                             this.walkIndex++;

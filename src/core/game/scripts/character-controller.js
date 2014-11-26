@@ -1,10 +1,19 @@
-angular.module('game.scripts.character-controller', ['components.script', 'three', 'ammo'])
-    .run(function ($log, ScriptBank, THREE, Ammo) {
+angular
+    .module('game.scripts.character-controller', [
+        'components.script',
+        'three',
+        'ammo',
+        'game.game-socket' // passing this in here may not be the best way...
+    ])
+    .run(function ($log, ScriptBank, THREE, Ammo, $gameSocket) {
         'use strict';
 
         var acceleration = 0.7;
         var rotateSpeed = 2;
         var maxspeed = 4;
+
+        // The time that that must pass before you can jump again
+        var minimumJumpDelay = 0.5;
 
         var btVec3 = new Ammo.btVector3();
 
@@ -22,6 +31,7 @@ angular.module('game.scripts.character-controller', ['components.script', 'three
 
             this.canJump = true;
             this.jump = false;
+            this.jumpTimer = 0.0;
 
             this.activeCollisions = [];
 
@@ -31,11 +41,9 @@ angular.module('game.scripts.character-controller', ['components.script', 'three
 
             if (collisionReporterComponent) {
                 collisionReporterComponent.collisionStart.add(function (contact) {
-                    console.log('collision start!');
                     me.activeCollisions.push(contact);
                 });
                 collisionReporterComponent.collisionEnd.add(function (contact) {
-                    console.log('collision end!');
                     me.activeCollisions.splice(me.activeCollisions.indexOf(contact), 1);
                 });
             }
@@ -44,7 +52,10 @@ angular.module('game.scripts.character-controller', ['components.script', 'three
         CharacterControllerScript.prototype.update = function (dt, elapsed, timestamp) {
 
             var input = this.world.getSystem('input'), // should cache this during init?
-                leftStick = input.virtualGamepad.leftThumbstick;
+                leftStick = input.virtualGamepad.leftThumbstick,
+                rightStick = input.virtualGamepad.rightThumbstick;
+
+            var me = this;
 
             // reset these every frame
             this.moveForward = false;
@@ -55,13 +66,31 @@ angular.module('game.scripts.character-controller', ['components.script', 'three
             this.moveRight = false;
             this.jump = false;
             this.canJump = false;
-            var me = this;
+
+            this.jumpTimer += dt;
+
+            var rigidBodyComponent = me.entity.getComponent('rigidBody');
+
+            if (rigidBodyComponent) {
+                // We only set a friction when the character is on the ground, to prevent
+                // side-friction from allowing character to stop in midair
+                // First reset the friction here
+                // rigidBodyComponent.rigidBody.setFriction(0);
+            }
 
             // Are we allowed to jump?
             this.activeCollisions.forEach(function (activeCollision) {
                 activeCollision.contacts.forEach(function (contact) {
+
+                    // When we are on ground that is relatively flat
+                    // we allow jumping and set friction so we don't slide off
+                    me.canJump = true;
                     if (contact.normal.y > 0.5) {
-                        me.canJump = true;
+
+
+                        if (rigidBodyComponent) {
+                            // rigidBodyComponent.rigidBody.setFriction(1.0);
+                        }
                     }
                 });
             });
@@ -81,6 +110,10 @@ angular.module('game.scripts.character-controller', ['components.script', 'three
                 if (leftStick.delta.x > 0) {
                     this.rotateRight = true;
                 }
+            }
+            // right now just use right stick as jump
+            if (rightStick) {
+                this.jump = true;
             }
 
             // keyboard controls
@@ -131,19 +164,18 @@ angular.module('game.scripts.character-controller', ['components.script', 'three
             // Make sure they can't gain extra speed if moving diagonally
             inputVector.normalize();
 
-            var rigidBodyComponent = this.entity.getComponent('rigidBody');
             if (rigidBodyComponent) {
 
                 // We need to rotate the vector ourselves
                 var v1 = new THREE.Vector3();
-                v1.copy( inputVector ).applyQuaternion( this.entity.quaternion );
+                v1.copy(inputVector).applyQuaternion(this.entity.quaternion);
                 v1.multiplyScalar(acceleration);
 
                 var currentVel = rigidBodyComponent.rigidBody.getLinearVelocity();
                 currentVel = currentVel.toTHREEVector3();
 
-                if (this.jump && this.canJump && currentVel.y < 1) {
-                    console.log(currentVel.y);
+                if (this.jump && this.canJump && currentVel.y < 1 && this.jumpTimer > minimumJumpDelay) {
+                    this.jumpTimer = 0.0;
                     btVec3.setValue(0, 5, 0);
                     rigidBodyComponent.rigidBody.applyCentralImpulse(btVec3);
                 }
@@ -154,8 +186,7 @@ angular.module('game.scripts.character-controller', ['components.script', 'three
                     rigidBodyComponent.rigidBody.applyCentralImpulse(btVec3);
                 }
 
-                // Add custom friction, otherwise physics friction prevents
-                // characters from jumping upwards against a wall which is annoying
+                // Add a little bit custom friction for finetuning
                 var invertedVelocity = currentVel.clone().multiplyScalar(-0.2);
                 btVec3.setValue(invertedVelocity.x, 0, invertedVelocity.z);
                 rigidBodyComponent.rigidBody.applyCentralImpulse(btVec3);
@@ -163,8 +194,7 @@ angular.module('game.scripts.character-controller', ['components.script', 'three
                 // Experimental...
                 // rigidBodyComponent.rigidBody.applyCentralForce(btVec3);
                 // rigidBodyComponent.rigidBody.setLinearVelocity(btVec3);
-            }
-            else {
+            } else {
                 this.entity.translateOnAxis(inputVector, acceleration * dt);
             }
 
@@ -174,6 +204,9 @@ angular.module('game.scripts.character-controller', ['components.script', 'three
             if (this.rotateRight) {
                 this.entity.rotateY(-rotateSpeed * dt);
             }
+
+            // prolly needs a perf tweak..
+            $gameSocket.emit('movement', {position: this.entity.position.toArray(), rotation: this.entity.rotation.toArray()});
         };
 
         ScriptBank.add('/scripts/built-in/character-controller.js', CharacterControllerScript);
