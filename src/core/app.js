@@ -17,7 +17,7 @@ angular.module('Ironbane', [
         'engine.util',
         'game.game-socket'
     ])
-    .config(function (SoundSystemProvider, $gameSocketProvider) {
+    .config(function (SoundSystemProvider, $gameSocketProvider, $locationProvider) {
         $gameSocketProvider.setUrl('http://dev.server.ironbane.com:5001');
 
         // define all of the sounds & music for the game
@@ -29,6 +29,8 @@ angular.module('Ironbane', [
                 type: 'music'
             }
         });
+
+        $locationProvider.html5Mode(true);
     })
     .config(function (IbConfigProvider) {
         // Used for input events
@@ -37,9 +39,13 @@ angular.module('Ironbane', [
     .run(function ($rootScope, System, CameraSystem, ModelSystem, $rootWorld, THREE,
         LightSystem, SpriteSystem, QuadSystem, HelperSystem, SceneSystem, ScriptSystem,
         SoundSystem, InputSystem, RigidBodySystem, CollisionReporterSystem, $http, $log,
-        EntityBuilder, WieldItemSystem, Util, $gameSocket) {
+        EntityBuilder, WieldItemSystem, Util, $gameSocket, $location) {
 
         'use strict';
+
+        // temp for now allow scene switching via querystring
+        var starterScene = $location.search().scene || 'ravenwood-village';
+        //$log.debug('starterScene: ', starterScene, $location.search());
 
         $gameSocket.on('connect', function () {
             $log.log('socket connect', arguments);
@@ -121,13 +127,18 @@ angular.module('Ironbane', [
             $rootWorld.addEntity(player);
         });
 
-        var starterScene = 'ravenwood-village';
-
         // asset preload here
         // TODO: at some point have a loading screen with this preloading everything needed rather than just one
         $rootScope.ironbaneReady = $http.get('assets/scene/' + starterScene + '/ib-world.zip', {
             responseType: 'arraybuffer',
             cache: true
+        }).then(function (response) {
+            return response;
+        }, function (response) {
+            // attempt json instead
+            return $http.get('assets/scene/' + starterScene + '/ib-world.json', {
+                cache: true
+            });
         });
 
         // TODO: move to directive
@@ -237,7 +248,7 @@ angular.module('Ironbane', [
             var level = EntityBuilder.build('TestLevel', {
                 components: {
                     scene: {
-                        id: 'ravenwood-village'
+                        id: starterScene
                     },
                     rigidBody: {
                         shape: {
