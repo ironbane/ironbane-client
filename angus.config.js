@@ -33,6 +33,7 @@ module.exports = {
                 'howler.js/howler.js',
                 'Keypress/keypress.js',
                 'underscore/underscore.js',
+                'lib/jszip.js',
 
                 'lib/game-shim.js',
                 'lib/hand-1.3.8.js',

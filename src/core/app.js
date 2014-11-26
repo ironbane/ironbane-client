@@ -18,8 +18,7 @@ angular.module('Ironbane', [
         'game.game-socket'
     ])
     .config(function (SoundSystemProvider, $gameSocketProvider) {
-        //$gameSocketProvider.setUrl('http://dev.server.ironbane.com:5001');
-        $gameSocketProvider.setUrl('http://localhost:5001');
+        $gameSocketProvider.setUrl('http://dev.server.ironbane.com:5001');
 
         // define all of the sounds & music for the game
         SoundSystemProvider.setAudioLibraryData({
@@ -122,7 +121,7 @@ angular.module('Ironbane', [
             $rootWorld.addEntity(player);
         });
 
-        var starterScene = 'obstacle-test-course-one';
+        var starterScene = 'ravenwood-village';
 
         // asset preload here
         // TODO: at some point have a loading screen with this preloading everything needed rather than just one
@@ -234,91 +233,10 @@ angular.module('Ironbane', [
             // $log.debug('musicEntity', musicEntity);
             // $rootWorld.addEntity(musicEntity);
 
-            var cube = EntityBuilder.build('Cubey-Doobey-Doo', {
-                position: [0, 3, 0],
-                components: {
-                    model: {
-                        //default
-                    },
-                    script: {
-                        scripts: [{
-                                src: 'assets/scripts/test.js',
-                                params: {
-                                    speed: 0.5
-                                }
-                            }
-
-                            // Disabled as it interferes with regular DOM keyevent listeners
-                            // '/scripts/built-in/input-test.js'
-                        ]
-                    }
-                }
-            });
-            $rootWorld.addEntity(cube);
-
-
-
-            for (var i = 0; i < 1; i++) {
-                (function (i) {
-
-                    setTimeout(function () {
-                        // console.log('Spawning ' + i);
-                        var bunny = EntityBuilder.build('Bunny', {
-                            rotation: [0, Math.PI / 2, 0],
-                            position: [-2, 17, -8],
-                            // position: [Util.getRandomInt(-55, -45), 100, Util.getRandomInt(-55, -45)],
-                            components: {
-                                quad: {
-                                    transparent: true,
-                                    texture: 'assets/images/characters/skin/29.png'
-                                },
-                                rigidBody: {
-                                    shape: {
-                                        type: 'sphere',
-                                        // height: 1,
-                                        radius: 0.5
-                                    },
-                                    mass: 1,
-                                    friction: 0,
-                                    restitution: 0,
-                                    allowSleep: false,
-                                    lock: {
-                                        position: {
-                                            x: false,
-                                            y: false,
-                                            z: false
-                                        },
-                                        rotation: {
-                                            x: true,
-                                            y: true,
-                                            z: true
-                                        }
-                                    }
-                                },
-                                // helper: {
-                                //     line: true
-                                // },
-                                script: {
-                                    scripts: [
-                                        '/scripts/built-in/sprite-sheet.js',
-                                        '/scripts/special/spawn-100-bunnies.js'
-                                    ]
-                                },
-                                health: {
-                                    max: 5,
-                                    value: 5
-                                }
-                            }
-                        });
-                        $rootWorld.addEntity(bunny);
-                    }, i * 500);
-                })(i);
-            }
-
             var level = EntityBuilder.build('TestLevel', {
                 components: {
                     scene: {
-                        id: 'obstacle-test-course-one'
+                        id: 'ravenwood-village'
                     },
                     rigidBody: {
                         shape: {
