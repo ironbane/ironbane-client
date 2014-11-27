@@ -10,10 +10,10 @@ angular
         $componentsProvider.addComponentData({
             'proctree': {
                 'seed': 61,
-                'segments': 10,
-                'levels': 5,
+                'segments': 6,
+                'levels': 1,
                 'vMultiplier': 0.66,
-                'twigScale': 0.47,
+                'twigScale': 1,
                 'initalBranchLength': 0.5,
                 'lengthFalloffFactor': 0.85,
                 'lengthFalloffPower': 0.99,
@@ -31,12 +31,12 @@ angular
                 'radiusFalloffRate': 0.66,
                 'twistRate': 2.7,
                 'trunkLength': 1.55,
-                'trunkMaterial': 'TrunkType2',
-                'twigMaterial': 'BranchType5'
+                'trunkMaterial': 'bark1.png',
+                'twigMaterial': 'leaves1.png'
             }
         });
     })
-    .factory('ProcTreeSystem', function (THREE, System, ProcTree) {
+    .factory('ProcTreeSystem', function (THREE, System, ProcTree, $log, TextureLoader) {
         var ProcTreeSystem = System.extend({
             addedToWorld: function (world) {
                 var sys = this;
@@ -46,41 +46,80 @@ angular
                 world.entityAdded('proctree').add(function (entity) {
                     var component = entity.getComponent('proctree');
                     var tree = new ProcTree(component);
-                    var model = {
+                    var treeModel = new THREE.Object3D();
+                    var trunkModel = {
                         'metadata': {
                             'formatVersion': 3.1,
-                            'generatedBy': 'bb3d2proctree',
-                            'vertices': 0,
-                            'faces': 0,
+                            'generatedBy': 'Ironbane ProcTree',
                             'description': 'Auto-generated from proctree.'
-                        },
-                        'materials': [{ // just testing...
-                            'diffuse': 20000
-                        }],
-                        'colors': [0xff00ff, 0xff0000] // just testing
+                        }
                     };
 
-                    model.vertices = ProcTree.flattenArray(tree.verts);
-                    model.normals = ProcTree.flattenArray(tree.normals);
-                    model.uvs = [ProcTree.flattenArray(tree.UV)];
+                    trunkModel.vertices = ProcTree.flattenArray(tree.verts);
+                    trunkModel.normals = ProcTree.flattenArray(tree.normals);
+                    trunkModel.uvs = [ProcTree.flattenArray(tree.UV)];
 
-                    model.faces = [];
+                    trunkModel.faces = [];
                     for (var i = 0; i < tree.faces.length; i++) {
                         var face = tree.faces[i];
-                        model.faces.push(0);
-                        model.faces.push(face[0]); // v1
-                        model.faces.push(face[1]); // v2
-                        model.faces.push(face[2]); // v3
+                        trunkModel.faces.push(0);
+                        trunkModel.faces.push(face[0]); // v1
+                        trunkModel.faces.push(face[1]); // v2
+                        trunkModel.faces.push(face[2]); // v3
                     }
 
                     var loader = new THREE.JSONLoader();
-                    var meshData = loader.parse(model);
-                    var mesh = new THREE.Mesh(meshData.geometry, new THREE.MeshBasicMaterial({
-                        color: 0xFF0000
+                    var trunkMeshData = loader.parse(trunkModel);
+                    $log.debug('trunkMeshData', trunkMeshData);
+                    var trunkMesh = new THREE.Mesh(trunkMeshData.geometry, new THREE.MeshBasicMaterial({
+                        color: 0x875E00
                     }));
 
-                    component.mesh = mesh; // store reference in the component
-                    entity.add(mesh);
+                    /*TextureLoader.load('assets/images/trees/' + component.trunkMaterial)
+                        .then(function (texture) {
+                            var material = trunkMesh.material;
+                            var geometry = trunkMesh.geometry;
+
+                            material.map = texture;
+                            material.needsUpdate = true;
+                            geometry.buffersNeedUpdate = true;
+                            geometry.uvsNeedUpdate = true;
+                        });*/
+
+                    var twigModel = {};
+                    twigModel.vertices = ProcTree.flattenArray(tree.vertsTwig);
+                    twigModel.normals = ProcTree.flattenArray(tree.normalsTwig);
+                    twigModel.uvs = [ProcTree.flattenArray(tree.uvsTwig)];
+                    twigModel.faces = [];
+                    for (var x = 0; x < tree.facesTwig.length; x++) {
+                        var twigFace = tree.facesTwig[x];
+                        twigModel.faces.push(0);
+                        twigModel.faces.push(twigFace[0]); // v1
+                        twigModel.faces.push(twigFace[1]); // v2
+                        twigModel.faces.push(twigFace[2]); // v3
+                    }
+
+                    var twigMeshData = loader.parse(twigModel);
+                    var twigMesh = new THREE.Mesh(twigMeshData.geometry, new THREE.MeshBasicMaterial({
+                        color: 0x00FF00
+                    }));
+                    /* getting webGL errors...
+                    TextureLoader.load('assets/images/trees/' + component.twigMaterial)
+                        .then(function (texture) {
+                            var material = twigMesh.material;
+                            var geometry = twigMesh.geometry;
+
+                            material.map = texture;
+                            material.needsUpdate = true;
+                            geometry.buffersNeedUpdate = true;
+                            geometry.uvsNeedUpdate = true;
+                        });*/
+
+                    treeModel.add(trunkMesh);
+                    treeModel.add(twigMesh);
+
+                    component.tree = treeModel; // store reference in the component
+                    entity.add(treeModel);
 
                 });
             },

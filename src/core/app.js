@@ -275,10 +275,13 @@ angular.module('Ironbane', [
             $rootWorld.addEntity(level);
 
             var myTree = EntityBuilder.build('old oak', {
-                position: [21.064306259155273, 19.575157165527344, -23.9495849609375],
+                position: [21, 19, -24],
                 components: {
                     proctree: {
-                        seed: 1234
+                        seed: 938,
+                        levels: 1,
+                        trunkLength: 4,
+                        lengthFalloffFactor: 1.22
                     }
                 }
             });
