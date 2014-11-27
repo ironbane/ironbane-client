@@ -16,6 +16,8 @@ angular.module('components', [
     'components.script',
     'components.sound',
     'components.gameplay.health',
-    'components.net'
+    'components.net',
+
+    'components.procgen.tree'
 
 ]);

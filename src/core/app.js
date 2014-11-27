@@ -39,7 +39,7 @@ angular.module('Ironbane', [
     .run(function ($rootScope, System, CameraSystem, ModelSystem, $rootWorld, THREE,
         LightSystem, SpriteSystem, QuadSystem, HelperSystem, SceneSystem, ScriptSystem,
         SoundSystem, InputSystem, RigidBodySystem, CollisionReporterSystem, $http, $log,
-        EntityBuilder, WieldItemSystem, Util, $gameSocket, $location) {
+        EntityBuilder, WieldItemSystem, Util, $gameSocket, $location, ProcTreeSystem) {
 
         'use strict';
 
@@ -240,6 +240,7 @@ angular.module('Ironbane', [
             $rootWorld.addSystem(new CollisionReporterSystem());
             $rootWorld.addSystem(new HelperSystem());
             $rootWorld.addSystem(new WieldItemSystem());
+            $rootWorld.addSystem(new ProcTreeSystem());
             // NOTE: this should be the LAST system as it does rendering!!
             $rootWorld.addSystem(new CameraSystem());
 
@@ -272,6 +273,16 @@ angular.module('Ironbane', [
                 }
             });
             $rootWorld.addEntity(level);
+
+            var myTree = EntityBuilder.build('old oak', {
+                position: [21.064306259155273, 19.575157165527344, -23.9495849609375],
+                components: {
+                    proctree: {
+                        seed: 1234
+                    }
+                }
+            });
+            $rootWorld.addEntity(myTree);
 
             // after the level and whatnot is loaded, request a player spawn
             $gameSocket.emit('request spawn');
