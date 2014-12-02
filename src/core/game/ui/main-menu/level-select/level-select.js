@@ -23,7 +23,8 @@ angular
                 $scope.chooseLevel = function (level) {
                     $log.debug('chooseLevel', level);
                     $state.go('play', {
-                        'level': level.path
+                        'level': level.path,
+                        'mode': 'online'
                     });
                     window.state = $state;
                 };

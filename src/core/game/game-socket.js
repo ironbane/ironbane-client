@@ -1,4 +1,5 @@
-angular.module('game.game-socket', ['engine.socket'])
+angular
+    .module('game.game-socket', ['engine.socket'])
     .provider('$gameSocket', function () {
         var _url = 'http://localhost:3000';
 
@@ -8,8 +9,6 @@ angular.module('game.game-socket', ['engine.socket'])
 
         this.$get = function (Socket) {
             var socket = new Socket(_url);
-
-            socket.connect();
 
             return socket;
         };

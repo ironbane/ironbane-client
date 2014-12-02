@@ -5,7 +5,7 @@ angular
     ])
     .config(function ($stateProvider) {
         $stateProvider.state('play', {
-            url: '/play/:level',
+            url: '/play/:mode/:level',
             templateUrl: 'game/ui/play/play.tpl.html',
             resolve: {
                 // pass thru injection for onEnter/onExit events
@@ -13,12 +13,19 @@ angular
                     return GameService;
                 },
                 level: function ($stateParams, $log) {
-                    $log.debug('state!!', $stateParams);
-                    return $stateParams.level || 'obstacle-test-course-one';
+                    return $stateParams.level || 'obstacle-test-course-one'; // TODO: set a default in constants or something
+                },
+                mode: function ($stateParams) {
+                    return $stateParams.mode || 'online';
                 }
             },
-            onEnter: function (GameService, level) {
-                GameService.start(level);
+            onEnter: function (GameService, level, mode) {
+                var opts = {
+                    level: level,
+                    offline: mode !== 'online', // TODO: use local storage instead?
+                    server: null // TODO: pull from server-select
+                };
+                GameService.start(opts);
             },
             onExit: function (GameService) {
                 // TODO: shut down world
