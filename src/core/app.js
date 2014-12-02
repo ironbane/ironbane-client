@@ -39,25 +39,12 @@ angular.module('Ironbane', [
     .run(function ($rootScope, System, CameraSystem, ModelSystem, $rootWorld, THREE,
         LightSystem, SpriteSystem, QuadSystem, HelperSystem, SceneSystem, ScriptSystem,
         SoundSystem, InputSystem, RigidBodySystem, CollisionReporterSystem, $http, $log,
-        EntityBuilder, WieldItemSystem, Util, $gameSocket, $location) {
+        EntityBuilder, WieldItemSystem, Util, $gameSocket, $location, NetSystem) {
 
         'use strict';
 
         // temp for now allow scene switching via querystring
         var starterScene = $location.search().scene || 'ravenwood-village';
-        //$log.debug('starterScene: ', starterScene, $location.search());
-
-        $gameSocket.on('connect', function () {
-            $log.log('socket connect', arguments);
-        });
-
-        $gameSocket.on('error', function () {
-            $log.warn('socket error: ', arguments);
-        });
-
-        $gameSocket.on('chat message', function (message) {
-            $log.log('msg: ', message);
-        });
 
         $gameSocket.on('spawn', function (data) {
             $log.log('spawn', data);
@@ -105,9 +92,11 @@ angular.module('Ironbane', [
                     collisionReporter: {
 
                     },
-                    // helper: {
-                    //     line: true
-                    // },
+                    light: {
+                        type: 'PointLight',
+                        color: 0xffffff,
+                        distance: 5
+                    },
                     health: {
                         max: 5,
                         value: 5
@@ -156,78 +145,8 @@ angular.module('Ironbane', [
             var grid = new THREE.GridHelper(100, 1);
             $rootWorld.scene.add(grid);
 
-            // TODO: build this out better
-            function buildPlayerGhost(data) {
-                var player = EntityBuilder.build('NetPlayer', {
-                    rotation: data.rotation,
-                    position: data.position,
-                    components: {
-                        ghost: {
-                            id: data._id
-                        },
-                        quad: {
-                            transparent: true,
-                            texture: 'assets/images/characters/skin/2.png'
-                        },
-                        health: {
-                            max: 5,
-                            value: 5
-                        },
-                        script: {
-                            scripts: [
-                                '/scripts/built-in/sprite-sheet.js',
-                            ]
-                        }
-                    }
-                });
-                $rootWorld.addEntity(player);
-            }
-            var netsync = new System();
-            netsync.update = function (dt) {
-                $gameSocket.emit('sync');
-            };
-            netsync.sync = function (data) {
-                var ghosts = this.world.getEntities('ghost');
 
-                // first update the ones we already have
-                angular.forEach(ghosts, function (ghost) {
-                    var ghostComponent = ghost.getComponent('ghost');
-
-                    for (var i = 0; i < data.length; i++) {
-                        if (data[i]._id === ghostComponent.id) {
-                            if (!ghostComponent.player) {
-                                ghost.position.fromArray(data[i].position);
-                                ghost.rotation.fromArray(data[i].rotation);
-                            }
-                            data[i].ghosted = true;
-                            break;
-                        }
-                    }
-                });
-
-                // add new ones (the rest)
-                angular.forEach(data, function (g) {
-                    if (!g.ghosted) {
-                        buildPlayerGhost(g);
-                    }
-                });
-
-                // remove ones that have left
-                var ids = _.pluck(data, '_id');
-                for (var i = ghosts.length - 1; i > 0; i--) {
-                    if (ids.indexOf(ghosts[i].getComponent('ghost').id) < 0) {
-                        $log.log('dude dropped: ', ghosts[i], ids);
-                        $rootWorld.removeEntity(ghosts[i]);
-                    }
-                }
-            };
-            $gameSocket.on('sync', function (data) {
-                // here is where we need to update all the other players
-                //$log.debug('sync: ', data);
-                netsync.sync(data);
-            });
-            $rootWorld.addSystem(netsync);
-
+            $rootWorld.addSystem(new NetSystem());
             $rootWorld.addSystem(new InputSystem(), 'input');
             $rootWorld.addSystem(new SoundSystem());
             $rootWorld.addSystem(new ScriptSystem());
