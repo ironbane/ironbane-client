@@ -25,6 +25,6 @@ angular.module('game.game-loop', ['game.world-root'])
                 lastTimestamp = timestamp;
             }
 
-            window.requestAnimationFrame(onRequestedFrame);
+            $window.requestAnimationFrame(onRequestedFrame);
         }
     ]);

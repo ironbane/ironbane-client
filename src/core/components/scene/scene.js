@@ -1,4 +1,8 @@
-angular.module('components.scene.scene', ['ces', 'three', 'engine.entity-builder'])
+angular
+    .module('components.scene.scene', [
+        'ces',
+        'three'
+    ])
     .config(function ($componentsProvider) {
         'use strict';
 
@@ -8,7 +12,7 @@ angular.module('components.scene.scene', ['ces', 'three', 'engine.entity-builder
             }
         });
     })
-    .factory('SceneSystem', function (System, THREE, $http, TextureLoader, EntityBuilder, $log) {
+    .factory('SceneSystem', function (System, THREE, $http, TextureLoader, $log, $q) {
         'use strict';
 
         var SceneSystem = System.extend({
@@ -22,7 +26,7 @@ angular.module('components.scene.scene', ['ces', 'three', 'engine.entity-builder
                 });
             },
             update: function () {
-
+                // override because we have to
             },
             onEntityAdded: function (entity) {
                 var component = entity.getComponent('scene');
@@ -46,7 +50,7 @@ angular.module('components.scene.scene', ['ces', 'three', 'engine.entity-builder
                         return $http.get('assets/scene/' + component.id + '/ib-world.json')
                             .then(function (response) {
                                 return response.data;
-                            }); // TODO: handle errors here
+                            }, $q.reject); // TODO: handle errors here
                     })
                     .then(function (data) {
                         // THREE does not store material names/metadata when it recreates the materials
@@ -55,22 +59,20 @@ angular.module('components.scene.scene', ['ces', 'three', 'engine.entity-builder
                         component.scene = loader.parse(data);
 
                         var originalMats = data.materials[0].materials;
+                        var loadTexture = function (texName, material, geometry) {
+                            return TextureLoader.load('assets/scene/' + component.id + '/' + texName + '.png')
+                                .then(function (texture) {
+                                    material.map = texture;
+                                    material.needsUpdate = true;
+                                    geometry.buffersNeedUpdate = true;
+                                    geometry.uvsNeedUpdate = true;
+                                });
+                        };
 
                         for (var i = 0; i < originalMats.length; i++) {
-
                             if (originalMats[i].name) {
-
                                 var texName = originalMats[i].name.split('.')[0];
-
-                                (function (texName, material, geometry) {
-                                    TextureLoader.load('assets/scene/' + component.id + '/' + texName + '.png')
-                                        .then(function (texture) {
-                                            material.map = texture;
-                                            material.needsUpdate = true;
-                                            geometry.buffersNeedUpdate = true;
-                                            geometry.uvsNeedUpdate = true;
-                                        });
-                                })(texName, component.scene.material.materials[i], component.scene.geometry); //jshint ignore:line
+                                loadTexture(texName, component.scene.material.materials[i], component.scene.geometry);
 
                             }
                         }
@@ -78,21 +80,11 @@ angular.module('components.scene.scene', ['ces', 'three', 'engine.entity-builder
                         component.scene.material.needsUpdate = true;
 
                         entity.add(component.scene);
-                    });
-
-                var entitiesTask = $http.get('assets/scene/' + component.id + '/ib-entities.json')
-                    .then(function (response) {
-                        var entities = EntityBuilder.load(response.data);
-
-                        $log.log('scene loader ents: ', entities);
-
-                        entity.add(entities);
-                    });
+                    }, $q.reject);
 
                 // Link the promises to the component so we can
                 // wait for the mesh to load in other components
                 component.meshTask = meshTask;
-                component.entitiesTask = entitiesTask;
             },
             onEntityRemoved: function (entity) {
                 // TODO

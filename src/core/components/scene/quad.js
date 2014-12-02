@@ -75,6 +75,10 @@ angular.module('components.scene.quad', ['ces', 'three', 'engine.texture-loader'
 
                 quads.forEach(function (quadEnt) {
                     var quad = quadEnt.getComponent('quad').quad;
+                    if(!quad) {
+                        //$log.warn('quad not loaded for entity', quadEnt);
+                        return;
+                    }
                     quad.position.copy(quadEnt.position);
 
                     var camWorldPos = new THREE.Vector3();
