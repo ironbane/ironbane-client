@@ -6,6 +6,7 @@ angular
         'use strict';
 
         $stateProvider.state('main-menu.level-select', {
+            url: '/level-select/:mode',
             templateUrl: 'game/ui/main-menu/level-select/level-select.tpl.html',
             controller: function ($scope, $state, $log) {
                 // TODO: use config files
@@ -24,9 +25,8 @@ angular
                     $log.debug('chooseLevel', level);
                     $state.go('play', {
                         'level': level.path,
-                        'mode': 'online'
+                        'mode': $state.params.mode || 'online'
                     });
-                    window.state = $state;
                 };
             }
         });

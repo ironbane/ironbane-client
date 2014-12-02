@@ -9,11 +9,12 @@ angular
             templateUrl: 'game/ui/main-menu/play-mode/play-mode.tpl.html',
             controller: function ($scope, $state) {
                 $scope.playOnline = function() {
-                    $state.go('^.server-select');
+                    // TODO: go to server select, take mode out of url
+                    $state.go('^.level-select', {mode: 'online'});
                 };
 
                 $scope.playOffline = function() {
-                    $state.go('^.level-select');
+                    $state.go('^.level-select', {mode: 'offline'});
                 };
             }
         });
