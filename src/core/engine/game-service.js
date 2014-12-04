@@ -115,7 +115,7 @@ angular
 
             if (!options.offline) {
                 $log.log('online mode!!!');
-                $gameSocket.connect(options.server);
+                $gameSocket.connect(options.server, options.level);
 
                 $gameSocket.on('spawn', function (data) {
                     $log.log('spawn', data);

@@ -15,13 +15,18 @@ angular.module('engine.socket', [])
                 this._promise = this._deferred.promise;
             };
 
-            Socket.prototype.connect = function (url) {
+            Socket.prototype.connect = function (url, namespace) {
                 var socket = this;
 
-                if(url) {
+                if (url) {
                     $log.debug('socket override url: ', url);
                     // allow override during connect
                     socket.url = url;
+                }
+
+                if (namespace) {
+                    socket.url += '/' + namespace;
+                    $log.debug('socket namespace url: ', socket.url);
                 }
 
                 if (socket._socket !== null) {
