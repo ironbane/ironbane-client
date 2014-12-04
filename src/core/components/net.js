@@ -1,4 +1,9 @@
-angular.module('components.net', ['ces', 'game.game-socket'])
+angular
+    .module('components.net', [
+        'ces',
+        'game.game-socket',
+        'engine.entity-builder'
+    ])
     .config(function ($componentsProvider) {
         'use strict';
 
@@ -13,7 +18,7 @@ angular.module('components.net', ['ces', 'game.game-socket'])
             }
         });
     })
-    .factory('NetSystem', function (System, $gameSocket) { // relying on $gameSocket too "game" specific?
+    .factory('NetSystem', function (System, $gameSocket, $log, EntityBuilder) { // relying on $gameSocket too "game" specific?
         'use strict';
 
         var NetSystem = System.extend({
@@ -22,20 +27,72 @@ angular.module('components.net', ['ces', 'game.game-socket'])
 
                 $gameSocket.on('sync', this.sync.bind(this));
             },
-            sync: function (packet) {
-                var ghosts = this.world.getEntities('ghost'),
-                    packetIds = Object.keys(packet);
+            sync: function (data) {
+                var world = this.world,
+                    ghosts = world.getEntities('ghost');
 
-                ghosts.forEach(function(ghost) {
-                    var ghostId = ghost.getComponent('ghost').id;
+                // TODO: move to prefab, support other types
+                function buildPlayerGhost(data) {
+                    var player = EntityBuilder.build('NetPlayer', {
+                        rotation: data.rotation,
+                        position: data.position,
+                        components: {
+                            ghost: {
+                                id: data._id
+                            },
+                            quad: {
+                                transparent: true,
+                                texture: 'assets/images/characters/skin/2.png'
+                            },
+                            health: {
+                                max: 5,
+                                value: 5
+                            },
+                            script: {
+                                scripts: [
+                                    '/scripts/built-in/sprite-sheet.js',
+                                ]
+                            }
+                        }
+                    });
 
-                    if(packetIds.indexOf(ghostId) >= 0) {
-                        ghost.position.set(packet[ghostId][0], packet[ghostId][1], packet[ghostId][2]);
+                    world.addEntity(player);
+                }
+
+                // first update the ones we already have
+                angular.forEach(ghosts, function (ghost) {
+                    var ghostComponent = ghost.getComponent('ghost');
+
+                    for (var i = 0; i < data.length; i++) {
+                        if (data[i]._id === ghostComponent.id) {
+                            if (!ghostComponent.player) {
+                                ghost.position.fromArray(data[i].position);
+                                ghost.rotation.fromArray(data[i].rotation);
+                            }
+                            data[i].ghosted = true;
+                            break;
+                        }
                     }
                 });
+
+                // add new ones (the rest)
+                angular.forEach(data, function (g) {
+                    if (!g.ghosted) {
+                        buildPlayerGhost(g);
+                    }
+                });
+
+                // remove ones that have left
+                var ids = _.pluck(data, '_id');
+                for (var i = ghosts.length - 1; i > 0; i--) {
+                    if (ids.indexOf(ghosts[i].getComponent('ghost').id) < 0) {
+                        $log.log('dude dropped: ', ghosts[i], ids);
+                        world.removeEntity(ghosts[i]);
+                    }
+                }
             },
             update: function () {
-                var world = this.world;
+                $gameSocket.emit('sync');
             }
         });
 

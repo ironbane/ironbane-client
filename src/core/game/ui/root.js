@@ -1,10 +1,11 @@
-angular.module('game.ui', [
-    'ui.router',
-    'game.ui.play'
-])
-.run(function($state) {
-    'use strict';
+angular
+    .module('game.ui', [
+        'ui.router',
+        'game.ui.play',
+        'game.ui.main-menu'
+    ])
+    .run(function ($state) {
+        'use strict';
 
-    // for now just force "play" state
-    $state.go('play');
-});
+        $state.go('main-menu.play-mode');
+    });

@@ -15,8 +15,19 @@ angular.module('engine.socket', [])
                 this._promise = this._deferred.promise;
             };
 
-            Socket.prototype.connect = function () {
+            Socket.prototype.connect = function (url, namespace) {
                 var socket = this;
+
+                if (url) {
+                    $log.debug('socket override url: ', url);
+                    // allow override during connect
+                    socket.url = url;
+                }
+
+                if (namespace) {
+                    socket.url += '/' + namespace;
+                    $log.debug('socket namespace url: ', socket.url);
+                }
 
                 if (socket._socket !== null) {
                     $log.warn('socket already exists', socket._socket);
@@ -59,6 +70,7 @@ angular.module('engine.socket', [])
 
                 // emit doesn't need to be deferred, but also can't be called until connected
                 if (socket._socket === null) {
+                    //$log.warn('emit called before connected', arguments);
                     return;
                 }
 
