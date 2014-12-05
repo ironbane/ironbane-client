@@ -6,4 +6,5 @@ public/
 *.sublime*
 clara.json
 src/assets/scene
+src/assets/scene/scenes.json
 workshop
