@@ -8,18 +8,12 @@ angular
         $stateProvider.state('main-menu.level-select', {
             url: '/level-select/:mode',
             templateUrl: 'game/ui/main-menu/level-select/level-select.tpl.html',
-            controller: function ($scope, $state, $log) {
-                // TODO: use config files
-                $scope.levels = [{
-                    name: 'Ravenwood Village',
-                    path: 'ravenwood-village'
-                }, {
-                    name: 'Obstacle Course',
-                    path: 'obstacle-test-course-one'
-                }, {
-                    name: 'Classic Dungeon',
-                    path: 'classic-dungeon'
-                }];
+            controller: function ($scope, $state, $log, $http) {
+                // TODO: move to service?
+                $http.get('assets/scene/scenes.json')
+                    .then(function (response) {
+                        $scope.levels = response.data;
+                    });
 
                 $scope.chooseLevel = function (level) {
                     $log.debug('chooseLevel', level);
