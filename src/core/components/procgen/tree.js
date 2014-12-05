@@ -45,6 +45,9 @@ angular
 
                 world.entityAdded('proctree').add(function (entity) {
                     var component = entity.getComponent('proctree');
+                    if(component.seed === 'random') {
+                        component.seed = parseInt(Math.random() * 10000 + 1, 10);
+                    }
                     var tree = new ProcTree(component);
                     var treeModel = new THREE.Object3D();
                     var trunkModel = {

@@ -16,11 +16,12 @@ angular
                     });
 
                 $scope.chooseLevel = function (level) {
-                    $log.debug('chooseLevel', level);
-                    $state.go('play', {
+                    var params = {
                         'level': level.path,
                         'mode': $state.params.mode || 'online'
-                    });
+                    };
+                    $log.debug('chooseLevel', level, params);
+                    $state.go('play', params);
                 };
             }
         });

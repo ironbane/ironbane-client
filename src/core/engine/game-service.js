@@ -13,7 +13,7 @@ angular
     .service('GameService', function ($rootWorld, CameraSystem, ModelSystem,
         LightSystem, SpriteSystem, QuadSystem, HelperSystem, SceneSystem, ScriptSystem,
         SoundSystem, InputSystem, RigidBodySystem, CollisionReporterSystem, WieldItemSystem, NetSystem,
-        EntityBuilder, $gameSocket, $log, LevelLoader) {
+        EntityBuilder, $gameSocket, $log, LevelLoader, ProcTreeSystem) {
 
         'use strict';
 
@@ -101,7 +101,7 @@ angular
             $rootWorld.addSystem(new InputSystem(), 'input');
             $rootWorld.addSystem(new SoundSystem(), 'sound');
             $rootWorld.addSystem(new ScriptSystem(), 'scripts');
-
+            $rootWorld.addSystem(new ProcTreeSystem(), 'proctree');
             $rootWorld.addSystem(new SpriteSystem());
             $rootWorld.addSystem(new ModelSystem());
             $rootWorld.addSystem(new LightSystem());
