@@ -30,7 +30,7 @@ angular.module('Ironbane', [
             }
         });
 
-        $locationProvider.html5Mode(true);
+        $locationProvider.html5Mode(false);
     })
     .config(function (IbConfigProvider) {
         // Used for input events
