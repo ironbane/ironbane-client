@@ -1,3 +1,5 @@
+// jshint ignore: start
+
 /*
 proctree.js
 Copyright (c) 2012, Paul Brunt
