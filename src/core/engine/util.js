@@ -13,7 +13,7 @@ angular.module('engine.util', [])
             };
 
             this.roundNumber = function (number, decimals) {
-              var newnumber = new Number(number+'').toFixed(parseInt(decimals));
+              var newnumber = new Number(number+'').toFixed(parseInt(decimals)); // jshint ignore:line
               return parseFloat(newnumber);
             };
         }

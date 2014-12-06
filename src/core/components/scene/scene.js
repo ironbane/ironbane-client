@@ -1,10 +1,12 @@
+'use strict';
+/* global JSZip */
+
 angular
     .module('components.scene.scene', [
         'ces',
         'three'
     ])
     .config(function ($componentsProvider) {
-        'use strict';
 
         $componentsProvider.addComponentData({
             'scene': {
@@ -13,7 +15,6 @@ angular
         });
     })
     .factory('SceneSystem', function (System, THREE, $http, TextureLoader, $log, $q) {
-        'use strict';
 
         var SceneSystem = System.extend({
             addedToWorld: function (world) {

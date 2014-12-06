@@ -271,6 +271,10 @@ angular.module('components.scene.collision-reporter', ['ces', 'three', 'ammo', '
                                 //     this.fire(EVENT_CONTACT, new SingleContactResult(e0, e1, cachedContactPoint));
                                 // }
 
+                                // jsHint complains here even though they are clearly defined above
+                                // no idea why...
+                                // jshint ignore:start
+
                                 if (useContacts0) {
                                     cachedContactPoint = cachedContactPoint || createContactPointFromAmmo(contactPoint);
                                     contacts0.push(cachedContactPoint);
@@ -279,6 +283,7 @@ angular.module('components.scene.collision-reporter', ['ces', 'three', 'ammo', '
                                 if (useContacts1) {
                                     contacts1.push(createReverseContactPointFromAmmo(contactPoint));
                                 }
+                                // jshint ignore:end
                             }
 
                             handleEntityCollision(e0, e1, contacts0, collisionFlags0);

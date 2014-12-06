@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('Ironbane', [
         'angus.templates.app',
         'game.ui',
@@ -43,9 +45,6 @@ angular.module('Ironbane', [
         $window.debug = Debugger;
     })
     .run(function ($window, $rootWorld) {
-
-        'use strict';
-
         // TODO: move to directive
         $rootWorld.renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild($rootWorld.renderer.domElement);

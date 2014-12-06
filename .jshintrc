@@ -40,6 +40,7 @@
         "angular": false,
         "window": true,
         "document": true,
+        "debug": true,
         "_": false
     }
 }
