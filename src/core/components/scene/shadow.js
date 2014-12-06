@@ -12,6 +12,8 @@ angular.module('components.scene.shadow', ['ces', 'three', 'engine.texture-loade
     .factory('ShadowSystem', function (System, THREE, TextureLoader, $log) {
         'use strict';
 
+        var SHADOW_PATH = 'assets/images/core/shadow.png';
+
         var ShadowSystem = System.extend({
             addedToWorld: function (world) {
                 var sys = this;
@@ -28,19 +30,20 @@ angular.module('components.scene.shadow', ['ces', 'three', 'engine.texture-loade
                     shadow.material.side = THREE.DoubleSide;
                     shadow.geometry.dynamic = true;
 
-                    if (shadowData.texture) {
-                        TextureLoader.load(shadowData.texture)
-                            .then(function (texture) {
-                                // texture.needsUpdate = true;
-                                shadow.material.map = texture;
-                                shadow.material.needsUpdate = true;
-                                shadow.geometry.buffersNeedUpdate = true;
-                                shadow.geometry.uvsNeedUpdate = true;
-                                shadow.material.transparent = shadowData.transparent;
-                            });
-                    }
+                    TextureLoader.load(SHADOW_PATH)
+                        .then(function (texture) {
+                            // texture.needsUpdate = true;
+                            shadow.material.map = texture;
+                            shadow.material.needsUpdate = true;
+                            shadow.geometry.buffersNeedUpdate = true;
+                            shadow.geometry.uvsNeedUpdate = true;
+                            shadow.material.transparent = true;
+                        });
 
                     shadowData.shadow = shadow;
+
+                    shadow.rotation.x = Math.PI / 2;
+
                     // It's not worth it to keep the shadow as a child of the original entity,
                     // because the only thing that needs to be sync'd is the position.
                     // It's hard to get the rotations and scaling right in terms of math (atleast for me)
@@ -72,7 +75,16 @@ angular.module('components.scene.shadow', ['ces', 'three', 'engine.texture-loade
                     var camWorldPos = new THREE.Vector3();
                     camWorldPos.setFromMatrixPosition(activeCamera.matrixWorld);
 
-                    shadow.lookAt(camWorldPos, shadow.position, shadow.up);
+                    // var rigidbodyWorld = world.getSystem('rigidbody');
+
+                    // rigidbodyWorld.raycastAll(shadowEnt.position,
+                    //     shadowEnt.position.clone().setY(shadowEnt.position.y-100),
+                    //     function (result) {
+                    //         debug.watch('raycast result', result.point);
+                    //         // console.log(result);
+                    //     });
+
+                    // shadow.lookAt(camWorldPos, shadow.position, shadow.up);
                 });
             }
         });

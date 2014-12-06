@@ -12,6 +12,7 @@ angular.module('components', [
     'components.scene.scene',
     'components.scene.quad',
     'components.scene.wield-item',
+    'components.scene.shadow',
 
     'components.script',
     'components.sound',

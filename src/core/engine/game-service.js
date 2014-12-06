@@ -13,7 +13,7 @@ angular
     .service('GameService', function ($rootWorld, CameraSystem, ModelSystem,
         LightSystem, SpriteSystem, QuadSystem, HelperSystem, SceneSystem, ScriptSystem,
         SoundSystem, InputSystem, RigidBodySystem, CollisionReporterSystem, WieldItemSystem, NetSystem,
-        EntityBuilder, $gameSocket, $log, LevelLoader, ProcTreeSystem) {
+        EntityBuilder, $gameSocket, $log, LevelLoader, ProcTreeSystem, ShadowSystem) {
 
         'use strict';
 
@@ -71,6 +71,9 @@ angular
                         max: 5,
                         value: 5
                     },
+                    shadow: {
+
+                    },
                     camera: {
                         aspectRatio: $rootWorld.renderer.domElement.width / $rootWorld.renderer.domElement.height
                     },
@@ -106,10 +109,12 @@ angular
             $rootWorld.addSystem(new ModelSystem());
             $rootWorld.addSystem(new LightSystem());
             $rootWorld.addSystem(new QuadSystem());
-            $rootWorld.addSystem(new RigidBodySystem());
+            $rootWorld.addSystem(new RigidBodySystem(), 'rigidbody');
             $rootWorld.addSystem(new CollisionReporterSystem());
             $rootWorld.addSystem(new HelperSystem());
             $rootWorld.addSystem(new WieldItemSystem());
+            $rootWorld.addSystem(new ShadowSystem());
+
             // NOTE: this should be the LAST system as it does rendering!!
             $rootWorld.addSystem(new CameraSystem(), 'camera');
 
