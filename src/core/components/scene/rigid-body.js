@@ -334,31 +334,38 @@ angular.module('components.scene.rigid-body', ['ces', 'three', 'ammo', 'ammo.phy
 
             },
 
-            raycastFirst: function (start, end, callback) {
-                ammoRayStart.setValue(start.x, start.y, start.z);
-                ammoRayEnd.setValue(end.x, end.y, end.z);
-                var rayCallback = new Ammo.ClosestRayResultCallback(ammoRayStart, ammoRayEnd);
+            // This native ammojs raycast function wworks but it only works by raycasting every object in the scene,
+            // and we don't seem to have support to filter out some entities.
+            // This is because AllHitsRayResultCallback is not implemented yet in Ammojs so we
+            // need to have our own raycast solution. threeoctree worked very well in old IB
+            // so we'll use that instead
 
-                PhysicsWorld.rayTest(ammoRayStart, ammoRayEnd, rayCallback);
-                if (rayCallback.hasHit()) {
-                    var collisionObjPtr = rayCallback.get_m_collisionObject(); // jshint ignore:line
-                    var collisionObj = Ammo.wrapPointer(collisionObjPtr, Ammo.btCollisionObject);
-                    var body = Ammo.castObject(collisionObj, Ammo.btRigidBody);
-                    var point = rayCallback.get_m_hitPointWorld(); // jshint ignore:line
-                    var normal = rayCallback.get_m_hitNormalWorld(); // jshint ignore:line
+            // raycastFirst: function (start, end, callback) {
+            //     ammoRayStart.setValue(start.x, start.y, start.z);
+            //     ammoRayEnd.setValue(end.x, end.y, end.z);
+            //     var rayCallback = new Ammo.ClosestRayResultCallback(ammoRayStart, ammoRayEnd);
 
-                    if (body) {
-                        callback(new RaycastResult(
-                                        body.entity,
-                                        new THREE.Vector3(point.x(), point.y(), point.z()),
-                                        new THREE.Vector3(normal.x(), normal.y(), normal.z())
-                                    )
-                                );
-                    }
-                }
+            //     PhysicsWorld.rayTest(ammoRayStart, ammoRayEnd, rayCallback);
+            //     if (rayCallback.hasHit()) {
+            //         var collisionObjPtr = rayCallback.get_m_collisionObject(); // jshint ignore:line
+            //         var collisionObj = Ammo.wrapPointer(collisionObjPtr, Ammo.btCollisionObject);
+            //         var body = Ammo.castObject(collisionObj, Ammo.btRigidBody);
+            //         var point = rayCallback.get_m_hitPointWorld(); // jshint ignore:line
+            //         var normal = rayCallback.get_m_hitNormalWorld(); // jshint ignore:line
 
-                Ammo.destroy(rayCallback);
-            },
+            //         if (body) {
+            //             callback(new RaycastResult(
+            //                             body.entity,
+            //                             new THREE.Vector3(point.x(), point.y(), point.z()),
+            //                             new THREE.Vector3(normal.x(), normal.y(), normal.z())
+            //                         )
+            //                     );
+            //         }
+            //     }
+
+            //     Ammo.destroy(rayCallback);
+            // },
+
             syncEntities: function () {
                 var rigidBodies = this.world.getEntities('rigidBody');
 

@@ -39,6 +39,7 @@ module.exports = {
                 'lib/hand-1.3.8.js',
                 'lib/three.js',
                 'lib/three-angular.js',
+                'lib/threeoctree.js',
                 'lib/howler-angular.js',
                 'lib/ammo.js',
                 'lib/ammo-angular.js',
