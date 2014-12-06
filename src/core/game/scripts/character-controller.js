@@ -51,6 +51,8 @@ angular
 
         CharacterControllerScript.prototype.update = function (dt, elapsed, timestamp) {
 
+            debug.watch('player.position', this.entity.position);
+
             var input = this.world.getSystem('input'), // should cache this during init?
                 leftStick = input.virtualGamepad.leftThumbstick,
                 rightStick = input.virtualGamepad.rightThumbstick;
