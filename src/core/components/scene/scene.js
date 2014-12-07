@@ -78,8 +78,16 @@ angular
                             }
                         }
 
+                        // Attach an octree for easy raycasting
+                        entity.octree = new THREE.Octree({
+                            undeferred: true,
+                            useFaces: true
+                        });
+                        entity.octree.add(component.scene);
+
                         component.scene.material.needsUpdate = true;
 
+                        entity.scene = component.scene;
                         entity.add(component.scene);
                     }, $q.reject);
 
