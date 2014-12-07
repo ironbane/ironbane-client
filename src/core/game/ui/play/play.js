@@ -19,6 +19,13 @@ angular
                     return $stateParams.mode || 'online';
                 }
             },
+            controller: function($rootScope) {
+                // for now we need to force them to remain in this state
+                // TODO: tear down the scene on transition and/or allow for some play sub states
+                $rootScope.$on('$stateChangeStart', function(e) {
+                    e.preventDefault();
+                });
+            },
             onEnter: function (GameService, level, mode) {
                 var opts = {
                     level: level,
