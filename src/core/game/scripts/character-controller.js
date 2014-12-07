@@ -12,8 +12,8 @@ angular
         var rotateSpeed = 2;
         var maxspeed = 4;
 
-        // The time that that must pass before you can jump again
-        var minimumJumpDelay = 0.5;
+        // The amount of time that must pass before you can jump again
+        var minimumJumpDelay = 0.4;
 
         var btVec3 = new Ammo.btVector3();
 
@@ -77,25 +77,37 @@ angular
                 // We only set a friction when the character is on the ground, to prevent
                 // side-friction from allowing character to stop in midair
                 // First reset the friction here
-                // rigidBodyComponent.rigidBody.setFriction(0);
+                rigidBodyComponent.rigidBody.setFriction(0.7);
             }
 
-            // Are we allowed to jump?
-            this.activeCollisions.forEach(function (activeCollision) {
-                activeCollision.contacts.forEach(function (contact) {
-
-                    // When we are on ground that is relatively flat
-                    // we allow jumping and set friction so we don't slide off
-                    me.canJump = true;
-                    if (contact.normal.y > 0.5) {
+            var scenes = this.world.getEntities('scene');
 
 
-                        if (rigidBodyComponent) {
-                            // rigidBodyComponent.rigidBody.setFriction(1.0);
-                        }
+            // TODO cache raycasts, this needs to raycast again which could actually use the one
+            // used from the shadow. Perhaps a raycastmanager of some sort is needed.
+
+            // Reset just to be sure
+            this.canJump = false;
+
+            if (scenes.length) {
+                var octree = scenes[0].octree;
+
+                var ray = new THREE.Raycaster(this.entity.position, new THREE.Vector3(0, -1, 0));
+
+                var intersections = ray.intersectOctreeObjects(octree.objects);
+
+                if (intersections.length) {
+                    if (intersections[0].distance <= 0.55) {
+                        // We can jump when the ray distance is less than 0.5, since the player pos is at 0.5 and is 1 in height.
+                        // Add 0.05 to take into account slopes, which have a small offset when casting rays downwards = 0.55
+                        this.canJump = true;
                     }
-                });
-            });
+                    else {
+                        // Get rid of friction so we don't slow down on the walls while falling
+                        rigidBodyComponent.rigidBody.setFriction(0.0);
+                    }
+                }
+            }
 
             // virtual gamepad (touch ipad) controls
             if (leftStick) {
