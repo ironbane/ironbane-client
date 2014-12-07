@@ -2,10 +2,12 @@ angular.module('game.prefabs.torch', [])
     .constant('TorchPrefab', {
         components: {
             'model': {
-                type: 'Sphere'
+                type: 'Box'
             },
             'light': {
-                type: 'PointLight'
+                type: 'PointLight',
+                distance: 5,
+                color: 0x60511b
             }
         }
     });

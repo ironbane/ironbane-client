@@ -64,8 +64,8 @@ angular
                     },
                     light: {
                         type: 'PointLight',
-                        color: 0xffffff,
-                        distance: 5
+                        color: 0x60511b,
+                        distance: 3.5
                     },
                     health: {
                         max: 5,
