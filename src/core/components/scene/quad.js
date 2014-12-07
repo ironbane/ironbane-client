@@ -84,6 +84,8 @@ angular.module('components.scene.quad', ['ces', 'three', 'engine.texture-loader'
                     var camWorldPos = new THREE.Vector3();
                     camWorldPos.setFromMatrixPosition(activeCamera.matrixWorld);
 
+                    camWorldPos.y = quad.position.y;
+
                     quad.lookAt(camWorldPos, quad.position, quad.up);
                 });
             }
