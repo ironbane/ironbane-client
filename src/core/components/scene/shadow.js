@@ -55,36 +55,22 @@ angular.module('components.scene.shadow', ['ces', 'three', 'engine.texture-loade
             update: function () {
                 var world = this.world,
                     shadows = world.getEntities('shadow'),
-                    entitiesWithCamera = this.world.getEntities('camera'),
-                    activeCamera;
-
-                if (entitiesWithCamera.length) {
-                    // HACK: this might not be the active camera someday...
-                    activeCamera = entitiesWithCamera[0].getComponent('camera').camera;
-                }
-
-                if (!activeCamera) {
-                    //$log.warn('No camera to look at!');
-                    return;
-                }
+                    scenes = this.world.getEntities('scene');
 
                 shadows.forEach(function (shadowEnt) {
                     var shadow = shadowEnt.getComponent('shadow').shadow;
-                    shadow.position.copy(shadowEnt.position);
 
-                    var camWorldPos = new THREE.Vector3();
-                    camWorldPos.setFromMatrixPosition(activeCamera.matrixWorld);
+                    if (scenes.length) {
+                        var octree = scenes[0].octree;
 
-                    // var rigidbodyWorld = world.getSystem('rigidbody');
+                        var ray = new THREE.Raycaster(shadowEnt.position, new THREE.Vector3(0, -1, 0));
 
-                    // rigidbodyWorld.raycastAll(shadowEnt.position,
-                    //     shadowEnt.position.clone().setY(shadowEnt.position.y-100),
-                    //     function (result) {
-                    //         debug.watch('raycast result', result.point);
-                    //         // console.log(result);
-                    //     });
+                        var intersections = ray.intersectOctreeObjects( octree.objects );
 
-                    // shadow.lookAt(camWorldPos, shadow.position, shadow.up);
+                        if (intersections.length) {
+                            shadow.position.copy(intersections[0].point.add(new THREE.Vector3(0, 0.01, 0)));
+                        }
+                    }
                 });
             }
         });
