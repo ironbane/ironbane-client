@@ -44,9 +44,17 @@ angular
                                 transparent: true,
                                 texture: 'assets/images/characters/skin/2.png'
                             },
+                            light: {
+                                type: 'PointLight',
+                                color: 0x60511b,
+                                distance: 3.5
+                            },
                             health: {
                                 max: 5,
                                 value: 5
+                            },
+                            shadow: {
+
                             },
                             script: {
                                 scripts: [
