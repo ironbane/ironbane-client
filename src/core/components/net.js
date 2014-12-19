@@ -32,10 +32,10 @@ angular
                     ghosts = world.getEntities('ghost');
 
                 // TODO: move to prefab, support other types
-                function buildPlayerGhost(data) {
-                    var player = EntityBuilder.build('NetPlayer', {
-                        rotation: data.rotation,
-                        position: data.position,
+                function spawnGhost(data) {
+                    $log.log('ghost data: ', data);
+
+                    var defaultPlayerData = {
                         components: {
                             ghost: {
                                 id: data._id
@@ -54,9 +54,13 @@ angular
                                 ]
                             }
                         }
-                    });
+                    };
 
-                    world.addEntity(player);
+                    var entData = _.deepExtend({}, defaultPlayerData, data);
+
+                    var ghost = EntityBuilder.build('GhostedObject', entData);
+                    $log.log('final ghost: ', ghost);
+                    world.addEntity(ghost);
                 }
 
                 // first update the ones we already have
@@ -65,6 +69,7 @@ angular
 
                     for (var i = 0; i < data.length; i++) {
                         if (data[i]._id === ghostComponent.id) {
+                            // TODO: sync more than just transform, use delta
                             if (!ghostComponent.player) {
                                 ghost.position.fromArray(data[i].position);
                                 ghost.rotation.fromArray(data[i].rotation);
@@ -78,7 +83,7 @@ angular
                 // add new ones (the rest)
                 angular.forEach(data, function (g) {
                     if (!g.ghosted) {
-                        buildPlayerGhost(g);
+                        spawnGhost(g);
                     }
                 });
 
@@ -86,7 +91,7 @@ angular
                 var ids = _.pluck(data, '_id');
                 for (var i = ghosts.length - 1; i > 0; i--) {
                     if (ids.indexOf(ghosts[i].getComponent('ghost').id) < 0) {
-                        $log.log('dude dropped: ', ghosts[i], ids);
+                        $log.log('ghost left: ', ghosts[i], ids);
                         world.removeEntity(ghosts[i]);
                     }
                 }

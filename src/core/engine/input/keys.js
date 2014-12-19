@@ -1,6 +1,7 @@
 angular.module('engine.input.keys', [])
     .constant('KEYS', {
         // TODO: fill rest out
+        SHIFT: 16,
         ESC: 27,
 
         SPACE: 32,

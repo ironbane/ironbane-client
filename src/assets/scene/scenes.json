@@ -1,6 +1,29 @@
 [{
+    "name": "Tower of Doom",
+    "path": "tower-of-doom",
+    "thumb": "assets/scene/tower-of-doom/thumb.png",
+    "descr": "Ultimate parkour challenge."
+},{
     "name": "Obstacle Course",
     "path": "obstacle-test-course-one",
     "thumb": "assets/scene/obstacle-test-course-one/thumb.png",
     "descr": "Test your jumping skills in this intro level."
+},
+{
+    "name": "Ravenwood Village",
+    "path": "ravenwood-village",
+    "thumb": "assets/scene/ravenwood-village/thumb.png",
+    "descr": "The peaceful village of Ravenwood. (WARNING: Long load time!)"
+},
+{
+    "name": "Classic Dungeon",
+    "path": "classic-dungeon",
+    "thumb": "assets/scene/classic-dungeon/thumb.png",
+    "descr": "Roam the halls of the dark dank dungeon."
+},
+{
+    "name": "Procwood Forest",
+    "path": "procwood-forest",
+    "thumb": "assets/scene/procwood-forest/thumb.png",
+    "descr": "Test level for procedural trees."
 }]

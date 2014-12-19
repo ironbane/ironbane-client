@@ -18,10 +18,7 @@ angular
         'use strict';
 
         var createPlayer = function (data) {
-            // TODO: move this to more specific player creation service method
-            var player = EntityBuilder.build('Player', {
-                rotation: data.rotation,
-                position: data.position,
+            var defaultData = {
                 components: {
                     ghost: {
                         id: data._id,
@@ -85,8 +82,17 @@ angular
                         ]
                     }
                 }
-            });
+            };
+
+            var finalData = angular.extend({}, data, defaultData);
+            angular.extend(finalData.components, data.components);
+            $log.log('finalData', finalData);
+            // TODO: move this to more specific player creation service method
+            var player = EntityBuilder.build('Player', finalData);
             $rootWorld.addEntity(player);
+
+            $log.log('player ent: ', player);
+            return player;
         };
 
         this.start = function (options) {
@@ -127,19 +133,36 @@ angular
 
                     createPlayer(data);
                 });
-            } else {
-                $log.log('offline mode!');
-                createPlayer({
-                    _id: 'abc123',
-                    position: [22, 25, -10],
-                    rotation: [0, Math.PI - 0.4, 0]
-                });
             }
 
             LevelLoader.load(options.level).then(function () {
+                var playerData = {
+                    handle: 'fooman',
+                    components: {
+                        quad: {
+                            texture: 'assets/images/characters/prefab/' + _.sample(_.range(1, 10)) + '.png',
+                            transparent: true
+                        }
+                    }
+                };
+
                 if (!options.offline) {
                     // after the level and whatnot is loaded, request a player spawn
-                    $gameSocket.emit('request spawn');
+                    $gameSocket.emit('request spawn', playerData);
+                } else {
+                    $log.log('offline mode!');
+                    createPlayer({
+                        _id: 'abc123',
+                        handle: 'fooman',
+                        position: [22, 25, -10],
+                        rotation: [0, Math.PI - 0.4, 0],
+                        components: {
+                            quad: {
+                                texture: 'assets/images/characters/prefab/' + _.sample(_.range(1, 10)) + '.png',
+                                transparent: true
+                            }
+                        }
+                    });
                 }
             }, function (err) {
                 $log.warn('error loading level: ', err);

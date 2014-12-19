@@ -1,6 +1,7 @@
 'use strict';
 
-angular.module('Ironbane', [
+angular
+    .module('Ironbane', [
         'angus.templates.app',
         'game.ui',
         'game.game-loop',
@@ -18,9 +19,11 @@ angular.module('Ironbane', [
         'engine.input.input-system',
         'engine.util',
         'engine.debugger',
-        'game.game-socket'
+        'game.game-socket',
+        'util.deepExtend'
     ])
     .config(function (SoundSystemProvider, $gameSocketProvider, $locationProvider) {
+        //$gameSocketProvider.setUrl('http://localhost:5001');
         $gameSocketProvider.setUrl('http://dev.server.ironbane.com:5001');
 
         // define all of the sounds & music for the game
