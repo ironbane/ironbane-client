@@ -8,12 +8,14 @@ angular
         'engine.entity-builder',
         'engine.sound-system',
         'engine.input.input-system',
-        'engine.level-loader'
+        'engine.level-loader',
+        'util.name-gen'
     ])
     .service('GameService', function ($rootWorld, CameraSystem, ModelSystem,
         LightSystem, SpriteSystem, QuadSystem, HelperSystem, SceneSystem, ScriptSystem,
         SoundSystem, InputSystem, RigidBodySystem, CollisionReporterSystem, WieldItemSystem, NetSystem,
-        EntityBuilder, $gameSocket, $log, LevelLoader, ProcTreeSystem, ShadowSystem) {
+        EntityBuilder, $gameSocket, $log, LevelLoader, ProcTreeSystem, ShadowSystem,
+        FantasyNameGenerator) {
 
         'use strict';
 
@@ -137,7 +139,7 @@ angular
 
             LevelLoader.load(options.level).then(function () {
                 var playerData = {
-                    handle: 'fooman',
+                    handle: FantasyNameGenerator.generateName('mmo'),
                     components: {
                         quad: {
                             texture: 'assets/images/characters/prefab/' + _.sample(_.range(1, 10)) + '.png',
@@ -153,7 +155,7 @@ angular
                     $log.log('offline mode!');
                     createPlayer({
                         _id: 'abc123',
-                        handle: 'fooman',
+                        handle: FantasyNameGenerator.generateName('egyptian'),
                         position: [22, 25, -10],
                         rotation: [0, Math.PI - 0.4, 0],
                         components: {

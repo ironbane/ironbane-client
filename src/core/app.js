@@ -20,7 +20,8 @@ angular
         'engine.util',
         'engine.debugger',
         'game.game-socket',
-        'util.deepExtend'
+        'util.deepExtend',
+        'util.name-gen'
     ])
     .config(function (SoundSystemProvider, $gameSocketProvider, $locationProvider) {
         //$gameSocketProvider.setUrl('http://localhost:5001');
