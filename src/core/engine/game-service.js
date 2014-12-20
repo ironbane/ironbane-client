@@ -142,13 +142,14 @@ angular
             }
 
             LevelLoader.load(options.level).then(function () {
-                var characterName = FantasyNameGenerator.generateName('mmo');
+                var characterName = FantasyNameGenerator.generateName('mmo'),
+                    characterSprite = 'assets/images/characters/prefab/' + _.sample(_.range(1, 11)) + '.png';
 
                 var playerData = {
                     handle: characterName,
                     components: {
                         quad: {
-                            texture: 'assets/images/characters/prefab/' + _.sample(_.range(1, 10)) + '.png',
+                            texture: characterSprite,
                             transparent: true
                         },
                         'name-mesh': {
@@ -169,7 +170,7 @@ angular
                         rotation: [0, Math.PI - 0.4, 0],
                         components: {
                             quad: {
-                                texture: 'assets/images/characters/prefab/' + _.sample(_.range(1, 10)) + '.png',
+                                texture: characterSprite,
                                 transparent: true
                             },
                             'name-mesh': {
