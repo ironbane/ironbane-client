@@ -134,6 +134,8 @@ angular
                     $log.log('spawn', data);
 
                     createPlayer(data);
+                    // we do this AFTER the player is created so the ghost doesn't win
+                    $rootWorld.getSystem('net').enabled = true;
                 });
             }
 

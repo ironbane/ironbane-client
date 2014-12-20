@@ -22,6 +22,7 @@ angular
         'use strict';
 
         var NetSystem = System.extend({
+            enabled: false,
             init: function () {
                 this._super();
 
@@ -105,7 +106,9 @@ angular
                 }
             },
             update: function () {
-                $gameSocket.emit('sync');
+                if(this.enabled) {
+                    $gameSocket.emit('sync');
+                }
             }
         });
 
