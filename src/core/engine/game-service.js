@@ -9,13 +9,14 @@ angular
         'engine.sound-system',
         'engine.input.input-system',
         'engine.level-loader',
-        'util.name-gen'
+        'util.name-gen',
+        'components.scene.name-mesh'
     ])
     .service('GameService', function ($rootWorld, CameraSystem, ModelSystem,
         LightSystem, SpriteSystem, QuadSystem, HelperSystem, SceneSystem, ScriptSystem,
         SoundSystem, InputSystem, RigidBodySystem, CollisionReporterSystem, WieldItemSystem, NetSystem,
         EntityBuilder, $gameSocket, $log, LevelLoader, ProcTreeSystem, ShadowSystem,
-        FantasyNameGenerator) {
+        FantasyNameGenerator, NameMeshSystem) {
 
         'use strict';
 
@@ -109,6 +110,7 @@ angular
             if (!options.offline) {
                 $rootWorld.addSystem(new NetSystem(), 'net');
             }
+            $rootWorld.addSystem(new NameMeshSystem());
             $rootWorld.addSystem(new InputSystem(), 'input');
             $rootWorld.addSystem(new SoundSystem(), 'sound');
             $rootWorld.addSystem(new ScriptSystem(), 'scripts');
@@ -140,12 +142,17 @@ angular
             }
 
             LevelLoader.load(options.level).then(function () {
+                var characterName = FantasyNameGenerator.generateName('mmo');
+
                 var playerData = {
-                    handle: FantasyNameGenerator.generateName('mmo'),
+                    handle: characterName,
                     components: {
                         quad: {
                             texture: 'assets/images/characters/prefab/' + _.sample(_.range(1, 10)) + '.png',
                             transparent: true
+                        },
+                        'name-mesh': {
+                            text: characterName
                         }
                     }
                 };
@@ -154,16 +161,19 @@ angular
                     // after the level and whatnot is loaded, request a player spawn
                     $gameSocket.emit('request spawn', playerData);
                 } else {
-                    $log.log('offline mode!');
+                    //$log.log('offline mode!');
                     createPlayer({
                         _id: 'abc123',
-                        handle: FantasyNameGenerator.generateName('egyptian'),
+                        handle: characterName,
                         position: [22, 25, -10],
                         rotation: [0, Math.PI - 0.4, 0],
                         components: {
                             quad: {
                                 texture: 'assets/images/characters/prefab/' + _.sample(_.range(1, 10)) + '.png',
                                 transparent: true
+                            },
+                            'name-mesh': {
+                                text: characterName
                             }
                         }
                     });
