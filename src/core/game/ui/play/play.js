@@ -1,7 +1,8 @@
 angular
     .module('game.ui.play', [
         'ui.router',
-        'engine.game-service'
+        'engine.game-service',
+        'game.ui.chat'
     ])
     .config(function ($stateProvider) {
         $stateProvider.state('play', {

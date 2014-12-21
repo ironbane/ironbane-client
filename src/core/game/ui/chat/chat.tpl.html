@@ -1,0 +1,9 @@
+<div>
+    <ul>
+        <li ng-repeat="message in messages">
+            {{ message }}
+        </li>
+    </ul>
+    <input ng-model="chat.message" />
+    <button ng-click="send()">Say</button>
+</div>
