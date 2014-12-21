@@ -10,13 +10,15 @@ angular
         'engine.input.input-system',
         'engine.level-loader',
         'util.name-gen',
-        'components.scene.name-mesh'
+        'components.scene.name-mesh',
+        'game.chat-socket',
+        'game.game-socket'
     ])
     .service('GameService', function ($rootWorld, CameraSystem, ModelSystem,
         LightSystem, SpriteSystem, QuadSystem, HelperSystem, SceneSystem, ScriptSystem,
         SoundSystem, InputSystem, RigidBodySystem, CollisionReporterSystem, WieldItemSystem, NetSystem,
         EntityBuilder, $gameSocket, $log, LevelLoader, ProcTreeSystem, ShadowSystem,
-        FantasyNameGenerator, NameMeshSystem) {
+        FantasyNameGenerator, NameMeshSystem, $chatSocket) {
 
         'use strict';
 
@@ -131,6 +133,8 @@ angular
             if (!options.offline) {
                 $log.log('online mode!!!');
                 $gameSocket.connect(options.server, options.level);
+
+                $chatSocket.connect();
 
                 $gameSocket.on('spawn', function (data) {
                     $log.log('spawn', data);

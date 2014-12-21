@@ -20,12 +20,15 @@ angular
         'engine.util',
         'engine.debugger',
         'game.game-socket',
+        'game.chat-socket',
         'util.deepExtend',
         'util.name-gen'
     ])
-    .config(function (SoundSystemProvider, $gameSocketProvider, $locationProvider) {
+    .config(function (SoundSystemProvider, $gameSocketProvider, $locationProvider, $chatSocketProvider) {
         //$gameSocketProvider.setUrl('http://localhost:5001');
         $gameSocketProvider.setUrl('http://dev.server.ironbane.com:5001');
+
+        $chatSocketProvider.setUrl('http://dev.server.ironbane.com:5001/chat');
 
         // define all of the sounds & music for the game
         SoundSystemProvider.setAudioLibraryData({

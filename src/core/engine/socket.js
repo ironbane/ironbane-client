@@ -34,6 +34,7 @@ angular.module('engine.socket', [])
                     return;
                 }
 
+                $log.debug('attempting to connect: ', this.url);
                 socket._socket = $window.io(socket.url, {
                     reconnect: false
                 });
